@@ -1,0 +1,53 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px 0 0;
+  height: 64px;
+  background-color: #ffe600;
+}
+
+.header-left {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+  width: auto;
+}
+
+.header-center div {
+  display: flex;
+  flex-direction: column;
+}
+
+.header-left div {
+  display: flex;
+  flex-direction: column;
+}
+
+.title {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.subtitle {
+  font-size: 0.8rem;
+}
+
+.header-right {
+  display: flex;
+  gap: 20px;
+  font-size: 1.3rem;
+  cursor: pointer;
+}
+
+img {
+  width: 65px;
+  height: 65px;
+  object-fit: cover;
+}
+
+.theme-icon {
+  font-size: 1rem;
+  cursor: pointer;
+}
