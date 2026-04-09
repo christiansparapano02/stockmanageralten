@@ -1,0 +1,77 @@
+/* Contenitore della Griglia */
+.categories-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 per riga */
+  gap: 2rem; /* Spazio generoso tra le card */
+  padding: 2rem;
+  background: linear-gradient(
+    135deg,
+    #f5f7fa 0%,
+    #c3cfe2 100%
+  ); /* Sfondo per far risaltare il vetro */
+  min-height: 100vh;
+}
+
+/* Personalizzazione del Bottone PrimeNG come Card */
+:host ::ng-deep .category-glass-card {
+  width: 100%;
+  height: 200px;
+  background: rgba(255, 255, 255, 0.2); /* Sfondo semi-trasparente */
+  backdrop-filter: blur(10px); /* Effetto sfocato (Glass) */
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3); /* Bordino leggero */
+  border-radius: 20px;
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+  color: #2d3436;
+  transition: all 0.3s ease;
+
+  /* Contenuto interno del bottone */
+  .p-button {
+    background: transparent !important;
+    border: none !important;
+    color: inherit !important;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    gap: 1rem;
+
+    .p-button-icon {
+      font-size: 2.5rem; /* Icona bella grande */
+    }
+
+    .p-button-label {
+      font-size: 1.2rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+  }
+
+  /* Effetto Hover */
+  &:not(.p-disabled):hover {
+    transform: translateY(-10px);
+    background: rgba(255, 255, 255, 0.4);
+    box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+  }
+
+  /* Stato Disabilitato */
+  &.p-disabled {
+    opacity: 0.5;
+    filter: grayscale(1);
+    cursor: not-allowed;
+  }
+}
+
+/* Responsive: 2 per riga su tablet, 1 su mobile */
+@media (max-width: 1024px) {
+  .categories-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 600px) {
+  .categories-grid {
+    grid-template-columns: 1fr;
+  }
+}

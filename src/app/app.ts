@@ -1,11 +1,13 @@
 import { Component, signal } from '@angular/core';
 
 import { Header } from './layout/header/header';
+
+import { Categories } from './features/categories/categories';
 import { Sidebar } from './layout/sidebar/sidebar';
 
 @Component({
   selector: 'app-root',
-  imports: [Header, Sidebar],
+  imports: [Header, Categories, Sidebar],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
