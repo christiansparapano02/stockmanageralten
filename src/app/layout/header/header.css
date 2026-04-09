@@ -4,27 +4,29 @@
   justify-content: space-between;
   padding: 0 24px 0 0;
   height: 64px;
+  width: 100%;
   background-color: #ffe600;
 }
 
+/* LEFT */
 .header-left {
   display: flex;
-  flex-direction: row;
   align-items: center;
-  gap: 12px;
-  width: auto;
 }
 
+/* CENTER */
 .header-center {
   flex: 1;
   display: flex;
   justify-content: center;
+  align-items: center;
 }
 
-.header-text {
+.header-center > div {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
+  text-align: center;
 }
 
 .title {
@@ -36,8 +38,10 @@
   font-size: 0.8rem;
 }
 
+/* RIGHT */
 .header-right {
   display: flex;
+  align-items: center;
   gap: 20px;
   font-size: 1.3rem;
   cursor: pointer;
@@ -54,56 +58,21 @@ img {
   cursor: pointer;
 }
 
-/* dropdown sede */
-.office-wrapper {
-  position: relative;
-  display: flex;
-  align-items: center;
-  gap: 4px;
+/* ===================== */
+/* 🌙 DARK MODE */
+/* ===================== */
+
+:host-context(.dark-mode) .header {
+  background: linear-gradient(90deg, #1e1e1e, #2a2a2a);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
 }
 
-.office-button {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  border: none;
-  background: transparent;
-  padding: 0;
-  font-size: 0.8rem;
-  font-family: inherit;
-  cursor: pointer;
+:host-context(.dark-mode) .title,
+:host-context(.dark-mode) .subtitle {
+  color: #ffffff;
 }
 
-.office-button i {
-  font-size: 0.7rem;
-}
-
-.office-menu {
-  position: absolute;
-  top: calc(100% + 6px);
-  left: 38px;
-  min-width: 150px;
-  background: white;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  padding: 6px 0;
-  z-index: 200;
-  max-height: 220px;
-  overflow-y: auto;
-}
-
-.office-option {
-  display: block;
-  width: 100%;
-  border: none;
-  background: white;
-  text-align: left;
-  padding: 8px 12px;
-  font-size: 0.85rem;
-  cursor: pointer;
-}
-
-.office-option:hover {
-  background: #f5f5f5;
+:host-context(.dark-mode) .theme-icon,
+:host-context(.dark-mode) .pi-user {
+  color: #ffffff;
 }
