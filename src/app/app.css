@@ -1,5 +1,13 @@
-.main-layout {
+.layout {
   display: flex;
-  flex-direction: row;
   height: calc(100vh - 64px);
+}
+
+app-sidebar {
+  flex-shrink: 0;
+}
+
+app-categories {
+  flex: 1;
+  overflow: auto;
 }

@@ -15,14 +15,16 @@
   width: auto;
 }
 
-.header-center div {
+.header-center {
+  flex: 1;
   display: flex;
-  flex-direction: column;
+  justify-content: center;
 }
 
-.header-left div {
+.header-text {
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
 }
 
 .title {
@@ -50,4 +52,58 @@ img {
 .theme-icon {
   font-size: 1rem;
   cursor: pointer;
+}
+
+/* dropdown sede */
+.office-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.office-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: none;
+  background: transparent;
+  padding: 0;
+  font-size: 0.8rem;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.office-button i {
+  font-size: 0.7rem;
+}
+
+.office-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 38px;
+  min-width: 150px;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 6px 0;
+  z-index: 200;
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+.office-option {
+  display: block;
+  width: 100%;
+  border: none;
+  background: white;
+  text-align: left;
+  padding: 8px 12px;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.office-option:hover {
+  background: #f5f5f5;
 }
