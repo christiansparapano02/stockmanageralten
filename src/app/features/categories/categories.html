@@ -1,0 +1,15 @@
+<div class="categories-grid">
+  @for (cat of categories(); track cat.id) {
+    <div class="grid-cell">
+      <p-button
+        [label]="cat.name"
+        [icon]="cat.icon"
+        iconPos="top"
+        styleClass="category-glass-card"
+        [disabled]="!cat.accessible"
+        (click)="onSelectCategory(cat)"
+      >
+      </p-button>
+    </div>
+  }
+</div>

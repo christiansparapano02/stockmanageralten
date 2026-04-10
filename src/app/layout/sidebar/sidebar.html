@@ -1,0 +1,41 @@
+<nav
+  class="sidebar-nav"
+  [class.expanded]="isExpanded"
+  (mouseenter)="isExpanded = true"
+  (mouseleave)="isExpanded = false"
+>
+  <div class="nav-section nav-top">
+    <a routerLink="/dashboard" routerLinkActive="active" class="nav-item" tooltipPosition="right">
+      <i class="pi pi-chart-line"></i>
+      <span>Dashboard</span>
+    </a>
+    <br />
+    <a routerLink="/categories" routerLinkActive="active" class="nav-item" tooltipPosition="right">
+      <i class="pi pi-briefcase"></i>
+      <span>Categories</span>
+    </a>
+    <br />
+
+    <a routerLink="/alerts" routerLinkActive="active" class="nav-item" tooltipPosition="right">
+      <i class="pi pi-megaphone"></i>
+      <span>Alerts</span>
+    </a>
+    <br />
+    <a
+      routerLink="/usersettings"
+      routerLinkActive="active"
+      class="nav-item"
+      tooltipPosition="right"
+    >
+      <i class="pi pi-user-edit"></i>
+      <span>User Settings</span>
+    </a>
+  </div>
+
+  <div class="nav-section nav-bottom">
+    <a routerLink="/support" routerLinkActive="active" class="nav-item" tooltipPosition="right">
+      <i class="pi pi-wrench"></i>
+      <span>Support</span>
+    </a>
+  </div>
+</nav>

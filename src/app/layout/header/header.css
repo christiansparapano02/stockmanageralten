@@ -1,0 +1,78 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px 0 0;
+  height: 64px;
+  width: 100%;
+  background-color: #ffe600;
+}
+
+/* LEFT */
+.header-left {
+  display: flex;
+  align-items: center;
+}
+
+/* CENTER */
+.header-center {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.header-center > div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.title {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.subtitle {
+  font-size: 0.8rem;
+}
+
+/* RIGHT */
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  font-size: 1.3rem;
+  cursor: pointer;
+}
+
+img {
+  width: 65px;
+  height: 65px;
+  object-fit: cover;
+}
+
+.theme-icon {
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+/* ===================== */
+/* 🌙 DARK MODE */
+/* ===================== */
+
+:host-context(.dark-mode) .header {
+  background: linear-gradient(90deg, #1e1e1e, #2a2a2a);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+}
+
+:host-context(.dark-mode) .title,
+:host-context(.dark-mode) .subtitle {
+  color: #ffffff;
+}
+
+:host-context(.dark-mode) .theme-icon,
+:host-context(.dark-mode) .pi-user {
+  color: #ffffff;
+}
