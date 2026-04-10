@@ -1,13 +1,22 @@
 .layout {
   display: flex;
-  height: calc(100vh - 64px);
+
+  height: calc(100vh - 60px); /* Sottrai l'altezza del tuo header */
+
+  overflow: hidden;
 }
 
-app-sidebar {
-  flex-shrink: 0;
+.main-content {
+  flex-grow: 1;
+
+  overflow-y: auto; /* Permette lo scroll solo nel contenuto, non nella sidebar */
+
+  background: #f4f7f9; /* O il gradiente che abbiamo visto prima */
 }
 
 app-categories {
   flex: 1;
   overflow: auto;
+  display: flex;
+  flex-direction: column;
 }
