@@ -1,17 +1,12 @@
-import { Component, signal, inject } from '@angular/core';
-
+import { Component, inject } from '@angular/core';
+import { Router, RouterOutlet, NavigationEnd } from '@angular/router';
 import { Header } from './layout/header/header';
-
-import { Categories } from './features/categories/categories';
 import { Sidebar } from './layout/sidebar/sidebar';
-import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',
-  imports: [Header, Categories, Sidebar, RouterOutlet],
+  imports: [RouterOutlet, Header, Sidebar],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
-export class App {
-  protected readonly title = signal('stockmanageralten');
-}
+export class App {}
