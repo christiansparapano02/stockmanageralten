@@ -3,11 +3,12 @@ import { InputTextModule } from 'primeng/inputtext';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { DarkModeService } from '../../core/dark_mode.service';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [InputTextModule, IconFieldModule, InputIconModule],
+  imports: [InputTextModule, IconFieldModule, InputIconModule, RouterLink],
   templateUrl: './header.html',
   styleUrl: './header.css',
 })
