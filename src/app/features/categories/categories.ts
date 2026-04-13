@@ -23,6 +23,6 @@ export class Categories {
 
   onSelectCategory(cat: Category) {
     console.log(`Navigazione verso categoria: ${cat.name}`);
-    this.router.navigate(['/stock', cat.id]);
+    this.router.navigate(['/categories/stock', cat.id]);
   }
 }
