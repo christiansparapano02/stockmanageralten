@@ -2,6 +2,7 @@ import { Component, inject, signal } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { Category } from '../../core/category/category.interface';
 import { CategoryService } from '../../core/category/category-service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-categories',
@@ -12,6 +13,7 @@ import { CategoryService } from '../../core/category/category-service';
 export class Categories {
   categories = signal<Category[]>([]);
   catService = inject(CategoryService);
+  router = inject(Router);
 
   ngOnInit() {
     this.catService.getCategories().subscribe((data) => {
@@ -21,6 +23,6 @@ export class Categories {
 
   onSelectCategory(cat: Category) {
     console.log(`Navigazione verso categoria: ${cat.name}`);
-    //aggiungere router.navigate([])
+    this.router.navigate(['/stock', cat.id]);
   }
 }

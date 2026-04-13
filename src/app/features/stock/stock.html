@@ -1,0 +1,18 @@
+<p-table [value]="items()" [tableStyle]="{ 'min-width': '50rem' }">
+  <ng-template pTemplate="header">
+    <tr>
+      <th>Nome</th>
+      <th>Stato</th>
+      <th>Prossimo controllo</th>
+      <th>Scadenza</th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-item>
+    <tr>
+      <td>{{ item.name }}</td>
+      <td>{{ item.status === 1 ? 'OK' : 'Critico' }}</td>
+      <td>{{ item.nextCheck ? (item.nextCheck | date: 'dd/MM/yyyy') : '—' }}</td>
+      <td>{{ item.expiring ? (item.expiring | date: 'dd/MM/yyyy') : '—' }}</td>
+    </tr>
+  </ng-template>
+</p-table>

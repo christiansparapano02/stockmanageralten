@@ -1,15 +1,16 @@
 .layout {
   display: flex;
   height: calc(100vh - 64px);
+  overflow: hidden;
 }
 
 app-sidebar {
   flex-shrink: 0;
 }
 
-app-categories {
+.main-content {
   flex: 1;
-  overflow: auto;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
 }
