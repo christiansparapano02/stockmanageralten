@@ -17,4 +17,8 @@ export class ItemService {
   getByCategory(categoryId: string) {
     return of(this.items.filter((i) => i.categoryId === categoryId));
   }
+
+  getCritical() {
+    return of(this.items.filter((i) => i.status === 0));
+  }
 }
