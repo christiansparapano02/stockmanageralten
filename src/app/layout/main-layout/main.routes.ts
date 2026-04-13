@@ -8,7 +8,7 @@ export const MAIN_ROUTES: Routes = [
         path: '',
         loadComponent: () =>
           import('../../features/categories/categories').then((m) => m.Categories),
-        title: 'Inventario - Categorie',
+        title: 'Inventory - Categories',
       },
       {
         path: 'stock/:category', // Questo corrisponde a "/categories/stock/:category"
@@ -16,10 +16,16 @@ export const MAIN_ROUTES: Routes = [
         canActivate: [
           /*categoryGuard*/
         ],
-        title: 'Dettaglio Stock',
+        title: 'Stock Details',
       },
 
       //implementare altre rotte con componenti dashboard, user setting, alerts
     ],
+  },
+
+  {
+    path: 'alerts',
+    loadComponent: () => import('../../features/alerts/alerts').then((m) => m.Alerts),
+    title: 'Inventory - Alerts',
   },
 ];
