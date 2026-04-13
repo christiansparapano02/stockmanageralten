@@ -5,25 +5,40 @@
   (mouseleave)="isExpanded = false"
 >
   <div class="nav-section nav-top">
-    <a routerLink="/dashboard" routerLinkActive="active" class="nav-item" tooltipPosition="right">
+    <a
+      (click)="goTo('dashboard')"
+      [class.active]="isActive('dashboard')"
+      class="nav-item"
+      tooltipPosition="right"
+    >
       <i class="pi pi-chart-line"></i>
       <span>Dashboard</span>
     </a>
     <br />
-    <a routerLink="/categories" routerLinkActive="active" class="nav-item" tooltipPosition="right">
+    <a
+      (click)="goTo('categories')"
+      [class.active]="isActive('categories')"
+      class="nav-item"
+      tooltipPosition="right"
+    >
       <i class="pi pi-briefcase"></i>
       <span>Categories</span>
     </a>
     <br />
 
-    <a routerLink="/alerts" routerLinkActive="active" class="nav-item" tooltipPosition="right">
+    <a
+      (click)="goTo('alerts')"
+      [class.active]="isActive('alerts')"
+      class="nav-item"
+      tooltipPosition="right"
+    >
       <i class="pi pi-megaphone"></i>
       <span>Alerts</span>
     </a>
     <br />
     <a
-      routerLink="/usersettings"
-      routerLinkActive="active"
+      (click)="goTo('usersettings')"
+      [class.active]="isActive('usersettings')"
       class="nav-item"
       tooltipPosition="right"
     >
@@ -33,7 +48,12 @@
   </div>
 
   <div class="nav-section nav-bottom">
-    <a routerLink="/support" routerLinkActive="active" class="nav-item" tooltipPosition="right">
+    <a
+      (click)="goTo('supports')"
+      routerLinkActive="active"
+      class="nav-item"
+      tooltipPosition="right"
+    >
       <i class="pi pi-wrench"></i>
       <span>Support</span>
     </a>
