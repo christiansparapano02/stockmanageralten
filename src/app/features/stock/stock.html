@@ -1,18 +1,209 @@
-<p-table [value]="items()" [tableStyle]="{ 'min-width': '50rem' }">
+<p-table
+  [value]="mode() === 'edit' ? editableItems() : items()"
+  [tableStyle]="{ 'min-width': '50rem' }"
+>
   <ng-template pTemplate="header">
     <tr>
       <th>Nome</th>
       <th>Stato</th>
       <th>Prossimo controllo</th>
       <th>Scadenza</th>
+      <th>Quantità disponibile</th>
+      <th>Quantità minima</th>
+      @if (mode() === 'delete') {
+        <th>Azioni</th>
+      }
     </tr>
   </ng-template>
-  <ng-template pTemplate="body" let-item>
+
+  <ng-template pTemplate="body" let-item let-rowIndex="rowIndex">
     <tr>
-      <td>{{ item.name }}</td>
-      <td>{{ item.status === 1 ? 'OK' : 'Critico' }}</td>
-      <td>{{ item.nextCheck ? (item.nextCheck | date: 'dd/MM/yyyy') : '—' }}</td>
-      <td>{{ item.expiring ? (item.expiring | date: 'dd/MM/yyyy') : '—' }}</td>
+      <td>
+        @if (mode() === 'edit') {
+          <input pInputText [(ngModel)]="editableItems()[rowIndex].name" />
+        } @else {
+          {{ item.name }}
+        }
+      </td>
+
+      <td>{{ getStatusLabel(item) }}</td>
+
+      <td>
+        @if (mode() === 'edit') {
+          <input
+            type="date"
+            [ngModel]="
+              editableItems()[rowIndex].nextCheck
+                ? (editableItems()[rowIndex].nextCheck | date: 'yyyy-MM-dd')
+                : ''
+            "
+            (ngModelChange)="
+              editableItems()[rowIndex].nextCheck = $event ? $any($event) : undefined
+            "
+          />
+        } @else {
+          {{ item.nextCheck ? (item.nextCheck | date: 'dd/MM/yyyy') : '—' }}
+        }
+      </td>
+
+      <td>
+        @if (mode() === 'edit') {
+          <input
+            type="date"
+            [ngModel]="
+              editableItems()[rowIndex].expiring
+                ? (editableItems()[rowIndex].expiring | date: 'yyyy-MM-dd')
+                : ''
+            "
+            (ngModelChange)="editableItems()[rowIndex].expiring = $event ? $any($event) : undefined"
+          />
+        } @else {
+          {{ item.expiring ? (item.expiring | date: 'dd/MM/yyyy') : '—' }}
+        }
+      </td>
+
+      <td>
+        @if (mode() === 'edit') {
+          <p-inputnumber
+            [(ngModel)]="editableItems()[rowIndex].quantity"
+            [showButtons]="true"
+            buttonLayout="horizontal"
+            spinnerMode="horizontal"
+            incrementButtonIcon="pi pi-plus"
+            decrementButtonIcon="pi pi-minus"
+          >
+          </p-inputnumber>
+        } @else {
+          {{ item.quantity }}
+        }
+      </td>
+
+      <td>
+        @if (mode() === 'edit') {
+          <p-inputnumber
+            [(ngModel)]="editableItems()[rowIndex].minQuantity"
+            [showButtons]="true"
+            buttonLayout="horizontal"
+            spinnerMode="horizontal"
+            incrementButtonIcon="pi pi-plus"
+            decrementButtonIcon="pi pi-minus"
+          >
+          </p-inputnumber>
+        } @else {
+          {{ item.minQuantity }}
+        }
+      </td>
+
+      @if (mode() === 'delete') {
+        <td>
+          <button
+            pButton
+            type="button"
+            icon="pi pi-trash"
+            severity="danger"
+            rounded
+            (click)="confirmDelete(item)"
+          ></button>
+        </td>
+      }
     </tr>
   </ng-template>
 </p-table>
+
+<app-options (onAdd)="handleAdd()" (onEdit)="handleEdit()" (onDelete)="handleDelete()" />
+
+@if (mode() === 'edit') {
+  <div class="edit-actions">
+    <button
+      pButton
+      type="button"
+      label="Annulla"
+      severity="secondary"
+      (click)="cancelEdit()"
+    ></button>
+
+    <button pButton type="button" label="Salva modifiche" (click)="saveEdit()"></button>
+  </div>
+}
+
+<p-dialog
+  header="Aggiungi item"
+  [visible]="dialogVisible()"
+  [modal]="true"
+  [style]="{ width: '30rem' }"
+  (visibleChange)="dialogVisible.set($event)"
+>
+  <div class="form-field">
+    <label for="name">Nome</label>
+    <input
+      id="name"
+      pInputText
+      [ngModel]="newItem().name"
+      (ngModelChange)="newItem.set({ ...newItem(), name: $event })"
+    />
+  </div>
+
+  <div class="form-field">
+    <label for="nextCheck">Prossimo controllo</label>
+    <input
+      id="nextCheck"
+      type="date"
+      [ngModel]="newItem().nextCheck ? (newItem().nextCheck | date: 'yyyy-MM-dd') : ''"
+      (ngModelChange)="newItem.set({ ...newItem(), nextCheck: $event ? $any($event) : undefined })"
+    />
+  </div>
+
+  <div class="form-field">
+    <label for="expiring">Scadenza</label>
+    <input
+      id="expiring"
+      type="date"
+      [ngModel]="newItem().expiring ? (newItem().expiring | date: 'yyyy-MM-dd') : ''"
+      (ngModelChange)="newItem.set({ ...newItem(), expiring: $event ? $any($event) : undefined })"
+    />
+  </div>
+
+  <div class="form-field">
+    <label for="quantity">Quantità disponibile</label>
+    <p-inputnumber
+      inputId="quantity"
+      [ngModel]="newItem().quantity"
+      (ngModelChange)="newItem.set({ ...newItem(), quantity: $event })"
+      [showButtons]="true"
+      buttonLayout="horizontal"
+      spinnerMode="horizontal"
+      incrementButtonIcon="pi pi-plus"
+      decrementButtonIcon="pi pi-minus"
+    >
+    </p-inputnumber>
+  </div>
+
+  <div class="form-field">
+    <label for="minQuantity">Quantità minima</label>
+    <p-inputnumber
+      inputId="minQuantity"
+      [ngModel]="newItem().minQuantity"
+      (ngModelChange)="newItem.set({ ...newItem(), minQuantity: $event })"
+      [showButtons]="true"
+      buttonLayout="horizontal"
+      spinnerMode="horizontal"
+      incrementButtonIcon="pi pi-plus"
+      decrementButtonIcon="pi pi-minus"
+    >
+    </p-inputnumber>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <button
+      pButton
+      type="button"
+      label="Annulla"
+      severity="secondary"
+      (click)="dialogVisible.set(false)"
+    ></button>
+
+    <button pButton type="button" label="Salva" (click)="saveNewItem()"></button>
+  </ng-template>
+</p-dialog>
+
+<p-confirmdialog />

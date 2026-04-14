@@ -180,3 +180,11 @@ Contenitore della Griglia
   height: 200px;
   /* ... resto degli stili invariato */
 }
+
+:host ::ng-deep .category-glass-card:hover:not(:disabled) {
+  transform: translateY(-6px);
+  background: #e6f0ff !important;
+  box-shadow:
+    8px 8px 20px rgba(0, 0, 0, 0.15),
+    -4px -4px 14px rgba(255, 255, 255, 0.8) !important;
+}

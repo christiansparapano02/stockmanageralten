@@ -5,6 +5,8 @@
       <th>Stato</th>
       <th>Prossimo controllo</th>
       <th>Scadenza</th>
+      <th>Quantità disponibile</th>
+      <th>Quantità minima</th>
       <th>Restock</th>
     </tr>
   </ng-template>
@@ -14,6 +16,8 @@
       <td>{{ item.status === 1 ? 'OK' : 'Critico' }}</td>
       <td>{{ item.nextCheck ? (item.nextCheck | date: 'dd/MM/yyyy') : '—' }}</td>
       <td>{{ item.expiring ? (item.expiring | date: 'dd/MM/yyyy') : '—' }}</td>
+      <td>{{ item.quantity }}</td>
+      <td>{{ item.minQuantity }}</td>
       <td>
         <p-button label="Ordina" severity="danger" size="small" (click)="onRestock(item)" />
       </td>

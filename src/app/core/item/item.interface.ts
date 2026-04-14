@@ -5,4 +5,6 @@ export interface Item {
   nextCheck?: Date;
   expiring?: Date;
   categoryId: string;
+  quantity: number;
+  minQuantity: number;
 }
