@@ -77,7 +77,14 @@ export class Stock implements OnInit {
   }
 
   getStatusLabel(item: Pick<Item, 'quantity' | 'minQuantity'>): string {
-    return this.computeStatus(item) === 1 ? 'OK' : 'Critico';
+    if(item.quantity >= item.minQuantity) {
+      return this.computeStatus(item) ? 'OK' : 'OK'
+    } else if(item.quantity < item.minQuantity && item.quantity !== 0) {
+      return this.computeStatus(item) ? 'Basso' : 'Basso'
+    } else if(item.quantity === 0) {
+      return this.computeStatus(item) ? 'Critico' : 'Critico';
+    }
+    return this.computeStatus(item) ? 'OK' : 'OK' 
   }
 
   handleAdd() {
@@ -155,4 +162,6 @@ export class Stock implements OnInit {
       },
     });
   }
+
+
 }
