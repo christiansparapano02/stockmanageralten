@@ -31,9 +31,8 @@
       ></p-password>
     </div>
 
-    @if (emailIsInvalid) {
-      <p class="control-error">Please enter a valid email address.</p>
-    }
+   
+    
 
     @if (passwordIsInvalid && loginForm.controls.password.hasError('mancaMaiuscola')) {
       <p class="control-error">

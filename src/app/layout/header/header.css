@@ -76,3 +76,48 @@ img {
 :host-context(.dark-mode) .pi-user {
   color: #ffffff;
 }
+
+
+:host ::ng-deep .p-menu {
+  min-width: 160px;
+  border-radius: 8px;
+
+  .p-menuitem-link {
+    gap: 0.75rem;
+  }
+
+  .p-menuitem:last-child .p-menuitem-link {
+    color: var(--p-red-500);
+
+    .p-menuitem-icon {
+      color: var(--p-red-500);
+    }
+  }
+}
+
+:host ::ng-deep .avatar-light.p-avatar {
+  background-color: #ffe600;
+  color: #000000;
+}
+
+/* Rimuove l'aspetto "disabilitato" dalla voce header */
+:host ::ng-deep .user-header-item.p-disabled {
+  opacity: 1;
+  cursor: default;
+}
+
+:host ::ng-deep .user-menu-header {
+  display: flex;
+  flex-direction: column;
+  padding: 0.25rem 0;
+}
+
+:host ::ng-deep .user-name {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+:host ::ng-deep .user-role {
+  font-size: 0.75rem;
+  opacity: 0.7;
+}

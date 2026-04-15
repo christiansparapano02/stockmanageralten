@@ -18,6 +18,15 @@
       [class]="darkModeService.isDark() ? 'pi pi-sun theme-icon' : 'pi pi-moon theme-icon'"
       (click)="darkModeService.onToggle()"
     ></i>
-    <i class="pi pi-user"></i>
+     <p-avatar
+    icon="pi pi-user"
+    shape="circle"
+    (click)="profileMenu.toggle($event)"
+     [class]="darkModeService.isDark() ? '' : 'avatar-light'"
+    style="cursor: pointer"
+  />
+
+  <!-- Menu popup -->
+  <p-menu #profileMenu [model]="menuItems" [popup]="true" />
   </div>
 </header>
