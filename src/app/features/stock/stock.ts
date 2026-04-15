@@ -14,6 +14,7 @@ import { TableModule } from 'primeng/table';
 import { Item } from '../../core/item/item.interface';
 import { ItemService } from '../../core/item/item-service';
 import { Options } from './options/options';
+import { StatusLabelPipe } from '../../shared/pipes/status.pipe.ts';
 
 @Component({
   selector: 'app-stock',
@@ -28,6 +29,7 @@ import { Options } from './options/options';
     InputNumberModule,
     ButtonModule,
     ConfirmDialogModule,
+    StatusLabelPipe,
   ],
   providers: [ConfirmationService],
   templateUrl: './stock.html',
@@ -52,7 +54,7 @@ export class Stock implements OnInit {
     expiring: undefined,
     categoryId: '',
     quantity: 0,
-    minQuantity: 0,
+    minQuantity: 1,
   });
 
   ngOnInit() {
@@ -76,17 +78,6 @@ export class Stock implements OnInit {
     return item.quantity < item.minQuantity ? 0 : 1;
   }
 
-  getStatusLabel(item: Pick<Item, 'quantity' | 'minQuantity'>): string {
-    if(item.quantity >= item.minQuantity) {
-      return this.computeStatus(item) ? 'OK' : 'OK'
-    } else if(item.quantity < item.minQuantity && item.quantity !== 0) {
-      return this.computeStatus(item) ? 'Basso' : 'Basso'
-    } else if(item.quantity === 0) {
-      return this.computeStatus(item) ? 'Critico' : 'Critico';
-    }
-    return this.computeStatus(item) ? 'OK' : 'OK' 
-  }
-
   handleAdd() {
     this.mode.set('none');
     this.newItem.set({
@@ -96,7 +87,7 @@ export class Stock implements OnInit {
       expiring: undefined,
       categoryId: this.categoryId(),
       quantity: 0,
-      minQuantity: 0,
+      minQuantity: 1,
     });
     this.dialogVisible.set(true);
   }
@@ -162,6 +153,4 @@ export class Stock implements OnInit {
       },
     });
   }
-
-
 }
