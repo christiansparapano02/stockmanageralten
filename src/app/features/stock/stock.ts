@@ -12,9 +12,11 @@ import { InputTextModule } from 'primeng/inputtext';
 import { TableModule } from 'primeng/table';
 
 import { Item } from '../../core/item/item.interface';
-import { ItemService } from '../../core/item/item-service';
+import { ItemMockService } from '../../core/item/item-mock.service';
 import { Options } from './options/options';
 import { StatusLabelPipe } from '../../shared/pipes/status.pipe.ts';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { ITEM_SERVICE_TOKEN } from '../../core/item/item-service.token';
 
 @Component({
   selector: 'app-stock',
@@ -30,6 +32,7 @@ import { StatusLabelPipe } from '../../shared/pipes/status.pipe.ts';
     ButtonModule,
     ConfirmDialogModule,
     StatusLabelPipe,
+    ProgressSpinnerModule,
   ],
   providers: [ConfirmationService],
   templateUrl: './stock.html',
@@ -37,7 +40,7 @@ import { StatusLabelPipe } from '../../shared/pipes/status.pipe.ts';
 })
 export class Stock implements OnInit {
   route = inject(ActivatedRoute);
-  itemService = inject(ItemService);
+  itemService = inject(ITEM_SERVICE_TOKEN);
   confirmationService = inject(ConfirmationService);
 
   items = signal<Item[]>([]);
@@ -57,6 +60,8 @@ export class Stock implements OnInit {
     minQuantity: 1,
   });
 
+  loading = signal(false);
+
   ngOnInit() {
     this.route.params.subscribe((params) => {
       this.categoryId.set(params['category']);
@@ -65,12 +70,20 @@ export class Stock implements OnInit {
   }
 
   loadItems() {
-    this.itemService.getByCategory(this.categoryId()).subscribe((data) => {
-      const normalized = data.map((item) => ({
-        ...item,
-        status: this.computeStatus(item),
-      }));
-      this.items.set(normalized);
+    this.loading.set(true);
+
+    this.itemService.getByCategory(this.categoryId()).subscribe({
+      next: (data) => {
+        const normalized = data.map((item) => ({
+          ...item,
+          status: this.computeStatus(item),
+        }));
+        this.items.set(normalized);
+        this.loading.set(false);
+      },
+      error: () => {
+        this.loading.set(false);
+      },
     });
   }
 

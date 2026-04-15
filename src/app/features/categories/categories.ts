@@ -1,23 +1,35 @@
 import { Component, inject, signal } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { Category } from '../../core/category/category.interface';
-import { CategoryService } from '../../core/category/category-service';
+import { CategoryMockService } from '../../core/category/category-mock.service';
 import { Router } from '@angular/router';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { CATEGORY_SERVICE_TOKEN } from '../../core/category/category-service.token';
 
 @Component({
   selector: 'app-categories',
-  imports: [ButtonModule],
+  imports: [ButtonModule, ProgressSpinnerModule],
   templateUrl: './categories.html',
   styleUrl: './categories.css',
 })
 export class Categories {
   categories = signal<Category[]>([]);
-  catService = inject(CategoryService);
+  catService = inject(CATEGORY_SERVICE_TOKEN);
   router = inject(Router);
 
+  loading = signal(false);
+
   ngOnInit() {
-    this.catService.getCategories().subscribe((data) => {
-      this.categories.set(data);
+    this.loading.set(true);
+
+    this.catService.getCategories().subscribe({
+      next: (data) => {
+        this.categories.set(data);
+        this.loading.set(false);
+      },
+      error: () => {
+        this.loading.set(false);
+      },
     });
   }
 

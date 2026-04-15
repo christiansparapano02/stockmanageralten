@@ -1,115 +1,123 @@
-<p-table
-  [value]="mode() === 'edit' ? editableItems() : items()"
-  [tableStyle]="{ 'min-width': '50rem' }"
->
-  <ng-template pTemplate="header">
-    <tr>
-      <th>Nome</th>
-      <th>Stato</th>
-      <th>Prossimo controllo</th>
-      <th>Scadenza</th>
-      <th>Quantità disponibile</th>
-      <th>Quantità minima</th>
-      @if (mode() === 'delete') {
-        <th>Azioni</th>
-      }
-    </tr>
-  </ng-template>
-
-  <ng-template pTemplate="body" let-item let-rowIndex="rowIndex">
-    <tr>
-      <td>
-        @if (mode() === 'edit') {
-          <input pInputText [(ngModel)]="editableItems()[rowIndex].name" />
-        } @else {
-          {{ item.name }}
+@if (loading()) {
+  <div class="spinner-container">
+    <p-progressSpinner />
+  </div>
+} @else {
+  <p-table
+    [value]="mode() === 'edit' ? editableItems() : items()"
+    [tableStyle]="{ 'min-width': '50rem' }"
+  >
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Nome</th>
+        <th>Stato</th>
+        <th>Prossimo controllo</th>
+        <th>Scadenza</th>
+        <th>Quantità disponibile</th>
+        <th>Quantità minima</th>
+        @if (mode() === 'delete') {
+          <th>Azioni</th>
         }
-      </td>
+      </tr>
+    </ng-template>
 
-      <td>{{ item | statusLabel }}</td>
-
-      <td>
-        @if (mode() === 'edit') {
-          <input
-            type="date"
-            [ngModel]="
-              editableItems()[rowIndex].nextCheck
-                ? (editableItems()[rowIndex].nextCheck | date: 'yyyy-MM-dd')
-                : ''
-            "
-            (ngModelChange)="
-              editableItems()[rowIndex].nextCheck = $event ? $any($event) : undefined
-            "
-          />
-        } @else {
-          {{ item.nextCheck ? (item.nextCheck | date: 'dd/MM/yyyy') : '—' }}
-        }
-      </td>
-
-      <td>
-        @if (mode() === 'edit') {
-          <input
-            type="date"
-            [ngModel]="
-              editableItems()[rowIndex].expiring
-                ? (editableItems()[rowIndex].expiring | date: 'yyyy-MM-dd')
-                : ''
-            "
-            (ngModelChange)="editableItems()[rowIndex].expiring = $event ? $any($event) : undefined"
-          />
-        } @else {
-          {{ item.expiring ? (item.expiring | date: 'dd/MM/yyyy') : '—' }}
-        }
-      </td>
-
-      <td>
-        @if (mode() === 'edit') {
-          <p-inputnumber
-            [(ngModel)]="editableItems()[rowIndex].quantity"
-            [showButtons]="true"
-            [min]="0"
-            buttonLayout="horizontal"
-            spinnerMode="horizontal"
-            incrementButtonIcon="pi pi-plus"
-            decrementButtonIcon="pi pi-minus"
-          >
-          </p-inputnumber>
-        } @else {
-          {{ item.quantity }}
-        }
-      </td>
-
-      <td>
-        @if (mode() === 'edit') {
-          <p-inputnumber
-            [(ngModel)]="editableItems()[rowIndex].minQuantity"
-            [showButtons]="true"
-            [min]="1"
-            buttonLayout="horizontal"
-            spinnerMode="horizontal"
-            incrementButtonIcon="pi pi-plus"
-            decrementButtonIcon="pi pi-minus"
-          >
-          </p-inputnumber>
-        } @else {
-          {{ item.minQuantity }}
-        }
-      </td>
-
-      @if (mode() === 'delete') {
+    <ng-template pTemplate="body" let-item let-rowIndex="rowIndex">
+      <tr>
         <td>
-          <p-button
-            icon="pi pi-trash"
-            severity="danger"
-            [rounded]="true"
-            (onClick)="confirmDelete(item)"
-            styleClass="delete-btn"
-          />
+          @if (mode() === 'edit') {
+            <input pInputText [(ngModel)]="editableItems()[rowIndex].name" />
+          } @else {
+            {{ item.name }}
+          }
         </td>
-      }
-    </tr>
-  </ng-template>
-</p-table>
+
+        <td>{{ item | statusLabel }}</td>
+
+        <td>
+          @if (mode() === 'edit') {
+            <input
+              type="date"
+              [ngModel]="
+                editableItems()[rowIndex].nextCheck
+                  ? (editableItems()[rowIndex].nextCheck | date: 'yyyy-MM-dd')
+                  : ''
+              "
+              (ngModelChange)="
+                editableItems()[rowIndex].nextCheck = $event ? $any($event) : undefined
+              "
+            />
+          } @else {
+            {{ item.nextCheck ? (item.nextCheck | date: 'dd/MM/yyyy') : '—' }}
+          }
+        </td>
+
+        <td>
+          @if (mode() === 'edit') {
+            <input
+              type="date"
+              [ngModel]="
+                editableItems()[rowIndex].expiring
+                  ? (editableItems()[rowIndex].expiring | date: 'yyyy-MM-dd')
+                  : ''
+              "
+              (ngModelChange)="
+                editableItems()[rowIndex].expiring = $event ? $any($event) : undefined
+              "
+            />
+          } @else {
+            {{ item.expiring ? (item.expiring | date: 'dd/MM/yyyy') : '—' }}
+          }
+        </td>
+
+        <td>
+          @if (mode() === 'edit') {
+            <p-inputnumber
+              [(ngModel)]="editableItems()[rowIndex].quantity"
+              [showButtons]="true"
+              [min]="0"
+              buttonLayout="horizontal"
+              spinnerMode="horizontal"
+              incrementButtonIcon="pi pi-plus"
+              decrementButtonIcon="pi pi-minus"
+            >
+            </p-inputnumber>
+          } @else {
+            {{ item.quantity }}
+          }
+        </td>
+
+        <td>
+          @if (mode() === 'edit') {
+            <p-inputnumber
+              [(ngModel)]="editableItems()[rowIndex].minQuantity"
+              [showButtons]="true"
+              [min]="1"
+              buttonLayout="horizontal"
+              spinnerMode="horizontal"
+              incrementButtonIcon="pi pi-plus"
+              decrementButtonIcon="pi pi-minus"
+            >
+            </p-inputnumber>
+          } @else {
+            {{ item.minQuantity }}
+          }
+        </td>
+
+        @if (mode() === 'delete') {
+          <td>
+            <p-button
+              icon="pi pi-trash"
+              severity="danger"
+              [rounded]="true"
+              (onClick)="confirmDelete(item)"
+              styleClass="delete-btn"
+            />
+          </td>
+        }
+      </tr>
+    </ng-template>
+  </p-table>
+}
 
 <app-options (onAdd)="handleAdd()" (onEdit)="handleEdit()" (onDelete)="handleDelete()" />
 
