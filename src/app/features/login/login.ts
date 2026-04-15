@@ -1,9 +1,10 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, NgForm, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
+import { Component, inject,} from '@angular/core';
+import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { ButtonModule } from 'primeng/button';
 import { form } from '@angular/forms/signals';
+import { RouterLink } from "@angular/router";
 
 
 function uppercaseValidator(control: AbstractControl): ValidationErrors | null {
@@ -21,7 +22,7 @@ function uppercaseValidator(control: AbstractControl): ValidationErrors | null {
   selector: 'app-login',
   templateUrl: './login.html',
   styleUrl: './login.css',
-  imports: [ReactiveFormsModule, InputTextModule, PasswordModule, ButtonModule],
+  imports: [ReactiveFormsModule, InputTextModule, PasswordModule, ButtonModule, RouterLink],
 })
 export class LoginComponent{
   private fb = inject(FormBuilder);

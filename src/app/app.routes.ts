@@ -13,5 +13,11 @@ export const routes: Routes = [
 
     loadChildren: () => import('./layout/main-layout/main.routes').then((m) => m.MAIN_ROUTES),
   },
+
+   {
+    path: 'forgotpassword',
+    loadComponent: () => import('./features/forgotpassword/forgotpassword').then((m) => m.ForgotPassword),
+    title: 'Forgot Password',
+  },
   //{ path: '**', redirectTo: 'login' },
 ];
