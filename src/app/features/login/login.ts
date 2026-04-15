@@ -20,6 +20,7 @@ function uppercaseValidator(control: AbstractControl): ValidationErrors | null {
 
 @Component({
   selector: 'app-login',
+  standalone: true,
   templateUrl: './login.html',
   styleUrl: './login.css',
   imports: [ReactiveFormsModule, InputTextModule, PasswordModule, ButtonModule, RouterLink],
