@@ -188,3 +188,10 @@ Contenitore della Griglia
     8px 8px 20px rgba(0, 0, 0, 0.15),
     -4px -4px 14px rgba(255, 255, 255, 0.8) !important;
 }
+
+.spinner-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 300px;
+}

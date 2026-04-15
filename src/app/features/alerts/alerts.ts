@@ -3,22 +3,32 @@ import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { DatePipe } from '@angular/common';
 import { Item } from '../../core/item/item.interface';
-import { ItemService } from '../../core/item/item-service';
+import { ItemMockService } from '../../core/item/item-mock.service';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 @Component({
   selector: 'app-alerts',
   standalone: true,
-  imports: [TableModule, ButtonModule, DatePipe],
+  imports: [TableModule, ButtonModule, DatePipe, ProgressSpinnerModule],
   templateUrl: './alerts.html',
   styleUrl: './alerts.css',
 })
 export class Alerts implements OnInit {
-  itemService = inject(ItemService);
+  itemService = inject(ItemMockService);
   criticalItems = signal<Item[]>([]);
+  loading = signal(false);
 
   ngOnInit() {
-    this.itemService.getCritical().subscribe((data) => {
-      this.criticalItems.set(data);
+    this.loading.set(true);
+
+    this.itemService.getCritical().subscribe({
+      next: (data) => {
+        this.criticalItems.set(data);
+        this.loading.set(false);
+      },
+      error: () => {
+        this.loading.set(false);
+      },
     });
   }
 

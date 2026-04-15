@@ -16,3 +16,10 @@
   position: relative;
   z-index: 10;
 }
+
+.spinner-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 300px;
+}

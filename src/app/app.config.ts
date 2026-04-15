@@ -4,7 +4,10 @@ import { provideRouter } from '@angular/router';
 import Aura from '@primeuix/themes/aura';
 
 import { routes } from './app.routes';
-import { DarkModeService } from './core/dark_mode.service';
+import { CATEGORY_SERVICE_TOKEN } from './core/category/category-service.token';
+import { CategoryMockService } from './core/category/category-mock.service';
+import { ITEM_SERVICE_TOKEN } from './core/item/item-service.token';
+import { ItemMockService } from './core/item/item-mock.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -18,5 +21,13 @@ export const appConfig: ApplicationConfig = {
         },
       },
     }),
+    {
+      provide: CATEGORY_SERVICE_TOKEN,
+      useExisting: CategoryMockService,
+    },
+    {
+      provide: ITEM_SERVICE_TOKEN,
+      useExisting: ItemMockService,
+    },
   ],
 };
