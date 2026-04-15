@@ -26,7 +26,7 @@
         }
       </td>
 
-      <td>{{ getStatusLabel(item) }}</td>
+      <td>{{ item | statusLabel }}</td>
 
       <td>
         @if (mode() === 'edit') {
@@ -67,6 +67,7 @@
           <p-inputnumber
             [(ngModel)]="editableItems()[rowIndex].quantity"
             [showButtons]="true"
+            [min]="0"
             buttonLayout="horizontal"
             spinnerMode="horizontal"
             incrementButtonIcon="pi pi-plus"
@@ -83,6 +84,7 @@
           <p-inputnumber
             [(ngModel)]="editableItems()[rowIndex].minQuantity"
             [showButtons]="true"
+            [min]="1"
             buttonLayout="horizontal"
             spinnerMode="horizontal"
             incrementButtonIcon="pi pi-plus"
@@ -169,6 +171,7 @@
       [ngModel]="newItem().quantity"
       (ngModelChange)="newItem.set({ ...newItem(), quantity: $event })"
       [showButtons]="true"
+      [min]="0"
       buttonLayout="horizontal"
       spinnerMode="horizontal"
       incrementButtonIcon="pi pi-plus"
@@ -184,6 +187,7 @@
       [ngModel]="newItem().minQuantity"
       (ngModelChange)="newItem.set({ ...newItem(), minQuantity: $event })"
       [showButtons]="true"
+      [min]="1"
       buttonLayout="horizontal"
       spinnerMode="horizontal"
       incrementButtonIcon="pi pi-plus"

@@ -8,24 +8,22 @@ export class ItemService {
     {
       id: '1',
       name: 'Carta A4 (risma)',
-      status: 1,
       categoryId: '1',
       quantity: 15,
       minQuantity: 10,
     },
-    { id: '2', name: 'Penne biro', status: 1, categoryId: '1', quantity: 30, minQuantity: 10 },
-    { id: '3', name: 'Spillatrice', status: 0, categoryId: '1', quantity: 1, minQuantity: 5 },
+    { id: '2', name: 'Penne biro', categoryId: '1', quantity: 30, minQuantity: 10 },
+    { id: '3', name: 'Spillatrice', categoryId: '1', quantity: 1, minQuantity: 5 },
     {
       id: '4',
       name: 'Kit pronto soccorso',
-      status: 1,
       categoryId: '2',
       quantity: 3,
       minQuantity: 2,
     },
-    { id: '5', name: 'Estintore', status: 1, categoryId: '3', quantity: 4, minQuantity: 2 },
-    { id: '6', name: 'Badge accesso', status: 0, categoryId: '3', quantity: 0, minQuantity: 5 },
-    { id: '7', name: 'Macchinetta caffè', status: 1, categoryId: '4', quantity: 2, minQuantity: 1 },
+    { id: '5', name: 'Estintore', categoryId: '3', quantity: 4, minQuantity: 2 },
+    { id: '6', name: 'Badge accesso', categoryId: '3', quantity: 0, minQuantity: 5 },
+    { id: '7', name: 'Macchinetta caffè', categoryId: '4', quantity: 2, minQuantity: 1 },
   ];
 
   getByCategory(categoryId: string) {
@@ -33,7 +31,7 @@ export class ItemService {
   }
 
   getCritical() {
-    return of(this.items.filter((i) => i.status === 0));
+    return of(this.items.filter((item) => item.quantity === 0));
   }
 
   add(item: Omit<Item, 'id'>) {
