@@ -11,3 +11,8 @@
   gap: 6px;
   margin-bottom: 14px;
 }
+
+:host ::ng-deep .delete-btn {
+  position: relative;
+  z-index: 10;
+}

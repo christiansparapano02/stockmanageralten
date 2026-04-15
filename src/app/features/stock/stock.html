@@ -96,14 +96,13 @@
 
       @if (mode() === 'delete') {
         <td>
-          <button
-            pButton
-            type="button"
+          <p-button
             icon="pi pi-trash"
             severity="danger"
-            rounded
-            (click)="confirmDelete(item)"
-          ></button>
+            [rounded]="true"
+            (onClick)="confirmDelete(item)"
+            styleClass="delete-btn"
+          />
         </td>
       }
     </tr>
