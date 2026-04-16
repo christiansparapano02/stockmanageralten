@@ -1,0 +1,185 @@
+/* --- 1. CONTENITORE PRINCIPALE (Centrato come il login) --- */
+/* --- 1. CONTENITORE PRINCIPALE (Correzione Scroll) --- */
+.support-page {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  
+  /* IL TRUCCO PER LO SCROLL INTERNO: */
+  height: calc(100vh - 100px); /* Usa height, non min-height. Sottrai l'altezza del tuo header/navbar */
+  overflow-y: auto;            /* Forza la comparsa della barra di scorrimento qui dentro */
+  
+  padding: 4rem 2rem;
+  font-family: sans-serif;
+}
+
+/* --- 2. LA CARD GLASSMORPHISM --- */
+.support-card {
+  width: 100%;
+  max-width: 650px; /* Abbastanza larga per far respirare il form */
+  background: var(--p-surface-card) !important;
+  border-radius: 20px;
+  padding: 3rem;
+  color: var(--p-text-color);
+  
+  /* Ombre identiche alla dashboard per coerenza */
+  box-shadow: 
+    6px 6px 16px rgba(0, 0, 0, 0.1), 
+    -4px -4px 12px rgba(255, 255, 255, 0.7);
+  transition: all 0.3s ease;
+  
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* --- 3. INTESTAZIONE --- */
+.support-header {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.support-header h2 {
+  margin: 0 0 0.5rem 0;
+  font-size: 2rem;
+  font-weight: 600;
+}
+
+.support-header p {
+  margin: 0;
+  color: var(--p-text-color);
+  opacity: 0.7; /* Rende il sottotitolo leggermente più delicato */
+  font-size: 1rem;
+}
+
+/* --- 4. CAMPI DEL FORM --- */
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-field label {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.form-field small {
+  opacity: 0.7;
+  font-size: 0.85rem;
+}
+
+/* Forza gli input di PrimeNG a prendere tutta la larghezza */
+::ng-deep .support-card .p-inputtext {
+  width: 100%;
+}
+
+/* --- 5. STILE PER GLI ELEMENTI HTML NATIVI (Select e File) --- */
+/* Li stilizziamo per farli sembrare componenti PrimeNG */
+.support-select,
+input[type="file"] {
+  width: 100%;
+  padding: 0.75rem;
+  border-radius: 6px;
+  border: 1px solid var(--p-content-border-color, #cbd5e1);
+  background: var(--p-surface-ground);
+  color: var(--p-text-color);
+  font-family: inherit;
+  font-size: 1rem;
+  transition: outline-color 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+}
+
+.support-select:focus {
+  outline: none;
+  border-color: var(--p-primary-color);
+  box-shadow: 0 0 0 1px var(--p-primary-color);
+}
+
+/* Customizzazione file input per renderlo più carino */
+input[type="file"]::file-selector-button {
+  background: var(--p-surface-hover);
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  color: var(--p-text-color);
+  cursor: pointer;
+  margin-right: 1rem;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+
+input[type="file"]::file-selector-button:hover {
+  background: var(--p-content-border-color, #cbd5e1);
+}
+
+/* --- 6. PULSANTI (Actions) --- */
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  margin-top: 2rem; /* Usa margin o padding, va bene uguale */
+    padding-top: 10px;
+}
+
+.form-actions button {
+  padding: 0.8rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+}
+
+/* Tasto Annulla (Secondario) */
+.form-actions button:first-child {
+  background: transparent;
+  color: var(--p-text-color);
+  border: 1px solid var(--p-content-border-color, #cbd5e1);
+}
+
+.form-actions button:first-child:hover {
+  background: var(--p-surface-hover, rgba(0, 0, 0, 0.04));
+}
+
+.form-actions button:last-child {
+  background-color: #028bd3; /* CAMBIA QUI: Questo è un bel verde smeraldo */
+  color: #ffffff;            /* Colore del testo (bianco) */
+  border: none;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.form-actions button:last-child:hover {
+  background-color: #0056b3; /* CAMBIA QUI: Un verde leggermente più scuro per l'effetto hover */
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.25);
+  /* Ho rimosso il filter: brightness, ora usiamo il cambio di background-color */
+}
+
+/* --- 7. CORREZIONE OMBRE PER IL TEMA SCURO --- */
+:host-context(.dark-mode) .support-card {
+  box-shadow: 
+    6px 6px 16px rgba(0, 0, 0, 0.6), 
+    -4px -4px 12px rgba(255, 255, 255, 0.03); 
+}
+
+/* Adatta lo sfondo del selettore file in dark mode */
+:host-context(.dark-mode) input[type="file"]::file-selector-button {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+:host-context(.dark-mode) input[type="file"]::file-selector-button:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+:host-context(.dark-mode) .form-actions button:first-child:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.spinner-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 300px;
+}

@@ -1,18 +1,24 @@
-import { Component, inject,} from '@angular/core';
-import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
+import { Component, inject, OnInit, signal } from '@angular/core';
+import {
+  AbstractControl,
+  FormBuilder,
+  ReactiveFormsModule,
+  ValidationErrors,
+  Validators,
+} from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { ButtonModule } from 'primeng/button';
 import { form } from '@angular/forms/signals';
-import { RouterLink } from "@angular/router";
-
+import { RouterLink } from '@angular/router';
+import { ProgressSpinner } from "primeng/progressspinner";
 
 function uppercaseValidator(control: AbstractControl): ValidationErrors | null {
   const value = control.value || '';
-  
+
   // Controlla se c'è una lettera maiuscola
   const haMaiuscola = /[A-Z]/.test(value);
-  
+
   // Se ce l'ha, restituisce null (nessun errore, tutto ok!)
   // Se NON ce l'ha, restituisce un oggetto con il nome dell'errore
   return haMaiuscola ? null : { mancaMaiuscola: true };
@@ -23,12 +29,20 @@ function uppercaseValidator(control: AbstractControl): ValidationErrors | null {
   standalone: true,
   templateUrl: './login.html',
   styleUrl: './login.css',
-  imports: [ReactiveFormsModule, InputTextModule, PasswordModule, ButtonModule, RouterLink],
+  imports: [ReactiveFormsModule, InputTextModule, PasswordModule, ButtonModule, RouterLink, ProgressSpinner],
 })
-export class LoginComponent{
+export class LoginComponent implements OnInit {
   private fb = inject(FormBuilder);
-  
-  
+
+  loading = signal(false);
+
+  ngOnInit(): void {
+    this.loading.set(true);
+    setTimeout(() => {
+      this.loading.set(false);
+    }, 1000);
+  }
+
   loginForm = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(6), uppercaseValidator]],
