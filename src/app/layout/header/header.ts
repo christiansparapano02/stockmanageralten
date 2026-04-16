@@ -11,7 +11,7 @@ import { Avatar } from 'primeng/avatar';
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [InputText, IconField, InputIcon, Menu, Avatar, RouterLink],
+  imports: [Menu, Avatar],
   templateUrl: './header.html',
   styleUrl: './header.css',
 })

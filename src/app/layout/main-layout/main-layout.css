@@ -12,7 +12,7 @@
 
 .content-container {
   flex: 1;
-  overflow-y: auto; /* Scroll solo qui dentro */
-  background-color: #f4f7f9; /* Sfondo neutro o il tuo gradiente */
+  flex-direction: row;
+  overflow-y: auto; /* Scroll solo qui dentro */ /* Sfondo neutro o il tuo gradiente */
   padding: 1rem;
 }
