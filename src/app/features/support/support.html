@@ -1,0 +1,46 @@
+<div class="support-page">
+  <div class="support-card">
+    <div class="support-header">
+      <h2>Richiesta supporto</h2>
+      <p>Compila il form per inviare una richiesta di assistenza.</p>
+    </div>
+
+    <div class="form-field">
+      <label for="category">Categoria</label>
+      <select id="category" class="support-select">
+        <option value="" selected disabled>Seleziona una categoria</option>
+        <option value="accesso">Problemi di accesso</option>
+        <option value="inventario">Errore inventario</option>
+        <option value="categorie">Problema categorie</option>
+        <option value="ui">Problema interfaccia</option>
+        <option value="altro">Altro</option>
+      </select>
+    </div>
+
+    <div class="form-field">
+      <label for="subject">Oggetto</label>
+      <input id="subject" type="text" pInputText placeholder="Inserisci un breve oggetto" />
+    </div>
+
+    <div class="form-field">
+      <label for="description">Descrizione</label>
+      <textarea
+        id="description"
+        rows="7"
+        pInputTextarea
+        placeholder="Descrivi il problema o la richiesta di supporto"
+      ></textarea>
+    </div>
+
+    <div class="form-field">
+      <label for="attachment">Allega screenshot</label>
+      <input id="attachment" type="file" accept="image/*" multiple />
+      <small>Puoi allegare uno o più screenshot.</small>
+    </div>
+
+    <div class="form-actions">
+      <button type="button">Annulla</button>
+      <button type="button">Invia ticket</button>
+    </div>
+  </div>
+</div>
