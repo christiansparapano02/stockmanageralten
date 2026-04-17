@@ -154,11 +154,11 @@ export class Stock implements OnInit {
 
   confirmDelete(item: Item) {
     this.confirmationService.confirm({
-      header: 'Conferma eliminazione',
-      message: `Vuoi eliminare "${item.name}"?`,
+      header: 'Confirm Deletion',
+      message: `Are you sure you want to delete "${item.name}"?`,
       icon: 'pi pi-exclamation-triangle',
-      acceptLabel: 'Elimina',
-      rejectLabel: 'Annulla',
+      acceptLabel: 'Delete',
+      rejectLabel: 'Cancel',
       accept: () => {
         this.itemService.delete(item.id).subscribe(() => {
           this.items.update((current) => current.filter((i) => i.id !== item.id));

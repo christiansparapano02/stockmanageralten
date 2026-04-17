@@ -9,7 +9,7 @@
   <div class="header-center">
     <div>
       <p class="title">Stock Manager</p>
-      <p class="subtitle">Sede: Bari</p>
+      <p class="subtitle">Location: Bari</p>
     </div>
   </div>
 
@@ -18,15 +18,15 @@
       [class]="darkModeService.isDark() ? 'pi pi-sun theme-icon' : 'pi pi-moon theme-icon'"
       (click)="darkModeService.onToggle()"
     ></i>
-     <p-avatar
-    icon="pi pi-user"
-    shape="circle"
-    (click)="profileMenu.toggle($event)"
-     [class]="darkModeService.isDark() ? '' : 'avatar-light'"
-    style="cursor: pointer"
-  />
+    <p-avatar
+      icon="pi pi-user"
+      shape="circle"
+      (click)="profileMenu.toggle($event)"
+      [class]="darkModeService.isDark() ? '' : 'avatar-light'"
+      style="cursor: pointer"
+    />
 
-  <!-- Menu popup -->
-  <p-menu #profileMenu [model]="menuItems" [popup]="true" />
+    <!-- Menu popup -->
+    <p-menu #profileMenu [model]="menuItems" [popup]="true" />
   </div>
 </header>

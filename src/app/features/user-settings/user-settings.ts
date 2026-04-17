@@ -68,12 +68,12 @@ export class UserSettings {
     this.userActions = [
       {
         icon: 'pi pi-user-plus',
-        tooltipOptions: { tooltipLabel: 'Aggiungi Utente' },
+        tooltipOptions: { tooltipLabel: 'Add User' },
         command: () => this.openDialog(), // Modo creazione
       },
       {
         icon: 'pi pi-pencil',
-        tooltipOptions: { tooltipLabel: 'Modifica Utenti' },
+        tooltipOptions: { tooltipLabel: 'Edit Users' },
         command: () => {
           this.isEditMode.set(!this.isEditMode());
           this.isDeleteMode.set(false); // Chiudiamo delete se aperto
@@ -81,7 +81,7 @@ export class UserSettings {
       },
       {
         icon: 'pi pi-trash',
-        tooltipOptions: { tooltipLabel: 'Elimina Utenti' },
+        tooltipOptions: { tooltipLabel: 'Delete Users' },
         command: () => {
           this.isDeleteMode.set(!this.isDeleteMode());
           this.isEditMode.set(false); // Chiudiamo edit se aperto
@@ -117,11 +117,11 @@ export class UserSettings {
   });
 
   roleOptions = [
-    { label: 'Amministratore', value: 'admin' },
-    { label: 'Area Medica', value: 'medicalArea' },
-    { label: 'Ufficio', value: 'officeArea' },
-    { label: 'Sicurezza', value: 'securityArea' },
-    { label: 'Area Relax', value: 'breakArea' },
+    { label: 'Administrator', value: 'admin' },
+    { label: 'Medical Area', value: 'medicalArea' },
+    { label: 'Office', value: 'officeArea' },
+    { label: 'Security', value: 'securityArea' },
+    { label: 'Break Area', value: 'breakArea' },
   ];
 
   openDialog() {
@@ -158,15 +158,15 @@ export class UserSettings {
 
   deleteUser(user: User) {
     const confirmDelete = confirm(
-      `Sei sicuro di voler eliminare l'utente ${user.firstName} ${user.lastName}?`,
+      `Are you sure you want to delete the user ${user.firstName} ${user.lastName}?`,
     );
 
     if (confirmDelete && user.id) {
       this.userService.deleteUser(user.id).subscribe({
         next: () => {
-          console.log('Utente eliminato con successo');
+          console.log('User successfully deleted');
         },
-        error: (err) => console.error("Errore durante l'eliminazione:", err),
+        error: (err) => console.error('Error during deletion:', err),
       });
     }
   }

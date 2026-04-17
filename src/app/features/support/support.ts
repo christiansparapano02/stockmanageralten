@@ -50,9 +50,9 @@ export class Support implements OnInit {
 
   onSubmit(category: string, object: string, description: string, file: string) {
     console.log(`
-      Categoria: ${category}
-      Oggetto: ${object}
-      Descrizione: ${description}
+      Category: ${category}
+      Object: ${object}
+      Description: ${description}
       File: ${file}`);
   }
 }

@@ -9,14 +9,14 @@
   >
     <ng-template pTemplate="header">
       <tr>
-        <th>Nome</th>
-        <th>Stato</th>
-        <th>Prossimo controllo</th>
-        <th>Scadenza</th>
-        <th>Quantità disponibile</th>
-        <th>Quantità minima</th>
+        <th>Name</th>
+        <th>Status</th>
+        <th>Next Check</th>
+        <th>Expiry Date</th>
+        <th>Available Quantity</th>
+        <th>Minimum Quantity</th>
         @if (mode() === 'delete') {
-          <th>Azioni</th>
+          <th>Actions</th>
         }
       </tr>
     </ng-template>
@@ -126,24 +126,24 @@
     <button
       pButton
       type="button"
-      label="Annulla"
+      label="Cancel"
       severity="secondary"
       (click)="cancelEdit()"
     ></button>
 
-    <button pButton type="button" label="Salva modifiche" (click)="saveEdit()"></button>
+    <button pButton type="button" label="Save Changes" (click)="saveEdit()"></button>
   </div>
 }
 
 <p-dialog
-  header="Aggiungi item"
+  header="Add Item"
   [visible]="dialogVisible()"
   [modal]="true"
   [style]="{ width: '30rem' }"
   (visibleChange)="dialogVisible.set($event)"
 >
   <div class="form-field">
-    <label for="name">Nome</label>
+    <label for="name">Name</label>
     <input
       id="name"
       pInputText
@@ -153,7 +153,7 @@
   </div>
 
   <div class="form-field">
-    <label for="nextCheck">Prossimo controllo</label>
+    <label for="nextCheck">Next Check</label>
     <input
       id="nextCheck"
       type="date"
@@ -163,7 +163,7 @@
   </div>
 
   <div class="form-field">
-    <label for="expiring">Scadenza</label>
+    <label for="expiring">Expiry Date</label>
     <input
       id="expiring"
       type="date"
@@ -173,7 +173,7 @@
   </div>
 
   <div class="form-field">
-    <label for="quantity">Quantità disponibile</label>
+    <label for="quantity">Available Quantity</label>
     <p-inputnumber
       inputId="quantity"
       [ngModel]="newItem().quantity"
@@ -189,7 +189,7 @@
   </div>
 
   <div class="form-field">
-    <label for="minQuantity">Quantità minima</label>
+    <label for="minQuantity">Minimum Quantity</label>
     <p-inputnumber
       inputId="minQuantity"
       [ngModel]="newItem().minQuantity"
@@ -208,12 +208,12 @@
     <button
       pButton
       type="button"
-      label="Annulla"
+      label="Cancel"
       severity="secondary"
       (click)="dialogVisible.set(false)"
     ></button>
 
-    <button pButton type="button" label="Salva" (click)="saveNewItem()"></button>
+    <button pButton type="button" label="Save" (click)="saveNewItem()"></button>
   </ng-template>
 </p-dialog>
 
