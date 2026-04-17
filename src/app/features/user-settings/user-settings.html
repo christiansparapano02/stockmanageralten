@@ -5,7 +5,7 @@
 } @else {
   <div class="card shadow-1 border-round p-3">
     <div class="flex align-items-center justify-content-between mb-4">
-      <h2 class="m-0 font-medium text-xl">User Management</h2>
+      <h2 i18n="@@userSettings.pageTitle" class="m-0 font-medium text-xl">User Management</h2>
     </div>
 
     <p-table
@@ -16,15 +16,17 @@
     >
       <ng-template pTemplate="header">
         <tr>
-          <th>First Name</th>
-          <th>Last Name</th>
-          <th>Email</th>
-          <th class="text-center" style="width: 150px">Role</th>
+          <th i18n="@@userSettings.table.firstName">First Name</th>
+          <th i18n="@@userSettings.table.lastName">Last Name</th>
+          <th i18n="@@userSettings.table.email">Email</th>
+          <th i18n="@@userSettings.table.role" class="text-center" style="width: 150px">Role</th>
           @if (isDeleteMode()) {
-            <th style="width: 80px" class="text-center">Actions</th>
+            <th i18n="@@userSettings.table.actions" style="width: 80px" class="text-center">
+              Actions
+            </th>
           }
           @if (isEditMode()) {
-            <th style="width: 80px" class="text-center">Edit</th>
+            <th i18n="@@userSettings.table.edit" style="width: 80px" class="text-center">Edit</th>
           }
         </tr>
       </ng-template>
@@ -65,7 +67,9 @@
 
       <ng-template pTemplate="emptymessage">
         <tr>
-          <td colspan="4" class="text-center p-5 text-500">No users found.</td>
+          <td i18n="@@userSettings.table.emptyMessage" colspan="4" class="text-center p-5 text-500">
+            No users found.
+          </td>
         </tr>
       </ng-template>
     </p-table>
@@ -82,7 +86,7 @@
   </div>
 
   <p-dialog
-    [header]="selectedUser ? 'Edit User' : 'New User'"
+    [header]="selectedUser ? editTitle : newTitle"
     [(visible)]="displayDialog"
     [modal]="true"
     [style]="{ width: '420px' }"
@@ -91,40 +95,43 @@
   >
     <form [formGroup]="userForm" class="user-form">
       <div class="form-field">
-        <label for="first_name">First Name</label>
+        <label i18n="@@userSettings.form.firstName" for="first_name">First Name</label>
         <input
           pInputText
           id="first_name"
           formControlName="firstName"
           autocomplete="off"
+          i18n-placeholder="@@userSettings.form.placeholder.firstName"
           placeholder="Enter first name"
         />
       </div>
 
       <div class="form-field">
-        <label for="last_name">Last Name</label>
+        <label i18n="@@userSettings.form.lastName" for="last_name">Last Name</label>
         <input
           pInputText
           id="last_name"
           formControlName="lastName"
           autocomplete="off"
+          i18n-placeholder="@@userSettings.form.placeholder.lastName"
           placeholder="Enter last name"
         />
       </div>
 
       <div class="form-field">
-        <label for="email_field">Email</label>
+        <label i18n="@@userSettings.form.email" for="email_field">Email</label>
         <input
           pInputText
           id="email_field"
           formControlName="email"
           autocomplete="off"
+          i18n-placeholder="@@userSettings.form.placeholder.email"
           placeholder="Enter email"
         />
       </div>
 
       <div class="form-field">
-        <label for="role_field">Role</label>
+        <label i18n="@@userSettings.form.role" for="role_field">Role</label>
         <p-select
           id="role_field"
           formControlName="role"
@@ -132,6 +139,7 @@
           optionLabel="label"
           optionValue="value"
           appendTo="body"
+          i18n-placeholder="@@userSettings.form.placeholder.role"
           placeholder="Select a role"
           styleClass="w-full"
         ></p-select>
@@ -140,12 +148,14 @@
 
     <ng-template pTemplate="footer">
       <p-button
+        i18n-label="@@userSettings.form.btnCancel"
         label="Cancel"
         icon="pi pi-times"
         [text]="true"
         (click)="displayDialog.set(false)"
       ></p-button>
       <p-button
+        i18n-label="@@userSettings.form.btnSave"
         label="Save"
         icon="pi pi-check"
         [disabled]="userForm.invalid"

@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file source-language="en-US" datatype="plaintext" original="ng2.template">
+    <body>
+      <trans-unit id="userSettings.pageTitle" datatype="html">
+        <source>User Management</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/user-settings/user-settings.html</context>
+          <context context-type="linenumber">8,12</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="userSettings.table.firstName" datatype="html">
+        <source>First Name</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/user-settings/user-settings.html</context>
+          <context context-type="linenumber">19,20</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="userSettings.table.lastName" datatype="html">
+        <source>Last Name</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/user-settings/user-settings.html</context>
+          <context context-type="linenumber">20,21</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="userSettings.table.email" datatype="html">
+        <source>Email</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/user-settings/user-settings.html</context>
+          <context context-type="linenumber">21,22</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="userSettings.table.role" datatype="html">
+        <source>Role</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/user-settings/user-settings.html</context>
+          <context context-type="linenumber">22,23</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="userSettings.table.actions" datatype="html">
+        <source> Actions </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/user-settings/user-settings.html</context>
+          <context context-type="linenumber">25,27</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="userSettings.table.edit" datatype="html">
+        <source>Edit</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/user-settings/user-settings.html</context>
+          <context context-type="linenumber">29,32</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="userSettings.table.emptyMessage" datatype="html">
+        <source> No users found. </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/user-settings/user-settings.html</context>
+          <context context-type="linenumber">71,74</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="userSettings.form.firstName" datatype="html">
+        <source>First Name</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/user-settings/user-settings.html</context>
+          <context context-type="linenumber">98,100</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="userSettings.form.placeholder.firstName" datatype="html">
+        <source>Enter first name</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/user-settings/user-settings.html</context>
+          <context context-type="linenumber">105,109</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="userSettings.form.lastName" datatype="html">
+        <source>Last Name</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/user-settings/user-settings.html</context>
+          <context context-type="linenumber">110,112</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="userSettings.form.placeholder.lastName" datatype="html">
+        <source>Enter last name</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/user-settings/user-settings.html</context>
+          <context context-type="linenumber">117,121</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="userSettings.form.email" datatype="html">
+        <source>Email</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/user-settings/user-settings.html</context>
+          <context context-type="linenumber">122,124</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="userSettings.form.placeholder.email" datatype="html">
+        <source>Enter email</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/user-settings/user-settings.html</context>
+          <context context-type="linenumber">129,133</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="userSettings.form.role" datatype="html">
+        <source>Role</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/user-settings/user-settings.html</context>
+          <context context-type="linenumber">134,136</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="userSettings.form.placeholder.role" datatype="html">
+        <source>Select a role</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/user-settings/user-settings.html</context>
+          <context context-type="linenumber">143,145</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="userSettings.form.btnCancel" datatype="html">
+        <source>Cancel</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/user-settings/user-settings.html</context>
+          <context context-type="linenumber">153,154</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="userSettings.form.btnSave" datatype="html">
+        <source>Save</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/user-settings/user-settings.html</context>
+          <context context-type="linenumber">160,161</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7508782863101180560" datatype="html">
+        <source>@@userSettings.dialog.editTitle:Edit User</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/user-settings/user-settings.ts</context>
+          <context context-type="linenumber">49</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8415992347464302152" datatype="html">
+        <source>@@userSettings.dialog.newTitle:New User</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/user-settings/user-settings.ts</context>
+          <context context-type="linenumber">50</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1822405709071023536" datatype="html">
+        <source>@@userSettings.actions.addUser:Add User</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/user-settings/user-settings.ts</context>
+          <context context-type="linenumber">69</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5262914900043695560" datatype="html">
+        <source>@@userSettings.actions.editUsers:Edit Users</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/user-settings/user-settings.ts</context>
+          <context context-type="linenumber">74</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5531115482597184433" datatype="html">
+        <source>@@userSettings.actions.deleteUsers:Delete Users</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/user-settings/user-settings.ts</context>
+          <context context-type="linenumber">83</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6140809949183947065" datatype="html">
+        <source>@@role.admin:Administrator</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/user-settings/user-settings.ts</context>
+          <context context-type="linenumber">120</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6636272187344292481" datatype="html">
+        <source>@@role.medical:Medical Area</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/user-settings/user-settings.ts</context>
+          <context context-type="linenumber">121</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8719378097294652229" datatype="html">
+        <source>@@role.office:Office</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/user-settings/user-settings.ts</context>
+          <context context-type="linenumber">122</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4497438417093389156" datatype="html">
+        <source>@@role.security:Security</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/user-settings/user-settings.ts</context>
+          <context context-type="linenumber">123</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1784485213391051037" datatype="html">
+        <source>@@role.break:Break Area</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/user-settings/user-settings.ts</context>
+          <context context-type="linenumber">124</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5965947221601659023" datatype="html">
+        <source>@@userSettings.confirmDelete:Are you sure you want to delete the user <x id="PH" equiv-text="user.firstName"/> <x id="PH_1" equiv-text="user.lastName"/>?</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/user-settings/user-settings.ts</context>
+          <context context-type="linenumber">161</context>
+        </context-group>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
