@@ -41,7 +41,7 @@ export class MockUserService implements IUserService {
 
   loadUsers(): Observable<User[]> {
     return of(this.mockUsers()).pipe(
-      delay(1500),
+      delay(900),
       tap((data) => this.mockUsers.set(data)),
     );
   }

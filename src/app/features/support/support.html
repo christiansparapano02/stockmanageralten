@@ -6,54 +6,54 @@
   <div class="support-page">
     <div class="support-card">
       <div class="support-header">
-        <h2>Richiesta supporto</h2>
-        <p>Compila il form per inviare una richiesta di assistenza.</p>
+        <h2>Support Request</h2>
+        <p>Fill out the form to submit a support request.</p>
       </div>
 
-      <form #form="ngForm" (ngSubmit)="onSubmit(categoryInput.value, objectInput.value, descriptionInput.value, fileInput.value)">
+      <form
+        #form="ngForm"
+        (ngSubmit)="
+          onSubmit(categoryInput.value, objectInput.value, descriptionInput.value, fileInput.value)
+        "
+      >
         <div class="form-field">
-          <label for="category">Categoria</label>
-          <select
-            id="category"
-            name="category"
-            class="support-select"
-            #categoryInput
-          >
-            <option value="" selected disabled>Seleziona una categoria</option>
-            <option value="accesso">Problemi di accesso</option>
-            <option value="inventario">Errore inventario</option>
-            <option value="categorie">Problema categorie</option>
-            <option value="ui">Problema interfaccia</option>
-            <option value="altro">Altro</option>
+          <label for="category">Category</label>
+          <select id="category" name="category" class="support-select" #categoryInput>
+            <option value="" selected disabled>Select a category</option>
+            <option value="accesso">Login Issues</option>
+            <option value="inventario">Inventory Error</option>
+            <option value="categorie">Category Issue</option>
+            <option value="ui">Interface Issue</option>
+            <option value="altro">Other</option>
           </select>
         </div>
 
         <div class="form-field">
-          <label for="subject">Oggetto</label>
+          <label for="subject">Subject</label>
           <input
             id="subject"
             name="subject"
             type="text"
             pInputText
-            placeholder="Inserisci un breve oggetto"
+            placeholder="Enter a short subject"
             #objectInput
           />
         </div>
 
         <div class="form-field">
-          <label for="description">Descrizione</label>
+          <label for="description">Description</label>
           <textarea
             id="description"
             name="description"
             rows="7"
             pInputTextarea
-            placeholder="Descrivi il problema o la richiesta di supporto"
+            placeholder="Describe the issue or support request"
             #descriptionInput
           ></textarea>
         </div>
 
         <div class="form-field">
-          <label for="attachment">Allega screenshot</label>
+          <label for="attachment">Attach screenshot</label>
           <input
             id="attachment"
             name="attachment"
@@ -62,12 +62,25 @@
             multiple
             #fileInput
           />
-          <small>Puoi allegare uno o più screenshot.</small>
+          <small>You can attach one or more screenshots.</small>
         </div>
 
         <div class="form-actions">
-          <button type="button">Annulla</button>
-          <button type="button" (click)="onClick()" (click)="onSubmit(categoryInput.value, objectInput.value, descriptionInput.value, fileInput.value)">Invia ticket</button>
+          <button type="button">Cancel</button>
+          <button
+            type="button"
+            (click)="onClick()"
+            (click)="
+              onSubmit(
+                categoryInput.value,
+                objectInput.value,
+                descriptionInput.value,
+                fileInput.value
+              )
+            "
+          >
+            Submit Ticket
+          </button>
         </div>
       </form>
     </div>

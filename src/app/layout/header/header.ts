@@ -15,32 +15,32 @@ import { Avatar } from 'primeng/avatar';
   templateUrl: './header.html',
   styleUrl: './header.css',
 })
-export class Header implements OnInit{
+export class Header implements OnInit {
   darkModeService = inject(DarkModeService);
-   menuItems: MenuItem[] = [];
+  menuItems: MenuItem[] = [];
 
   constructor(private router: Router) {}
 
-ngOnInit() {
-  this.menuItems = [
-    {
-      label: `<div class="user-menu-header">
+  ngOnInit() {
+    this.menuItems = [
+      {
+        label: `<div class="user-menu-header">
                 <span class="user-name">Mario Rossi</span>
-                <span class="user-role">Amministratore</span>
+                <span class="user-role">Admin</span>
               </div>`,
-      icon: 'pi pi-user',
-      escape: false,
-      disabled: true,
-      styleClass: 'user-header-item'
-    },
-    { separator: true },
-    {
-      label: 'Logout',
-      icon: 'pi pi-sign-out',
-      command: () => this.logout(),
-    },
-  ];
-}
+        icon: 'pi pi-user',
+        escape: false,
+        disabled: true,
+        styleClass: 'user-header-item',
+      },
+      { separator: true },
+      {
+        label: 'Logout',
+        icon: 'pi pi-sign-out',
+        command: () => this.logout(),
+      },
+    ];
+  }
 
   logout() {
     // logica logout

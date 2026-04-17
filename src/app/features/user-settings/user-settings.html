@@ -5,7 +5,7 @@
 } @else {
   <div class="card shadow-1 border-round p-3">
     <div class="flex align-items-center justify-content-between mb-4">
-      <h2 class="m-0 font-medium text-xl">Gestione Utenti</h2>
+      <h2 class="m-0 font-medium text-xl">User Management</h2>
     </div>
 
     <p-table
@@ -16,15 +16,15 @@
     >
       <ng-template pTemplate="header">
         <tr>
-          <th>Nome</th>
-          <th>Cognome</th>
+          <th>First Name</th>
+          <th>Last Name</th>
           <th>Email</th>
-          <th class="text-center" style="width: 150px">Ruolo</th>
+          <th class="text-center" style="width: 150px">Role</th>
           @if (isDeleteMode()) {
-            <th style="width: 80px" class="text-center">Azioni</th>
+            <th style="width: 80px" class="text-center">Actions</th>
           }
           @if (isEditMode()) {
-            <th style="width: 80px" class="text-center">Modifica</th>
+            <th style="width: 80px" class="text-center">Edit</th>
           }
         </tr>
       </ng-template>
@@ -65,7 +65,7 @@
 
       <ng-template pTemplate="emptymessage">
         <tr>
-          <td colspan="4" class="text-center p-5 text-500">Nessun utente trovato.</td>
+          <td colspan="4" class="text-center p-5 text-500">No users found.</td>
         </tr>
       </ng-template>
     </p-table>
@@ -82,7 +82,7 @@
   </div>
 
   <p-dialog
-    [header]="selectedUser ? 'Modifica Utente' : 'Nuovo Utente'"
+    [header]="selectedUser ? 'Edit User' : 'New User'"
     [(visible)]="displayDialog"
     [modal]="true"
     [style]="{ width: '420px' }"
@@ -91,24 +91,24 @@
   >
     <form [formGroup]="userForm" class="user-form">
       <div class="form-field">
-        <label for="first_name">Nome</label>
+        <label for="first_name">First Name</label>
         <input
           pInputText
           id="first_name"
           formControlName="firstName"
           autocomplete="off"
-          placeholder="Inserisci il nome"
+          placeholder="Enter first name"
         />
       </div>
 
       <div class="form-field">
-        <label for="last_name">Cognome</label>
+        <label for="last_name">Last Name</label>
         <input
           pInputText
           id="last_name"
           formControlName="lastName"
           autocomplete="off"
-          placeholder="Inserisci il cognome"
+          placeholder="Enter last name"
         />
       </div>
 
@@ -119,12 +119,12 @@
           id="email_field"
           formControlName="email"
           autocomplete="off"
-          placeholder="Inserisci l'email"
+          placeholder="Enter email"
         />
       </div>
 
       <div class="form-field">
-        <label for="role_field">Area di Competenza</label>
+        <label for="role_field">Role</label>
         <p-select
           id="role_field"
           formControlName="role"
@@ -132,7 +132,7 @@
           optionLabel="label"
           optionValue="value"
           appendTo="body"
-          placeholder="Seleziona un ruolo"
+          placeholder="Select a role"
           styleClass="w-full"
         ></p-select>
       </div>
@@ -140,13 +140,13 @@
 
     <ng-template pTemplate="footer">
       <p-button
-        label="Annulla"
+        label="Cancel"
         icon="pi pi-times"
         [text]="true"
         (click)="displayDialog.set(false)"
       ></p-button>
       <p-button
-        label="Salva"
+        label="Save"
         icon="pi pi-check"
         [disabled]="userForm.invalid"
         (click)="saveUser()"
