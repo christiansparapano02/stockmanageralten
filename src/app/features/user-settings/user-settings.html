@@ -1,1 +1,156 @@
-<p>user-settings works!</p>
+@if (loading()) {
+  <div class="spinner-container">
+    <p-progressSpinner />
+  </div>
+} @else {
+  <div class="card shadow-1 border-round p-3">
+    <div class="flex align-items-center justify-content-between mb-4">
+      <h2 class="m-0 font-medium text-xl">Gestione Utenti</h2>
+    </div>
+
+    <p-table
+      [value]="users()"
+      [scrollable]="true"
+      scrollHeight="350px"
+      [tableStyle]="{ 'min-width': '50rem' }"
+    >
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Nome</th>
+          <th>Cognome</th>
+          <th>Email</th>
+          <th class="text-center" style="width: 150px">Ruolo</th>
+          @if (isDeleteMode()) {
+            <th style="width: 80px" class="text-center">Azioni</th>
+          }
+          @if (isEditMode()) {
+            <th style="width: 80px" class="text-center">Modifica</th>
+          }
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-user>
+        <tr>
+          <td>{{ user.firstName }}</td>
+          <td>{{ user.lastName }}</td>
+          <td>{{ user.email }}</td>
+          <td class="text-center">
+            <p-tag [value]="user.role"></p-tag>
+          </td>
+          @if (isDeleteMode()) {
+            <td class="text-center">
+              <p-button
+                icon="pi pi-trash"
+                severity="danger"
+                [rounded]="true"
+                [text]="true"
+                (click)="deleteUser(user)"
+              >
+              </p-button>
+            </td>
+          }
+          @if (isEditMode()) {
+            <td class="text-center">
+              <p-button
+                icon="pi pi-pencil"
+                severity="info"
+                [rounded]="true"
+                [text]="true"
+                (onClick)="openEditDialog(user)"
+              ></p-button>
+            </td>
+          }
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="4" class="text-center p-5 text-500">Nessun utente trovato.</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+
+  <div class="user-speeddial-container">
+    <p-speed-dial
+      [model]="userActions"
+      direction="up"
+      showIcon="pi pi-plus"
+      hideIcon="pi pi-times"
+      buttonClassName="p-button-primary shadow-4"
+    ></p-speed-dial>
+  </div>
+
+  <p-dialog
+    header="selectedUser ? 'Modifica Utente' : 'Nuovo Utente'"
+    [(visible)]="displayDialog"
+    [modal]="true"
+    [style]="{ width: '420px' }"
+    [draggable]="false"
+    [resizable]="false"
+  >
+    <form [formGroup]="userForm" class="user-form">
+      <div class="form-field">
+        <label for="first_name">Nome</label>
+        <input
+          pInputText
+          id="first_name"
+          formControlName="firstName"
+          autocomplete="off"
+          placeholder="Inserisci il nome"
+        />
+      </div>
+
+      <div class="form-field">
+        <label for="last_name">Cognome</label>
+        <input
+          pInputText
+          id="last_name"
+          formControlName="lastName"
+          autocomplete="off"
+          placeholder="Inserisci il cognome"
+        />
+      </div>
+
+      <div class="form-field">
+        <label for="email_field">Email</label>
+        <input
+          pInputText
+          id="email_field"
+          formControlName="email"
+          autocomplete="off"
+          placeholder="Inserisci l'email"
+        />
+      </div>
+
+      <div class="form-field">
+        <label for="role_field">Area di Competenza</label>
+        <p-select
+          id="role_field"
+          formControlName="role"
+          [options]="roleOptions"
+          optionLabel="label"
+          optionValue="value"
+          appendTo="body"
+          placeholder="Seleziona un ruolo"
+          styleClass="w-full"
+        ></p-select>
+      </div>
+    </form>
+
+    <ng-template pTemplate="footer">
+      <p-button
+        label="Annulla"
+        icon="pi pi-times"
+        [text]="true"
+        (click)="displayDialog.set(false)"
+      ></p-button>
+      <p-button
+        label="Salva"
+        icon="pi pi-check"
+        [disabled]="userForm.invalid"
+        (click)="saveUser()"
+      ></p-button>
+    </ng-template>
+  </p-dialog>
+}
