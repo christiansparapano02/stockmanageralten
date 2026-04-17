@@ -1,12 +1,14 @@
 import { Component, ElementRef, OnInit, signal, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { InputTextModule } from 'primeng/inputtext';
 import { ProgressSpinner } from 'primeng/progressspinner';
+import { TextareaModule } from 'primeng/textarea';
 
 @Component({
   selector: 'app-support',
   standalone: true,
-  imports: [ProgressSpinner, FormsModule],
+  imports: [ProgressSpinner, FormsModule, InputTextModule, TextareaModule],
   templateUrl: './support.html',
   styleUrl: './support.css',
 })
