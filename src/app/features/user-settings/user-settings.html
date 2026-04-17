@@ -82,7 +82,7 @@
   </div>
 
   <p-dialog
-    header="selectedUser ? 'Modifica Utente' : 'Nuovo Utente'"
+    [header]="selectedUser ? 'Modifica Utente' : 'Nuovo Utente'"
     [(visible)]="displayDialog"
     [modal]="true"
     [style]="{ width: '420px' }"

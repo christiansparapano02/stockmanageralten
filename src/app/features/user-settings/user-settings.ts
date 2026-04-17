@@ -130,20 +130,19 @@ export class UserSettings {
     this.displayDialog.set(true);
   }
 
-  // Modifichiamo saveUser per gestire sia creazione che modifica
   saveUser() {
     if (this.userForm.valid) {
       const formData = this.userForm.getRawValue();
 
       if (this.selectedUser) {
-        // --- LOGICA MODIFICA ---
+        // MODIFICA utente
         const updatedUser = { ...this.selectedUser, ...formData };
         this.userService.updateUser(updatedUser).subscribe({
           next: () => this.closeDialog(),
           error: (err) => console.error(err),
         });
       } else {
-        // --- LOGICA CREAZIONE (esistente) ---
+        // CREAZIONE utente
         this.userService.addUser(formData).subscribe({
           next: () => this.closeDialog(),
           error: (err) => console.error(err),
