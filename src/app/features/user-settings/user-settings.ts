@@ -66,12 +66,12 @@ export class UserSettings implements OnInit {
     this.userActions = [
       {
         icon: 'pi pi-user-plus',
-        tooltipOptions: { tooltipLabel: $localize`@@userSettings.actions.addUser:Add User` },
+        tooltipOptions: { tooltipLabel: $localize`:@@userSettings.actions.addUser:Add User` },
         command: () => this.openDialog(), // Modo creazione
       },
       {
         icon: 'pi pi-pencil',
-        tooltipOptions: { tooltipLabel: $localize`@@userSettings.actions.editUsers:Edit Users` },
+        tooltipOptions: { tooltipLabel: $localize`:@@userSettings.actions.editUsers:Edit Users` },
         command: () => {
           this.isEditMode.set(!this.isEditMode());
           this.isDeleteMode.set(false); // Chiudiamo delete se aperto
@@ -80,7 +80,7 @@ export class UserSettings implements OnInit {
       {
         icon: 'pi pi-trash',
         tooltipOptions: {
-          tooltipLabel: $localize`@@userSettings.actions.deleteUsers:Delete Users`,
+          tooltipLabel: $localize`:@@userSettings.actions.deleteUsers:Delete Users`,
         },
         command: () => {
           this.isDeleteMode.set(!this.isDeleteMode());
