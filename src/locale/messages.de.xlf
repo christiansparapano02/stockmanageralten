@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file source-language="en-US" datatype="plaintext" original="ng2.template">
+    <body>
+      <trans-unit id="userSettings.pageTitle" datatype="html">
+        <source>User Management</source>
+        <target>Benutzerverwaltung</target>
+      </trans-unit>
+      <trans-unit id="userSettings.table.firstName" datatype="html">
+        <source>First Name</source>
+        <target>Vorname</target>
+      </trans-unit>
+      <trans-unit id="userSettings.table.lastName" datatype="html">
+        <source>Last Name</source>
+        <target>Nachname</target>
+      </trans-unit>
+      <trans-unit id="userSettings.table.email" datatype="html">
+        <source>Email</source>
+        <target>E-Mail</target>
+      </trans-unit>
+      <trans-unit id="userSettings.table.role" datatype="html">
+        <source>Role</source>
+        <target>Rolle</target>
+      </trans-unit>
+      <trans-unit id="userSettings.table.actions" datatype="html">
+        <source> Actions </source>
+        <target> Aktionen </target>
+      </trans-unit>
+      <trans-unit id="userSettings.table.edit" datatype="html">
+        <source>Edit</source>
+        <target>Bearbeiten</target>
+      </trans-unit>
+      <trans-unit id="userSettings.table.emptyMessage" datatype="html">
+        <source> No users found. </source>
+        <target> Keine Benutzer gefunden. </target>
+      </trans-unit>
+
+      <trans-unit id="userSettings.form.placeholder.firstName" datatype="html">
+        <source>Enter first name</source>
+        <target>Vorname eingeben</target>
+      </trans-unit>
+      <trans-unit id="userSettings.form.placeholder.lastName" datatype="html">
+        <source>Enter last name</source>
+        <target>Nachname eingeben</target>
+      </trans-unit>
+      <trans-unit id="userSettings.form.placeholder.email" datatype="html">
+        <source>Enter email</source>
+        <target>E-Mail eingeben</target>
+      </trans-unit>
+      <trans-unit id="userSettings.form.placeholder.role" datatype="html">
+        <source>Select a role</source>
+        <target>Rolle auswählen</target>
+      </trans-unit>
+      <trans-unit id="userSettings.form.btnCancel" datatype="html">
+        <source>Cancel</source>
+        <target>Abbrechen</target>
+      </trans-unit>
+      <trans-unit id="userSettings.form.btnSave" datatype="html">
+        <source>Save</source>
+        <target>Speichern</target>
+      </trans-unit>
+
+      <trans-unit id="userSettings.dialog.editTitle" datatype="html">
+        <source>Edit User</source>
+        <target>Benutzer bearbeiten</target>
+      </trans-unit>
+      <trans-unit id="userSettings.dialog.newTitle" datatype="html">
+        <source>New User</source>
+        <target>Neuer Benutzer</target>
+      </trans-unit>
+      <trans-unit id="userSettings.actions.addUser" datatype="html">
+        <source>Add User</source>
+        <target>Benutzer hinzufügen</target>
+      </trans-unit>
+      <trans-unit id="userSettings.actions.editUsers" datatype="html">
+        <source>Edit Users</source>
+        <target>Benutzer bearbeiten</target>
+      </trans-unit>
+      <trans-unit id="userSettings.actions.deleteUsers" datatype="html">
+        <source>Delete Users</source>
+        <target>Benutzer löschen</target>
+      </trans-unit>
+
+      <trans-unit id="role.admin" datatype="html">
+        <source>Administrator</source>
+        <target>Administrator</target>
+      </trans-unit>
+      <trans-unit id="role.medical" datatype="html">
+        <source>Medical Area</source>
+        <target>Medizinischer Bereich</target>
+      </trans-unit>
+      <trans-unit id="role.office" datatype="html">
+        <source>Office</source>
+        <target>Büro</target>
+      </trans-unit>
+      <trans-unit id="role.security" datatype="html">
+        <source>Security</source>
+        <target>Sicherheit</target>
+      </trans-unit>
+      <trans-unit id="role.break" datatype="html">
+        <source>Break Area</source>
+        <target>Pausenbereich</target>
+      </trans-unit>
+
+      <trans-unit id="userSettings.confirmDelete" datatype="html">
+        <source>Are you sure you want to delete the user <x id="PH" equiv-text="user.firstName"/> <x id="PH_1" equiv-text="user.lastName"/>?</source>
+        <target>Sind Sie sicher, dass Sie den Benutzer <x id="PH" equiv-text="user.firstName"/> <x id="PH_1" equiv-text="user.lastName"/> löschen möchten?</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
