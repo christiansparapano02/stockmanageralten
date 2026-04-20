@@ -4,12 +4,13 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { InputTextModule } from 'primeng/inputtext';
 import { ProgressSpinner } from 'primeng/progressspinner';
+import { SelectModule } from 'primeng/select';
 import { TextareaModule } from 'primeng/textarea';
 
 @Component({
   selector: 'app-support',
   standalone: true,
-  imports: [ProgressSpinner, FormsModule, InputTextModule, TextareaModule],
+  imports: [ProgressSpinner, FormsModule, InputTextModule, TextareaModule, SelectModule],
   templateUrl: './support.html',
   styleUrl: './support.css',
 })
@@ -27,6 +28,16 @@ export class Support implements OnInit {
   enteredFile = '';
 
   constructor(private router: Router) {}
+
+  categoryOptions = [
+  { label: 'Login Issues',     value: 'accesso' },
+  { label: 'Inventory Error',  value: 'inventario' },
+  { label: 'Category Issue',   value: 'categorie' },
+  { label: 'Interface Issue',  value: 'ui' },
+  { label: 'Other',            value: 'altro' },
+];
+
+selectedCategory = '';
 
   ngOnInit(): void {
     this.loading.set(true);
