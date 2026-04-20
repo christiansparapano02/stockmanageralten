@@ -10,12 +10,11 @@ import { DialogModule } from 'primeng/dialog';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
 import { TableModule } from 'primeng/table';
+import { SkeletonModule } from 'primeng/skeleton';
 
 import { Item } from '../../core/item/item.interface';
-import { ItemMockService } from '../../core/item/item-mock.service';
 import { Options } from './options/options';
 import { StatusLabelPipe } from '../../shared/pipes/status.pipe.ts';
-import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { ITEM_SERVICE_TOKEN } from '../../core/item/item-service.token';
 
 @Component({
@@ -32,7 +31,7 @@ import { ITEM_SERVICE_TOKEN } from '../../core/item/item-service.token';
     ButtonModule,
     ConfirmDialogModule,
     StatusLabelPipe,
-    ProgressSpinnerModule,
+    SkeletonModule,
   ],
   providers: [ConfirmationService],
   templateUrl: './stock.html',
@@ -49,6 +48,11 @@ export class Stock implements OnInit {
   mode = signal<'none' | 'edit' | 'delete'>('none');
   dialogVisible = signal(false);
   editableItems = signal<Item[]>([]);
+
+  addQtyVisible = signal(false);
+  removeQtyVisible = signal(false);
+  qtyAmount = 1;
+  selectedRowIndex = signal<number>(-1);
 
   newItem = signal<Omit<Item, 'id'>>({
     name: '',
@@ -165,5 +169,36 @@ export class Stock implements OnInit {
         });
       },
     });
+  }
+
+  openAddDialog(rowIndex: number) {
+    this.selectedRowIndex.set(rowIndex);
+    this.qtyAmount = 1;
+    this.addQtyVisible.set(true);
+  }
+
+  openRemoveDialog(rowIndex: number) {
+    this.selectedRowIndex.set(rowIndex);
+    this.qtyAmount = 1;
+    this.removeQtyVisible.set(true);
+  }
+
+  confirmAddQty() {
+    const idx = this.selectedRowIndex();
+    if (idx === -1) return;
+    const items = [...this.editableItems()];
+    items[idx] = { ...items[idx], quantity: items[idx].quantity + this.qtyAmount };
+    this.editableItems.set(items);
+    this.addQtyVisible.set(false);
+  }
+
+  confirmRemoveQty() {
+    const idx = this.selectedRowIndex();
+    if (idx === -1) return;
+    const items = [...this.editableItems()];
+    const newQty = Math.max(0, items[idx].quantity - this.qtyAmount);
+    items[idx] = { ...items[idx], quantity: newQty };
+    this.editableItems.set(items);
+    this.removeQtyVisible.set(false);
   }
 }

@@ -1,7 +1,28 @@
 @if (loading()) {
-  <div class="spinner-container">
-    <p-progressSpinner />
-  </div>
+  <p-table [value]="[1,2,3,4,5]" [tableStyle]="{ 'min-width': '50rem' }">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Name</th>
+        <th>Status</th>
+        <th>Next Check</th>
+        <th>Expiration</th>
+        <th>Available Quantity</th>
+        <th>Minimum Quantity</th>
+        <th>Restock</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body">
+      <tr>
+        <td><p-skeleton /></td>
+        <td><p-skeleton width="60%" /></td>
+        <td><p-skeleton width="70%" /></td>
+        <td><p-skeleton width="70%" /></td>
+        <td><p-skeleton width="40%" styleClass="mx-auto" /></td>
+        <td><p-skeleton width="40%" styleClass="mx-auto" /></td>
+        <td><p-skeleton width="60%" styleClass="mx-auto" /></td>
+      </tr>
+    </ng-template>
+  </p-table>
 } @else {
   <p-table [value]="criticalItems()" [tableStyle]="{ 'min-width': '50rem' }">
     <ng-template pTemplate="header">
