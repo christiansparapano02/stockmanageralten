@@ -2,14 +2,14 @@ import { Component, inject, signal, OnInit } from '@angular/core';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { DatePipe } from '@angular/common';
+import { SkeletonModule } from 'primeng/skeleton';
 import { Item } from '../../core/item/item.interface';
 import { ItemMockService } from '../../core/item/item-mock.service';
-import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 @Component({
   selector: 'app-alerts',
   standalone: true,
-  imports: [TableModule, ButtonModule, DatePipe, ProgressSpinnerModule],
+  imports: [TableModule, ButtonModule, DatePipe, SkeletonModule],
   templateUrl: './alerts.html',
   styleUrl: './alerts.css',
 })

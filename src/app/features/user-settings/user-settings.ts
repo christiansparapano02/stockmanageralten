@@ -11,7 +11,7 @@ import { Dialog } from 'primeng/dialog';
 import { Button } from 'primeng/button';
 import { Select } from 'primeng/select';
 import { InputText } from 'primeng/inputtext';
-import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { SkeletonModule } from 'primeng/skeleton';
 
 @Component({
   selector: 'app-user-settings',
@@ -25,7 +25,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
     ReactiveFormsModule,
     Select,
     InputText,
-    ProgressSpinnerModule,
+    SkeletonModule,
   ],
   templateUrl: './user-settings.html',
   styleUrl: './user-settings.css',
@@ -39,13 +39,10 @@ export class UserSettings implements OnInit {
   userActions: MenuItem[] = [];
   displayDialog = signal(false);
 
-  //  per gestire la visibilità del cestino
   isDeleteMode = signal<Boolean>(false);
+  isEditMode = signal(false);
+  selectedUser: User | null = null;
 
-  isEditMode = signal(false); // per mostrare la colonna con la matita
-  selectedUser: User | null = null; // per memorizzar l'utente da modificare
-
-  // Proprietà tradotte per l'header del dialog nel template
   editTitle = $localize`:@@userSettings.dialog.editTitle:Edit User`;
   newTitle = $localize`:@@userSettings.dialog.newTitle:New User`;
 
@@ -67,14 +64,14 @@ export class UserSettings implements OnInit {
       {
         icon: 'pi pi-user-plus',
         tooltipOptions: { tooltipLabel: $localize`:@@userSettings.actions.addUser:Add User` },
-        command: () => this.openDialog(), // Modo creazione
+        command: () => this.openDialog(),
       },
       {
         icon: 'pi pi-pencil',
         tooltipOptions: { tooltipLabel: $localize`:@@userSettings.actions.editUsers:Edit Users` },
         command: () => {
           this.isEditMode.set(!this.isEditMode());
-          this.isDeleteMode.set(false); // Chiudiamo delete se aperto
+          this.isDeleteMode.set(false);
         },
       },
       {
@@ -84,16 +81,14 @@ export class UserSettings implements OnInit {
         },
         command: () => {
           this.isDeleteMode.set(!this.isDeleteMode());
-          this.isEditMode.set(false); // Chiudiamo edit se aperto
+          this.isEditMode.set(false);
         },
       },
     ];
   }
 
-  // Apre il dialog per la MODIFICA
   openEditDialog(user: User) {
     this.selectedUser = user;
-    // Pre-compila il form con i dati dell'utente
     this.userForm.patchValue({
       firstName: user.firstName,
       lastName: user.lastName,
@@ -135,14 +130,12 @@ export class UserSettings implements OnInit {
       const formData = this.userForm.getRawValue();
 
       if (this.selectedUser) {
-        // MODIFICA utente
         const updatedUser = { ...this.selectedUser, ...formData };
         this.userService.updateUser(updatedUser).subscribe({
           next: () => this.closeDialog(),
           error: (err) => alert(err.message),
         });
       } else {
-        // CREAZIONE utente
         this.userService.addUser(formData).subscribe({
           next: () => this.closeDialog(),
           error: (err) => alert(err.message),
@@ -150,6 +143,7 @@ export class UserSettings implements OnInit {
       }
     }
   }
+
   closeDialog() {
     this.displayDialog.set(false);
     this.selectedUser = null;
