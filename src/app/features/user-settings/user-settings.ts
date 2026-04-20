@@ -3,7 +3,6 @@ import { USER_SERVICE_TOKEN } from '../../core/user/user-service.token';
 
 import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
-import { SpeedDialModule } from 'primeng/speeddial';
 import { MenuItem } from 'primeng/api';
 import { User, type UserRole } from '../../core/user/user.model';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -11,7 +10,9 @@ import { Dialog } from 'primeng/dialog';
 import { Button } from 'primeng/button';
 import { Select } from 'primeng/select';
 import { InputText } from 'primeng/inputtext';
-import { SkeletonModule } from 'primeng/skeleton';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { SpeedDialComponent } from '../../features/speeddial/speeddial';
+import { SpeedDial } from "primeng/speeddial"; // adatta il path
 
 @Component({
   selector: 'app-user-settings',
@@ -19,14 +20,15 @@ import { SkeletonModule } from 'primeng/skeleton';
   imports: [
     TableModule,
     TagModule,
-    SpeedDialModule,
     Dialog,
     Button,
     ReactiveFormsModule,
     Select,
     InputText,
-    SkeletonModule,
-  ],
+    ProgressSpinnerModule,
+    SpeedDialComponent,
+    SpeedDial
+],
   templateUrl: './user-settings.html',
   styleUrl: './user-settings.css',
 })
@@ -35,68 +37,34 @@ export class UserSettings implements OnInit {
   users = this.userService.allUsers;
 
   loading = signal(false);
-
-  userActions: MenuItem[] = [];
   displayDialog = signal(false);
-
   isDeleteMode = signal<Boolean>(false);
   isEditMode = signal(false);
   selectedUser: User | null = null;
 
-  editTitle = $localize`:@@userSettings.dialog.editTitle:Edit User`;
-  newTitle = $localize`:@@userSettings.dialog.newTitle:New User`;
-
-  ngOnInit() {
-    this.updateMenu();
-    this.fetchInitialData();
-  }
-
-  fetchInitialData() {
-    this.loading.set(true);
-    this.userService.loadUsers().subscribe({
-      next: () => this.loading.set(false),
-      error: () => this.loading.set(false),
-    });
-  }
-
-  updateMenu() {
-    this.userActions = [
-      {
-        icon: 'pi pi-user-plus',
-        tooltipOptions: { tooltipLabel: $localize`:@@userSettings.actions.addUser:Add User` },
-        command: () => this.openDialog(),
+  userActions: MenuItem[] = [
+    {
+      icon: 'pi pi-user-plus',
+      tooltipOptions: { tooltipLabel: 'Add User' },
+      command: () => this.openDialog(),
+    },
+    {
+      icon: 'pi pi-pencil',
+      tooltipOptions: { tooltipLabel: 'Edit Users' },
+      command: () => {
+        this.isEditMode.set(!this.isEditMode());
+        this.isDeleteMode.set(false);
       },
-      {
-        icon: 'pi pi-pencil',
-        tooltipOptions: { tooltipLabel: $localize`:@@userSettings.actions.editUsers:Edit Users` },
-        command: () => {
-          this.isEditMode.set(!this.isEditMode());
-          this.isDeleteMode.set(false);
-        },
+    },
+    {
+      icon: 'pi pi-trash',
+      tooltipOptions: { tooltipLabel: 'Delete Users' },
+      command: () => {
+        this.isDeleteMode.set(!this.isDeleteMode());
+        this.isEditMode.set(false);
       },
-      {
-        icon: 'pi pi-trash',
-        tooltipOptions: {
-          tooltipLabel: $localize`:@@userSettings.actions.deleteUsers:Delete Users`,
-        },
-        command: () => {
-          this.isDeleteMode.set(!this.isDeleteMode());
-          this.isEditMode.set(false);
-        },
-      },
-    ];
-  }
-
-  openEditDialog(user: User) {
-    this.selectedUser = user;
-    this.userForm.patchValue({
-      firstName: user.firstName,
-      lastName: user.lastName,
-      email: user.email,
-      role: user.role,
-    });
-    this.displayDialog.set(true);
-  }
+    },
+  ];
 
   userForm = new FormGroup({
     firstName: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
@@ -119,9 +87,32 @@ export class UserSettings implements OnInit {
     { label: $localize`:@@role.break:Break Area`, value: 'breakArea' },
   ];
 
+  ngOnInit() {
+    this.fetchInitialData();
+  }
+
+  fetchInitialData() {
+    this.loading.set(true);
+    this.userService.loadUsers().subscribe({
+      next: () => this.loading.set(false),
+      error: () => this.loading.set(false),
+    });
+  }
+
   openDialog() {
     this.selectedUser = null;
     this.userForm.reset();
+    this.displayDialog.set(true);
+  }
+
+  openEditDialog(user: User) {
+    this.selectedUser = user;
+    this.userForm.patchValue({
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      role: user.role,
+    });
     this.displayDialog.set(true);
   }
 
@@ -157,10 +148,8 @@ export class UserSettings implements OnInit {
 
     if (confirmDelete && user.id) {
       this.userService.deleteUser(user.id).subscribe({
-        next: () => {
-          console.log('User successfully deleted');
-        },
-        error: (err) => alert(err.message),
+        next: () => console.log('User successfully deleted'),
+        error: (err) => console.error('Error during deletion:', err),
       });
     }
   }

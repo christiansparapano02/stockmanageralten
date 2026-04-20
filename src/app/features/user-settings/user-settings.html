@@ -59,7 +59,13 @@
           </td>
           @if (isDeleteMode()) {
             <td class="text-center">
-              <p-button icon="pi pi-trash" severity="danger" [rounded]="true" [text]="true" (click)="deleteUser(user)" />
+              <p-button
+                icon="pi pi-trash"
+                severity="danger"
+                [rounded]="true"
+                [text]="true"
+                (click)="deleteUser(user)"
+              ></p-button>
             </td>
           }
           @if (isEditMode()) {
@@ -80,15 +86,15 @@
     </p-table>
   </div>
 
-  <div class="user-speeddial-container">
+  <app-speed-dial>
     <p-speed-dial
       [model]="userActions"
       direction="up"
       showIcon="pi pi-plus"
       hideIcon="pi pi-times"
       buttonClassName="p-button-primary shadow-4"
-    />
-  </div>
+    ></p-speed-dial>
+  </app-speed-dial>
 
   <p-dialog
     [header]="selectedUser ? editTitle : newTitle"
