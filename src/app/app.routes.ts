@@ -7,14 +7,6 @@ export const routes: Routes = [
     title: 'Login',
   },
   {
-    path: '',
-    //canActivate: [AuthGuard],
-    loadComponent: () => import('./layout/main-layout/main-layout').then((m) => m.MainLayout),
-
-    loadChildren: () => import('./layout/main-layout/main.routes').then((m) => m.MAIN_ROUTES),
-  },
-
-  {
     path: 'forgotpassword',
     loadComponent: () =>
       import('./features/forgotpassword/forgotpassword').then((m) => m.ForgotPassword),
@@ -23,6 +15,19 @@ export const routes: Routes = [
   {
     path: 'support',
     loadComponent: () => import('./features/support/support').then((m) => m.Support),
+    title: 'Support',
   },
-  //{ path: '**', redirectTo: 'login' },
+
+  {
+    path: '',
+    // canActivate: [AuthGuard],
+    loadComponent: () => import('./layout/main-layout/main-layout').then((m) => m.MainLayout),
+    loadChildren: () => import('./layout/main-layout/main.routes').then((m) => m.MAIN_ROUTES),
+  },
+
+  {
+    path: '**',
+    loadComponent: () => import('./features/not-found/not-found').then((m) => m.NotFound),
+    title: 'Not Found',
+  },
 ];
