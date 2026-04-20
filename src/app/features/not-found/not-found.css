@@ -1,0 +1,34 @@
+.not-found-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  width: 100%;
+  background-color: var(--surface-ground); /* Opzionale: usa il colore di sfondo del tema */
+  text-align: center;
+  padding: 2rem;
+}
+
+.not-found-content {
+  max-width: 400px;
+}
+
+.not-found-logo {
+  width: 300px;
+  height: auto;
+  margin-bottom: 2rem;
+}
+
+.not-found-title {
+  color: var(--text-color); /* Prende il colore dal tema PrimeNG */
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin: 0 0 1rem 0;
+}
+
+.not-found-message {
+  color: var(--text-color-secondary);
+  font-size: 1.25rem;
+  line-height: 1.5;
+  margin: 0;
+}
