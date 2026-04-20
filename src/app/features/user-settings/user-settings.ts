@@ -46,8 +46,8 @@ export class UserSettings implements OnInit {
   selectedUser: User | null = null; // per memorizzar l'utente da modificare
 
   // Proprietà tradotte per l'header del dialog nel template
-  editTitle = $localize`@@userSettings.dialog.editTitle:Edit User`;
-  newTitle = $localize`@@userSettings.dialog.newTitle:New User`;
+  editTitle = $localize`:@@userSettings.dialog.editTitle:Edit User`;
+  newTitle = $localize`:@@userSettings.dialog.newTitle:New User`;
 
   ngOnInit() {
     this.updateMenu();
@@ -117,11 +117,11 @@ export class UserSettings implements OnInit {
   });
 
   roleOptions = [
-    { label: $localize`@@role.admin:Administrator`, value: 'admin' },
-    { label: $localize`@@role.medical:Medical Area`, value: 'medicalArea' },
-    { label: $localize`@@role.office:Office`, value: 'officeArea' },
-    { label: $localize`@@role.security:Security`, value: 'securityArea' },
-    { label: $localize`@@role.break:Break Area`, value: 'breakArea' },
+    { label: $localize`:@@role.admin:Administrator`, value: 'admin' },
+    { label: $localize`:@@role.medical:Medical Area`, value: 'medicalArea' },
+    { label: $localize`:@@role.office:Office`, value: 'officeArea' },
+    { label: $localize`:@@role.security:Security`, value: 'securityArea' },
+    { label: $localize`:@@role.break:Break Area`, value: 'breakArea' },
   ];
 
   openDialog() {
@@ -158,7 +158,7 @@ export class UserSettings implements OnInit {
 
   deleteUser(user: User) {
     const confirmDelete = confirm(
-      $localize`@@userSettings.confirmDelete:Are you sure you want to delete the user ${user.firstName} ${user.lastName}?`,
+      $localize`:@@userSettings.confirmDelete:Are you sure you want to delete the user ${user.firstName} ${user.lastName}?`,
     );
 
     if (confirmDelete && user.id) {
