@@ -1,4 +1,5 @@
-import { Component, ElementRef, OnInit, signal, ViewChild } from '@angular/core';
+import { Location } from '@angular/common';
+import { Component, ElementRef, inject, OnInit, signal, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { InputTextModule } from 'primeng/inputtext';
@@ -15,6 +16,8 @@ import { TextareaModule } from 'primeng/textarea';
 export class Support implements OnInit {
   @ViewChild('form') form?: ElementRef<HTMLFormElement>;
   logged = signal(true);
+
+  location = inject(Location);
 
   loading = signal(false);
 
@@ -56,5 +59,9 @@ export class Support implements OnInit {
       Object: ${object}
       Description: ${description}
       File: ${file}`);
+  }
+
+  onCancel() {
+    this.location.back();
   }
 }
