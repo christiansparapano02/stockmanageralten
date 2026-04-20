@@ -45,8 +45,7 @@
                 [rounded]="true"
                 [text]="true"
                 (click)="deleteUser(user)"
-              >
-              </p-button>
+              ></p-button>
             </td>
           }
           @if (isEditMode()) {
@@ -71,7 +70,7 @@
     </p-table>
   </div>
 
-  <div class="user-speeddial-container">
+  <app-speed-dial>
     <p-speed-dial
       [model]="userActions"
       direction="up"
@@ -79,7 +78,7 @@
       hideIcon="pi pi-times"
       buttonClassName="p-button-primary shadow-4"
     ></p-speed-dial>
-  </div>
+  </app-speed-dial>
 
   <p-dialog
     [header]="selectedUser ? 'Edit User' : 'New User'"

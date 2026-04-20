@@ -3,7 +3,6 @@ import { USER_SERVICE_TOKEN } from '../../core/user/user-service.token';
 
 import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
-import { SpeedDialModule } from 'primeng/speeddial';
 import { MenuItem } from 'primeng/api';
 import { User, type UserRole } from '../../core/user/user.model';
 import {
@@ -18,13 +17,14 @@ import { Button } from 'primeng/button';
 import { Select } from 'primeng/select';
 import { InputText } from 'primeng/inputtext';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { SpeedDialComponent } from '../../features/speeddial/speeddial';
+import { SpeedDial } from "primeng/speeddial"; // adatta il path
 
 @Component({
   selector: 'app-user-settings',
   imports: [
     TableModule,
     TagModule,
-    SpeedDialModule,
     Dialog,
     ɵInternalFormsSharedModule,
     Button,
@@ -32,7 +32,9 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
     Select,
     InputText,
     ProgressSpinnerModule,
-  ],
+    SpeedDialComponent,
+    SpeedDial
+],
   templateUrl: './user-settings.html',
   styleUrl: './user-settings.css',
 })
@@ -41,67 +43,34 @@ export class UserSettings {
   users = this.userService.allUsers;
 
   loading = signal(false);
-
-  userActions: MenuItem[] = [];
   displayDialog = signal(false);
-
-  //  per gestire la visibilità del cestino
   isDeleteMode = signal<Boolean>(false);
+  isEditMode = signal(false);
+  selectedUser: User | null = null;
 
-  isEditMode = signal(false); // per mostrare la colonna con la matita
-  selectedUser: User | null = null; // per memorizzar l'utente da modificare
-
-  ngOnInit() {
-    this.updateMenu();
-    this.fetchInitialData();
-  }
-
-  fetchInitialData() {
-    this.loading.set(true);
-    this.userService.loadUsers().subscribe({
-      next: () => this.loading.set(false),
-      error: () => this.loading.set(false),
-    });
-  }
-
-  updateMenu() {
-    this.userActions = [
-      {
-        icon: 'pi pi-user-plus',
-        tooltipOptions: { tooltipLabel: 'Add User' },
-        command: () => this.openDialog(), // Modo creazione
+  userActions: MenuItem[] = [
+    {
+      icon: 'pi pi-user-plus',
+      tooltipOptions: { tooltipLabel: 'Add User' },
+      command: () => this.openDialog(),
+    },
+    {
+      icon: 'pi pi-pencil',
+      tooltipOptions: { tooltipLabel: 'Edit Users' },
+      command: () => {
+        this.isEditMode.set(!this.isEditMode());
+        this.isDeleteMode.set(false);
       },
-      {
-        icon: 'pi pi-pencil',
-        tooltipOptions: { tooltipLabel: 'Edit Users' },
-        command: () => {
-          this.isEditMode.set(!this.isEditMode());
-          this.isDeleteMode.set(false); // Chiudiamo delete se aperto
-        },
+    },
+    {
+      icon: 'pi pi-trash',
+      tooltipOptions: { tooltipLabel: 'Delete Users' },
+      command: () => {
+        this.isDeleteMode.set(!this.isDeleteMode());
+        this.isEditMode.set(false);
       },
-      {
-        icon: 'pi pi-trash',
-        tooltipOptions: { tooltipLabel: 'Delete Users' },
-        command: () => {
-          this.isDeleteMode.set(!this.isDeleteMode());
-          this.isEditMode.set(false); // Chiudiamo edit se aperto
-        },
-      },
-    ];
-  }
-
-  // Apre il dialog per la MODIFICA
-  openEditDialog(user: User) {
-    this.selectedUser = user;
-    // Pre-compila il form con i dati dell'utente
-    this.userForm.patchValue({
-      firstName: user.firstName,
-      lastName: user.lastName,
-      email: user.email,
-      role: user.role,
-    });
-    this.displayDialog.set(true);
-  }
+    },
+  ];
 
   userForm = new FormGroup({
     firstName: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
@@ -124,9 +93,32 @@ export class UserSettings {
     { label: 'Break Area', value: 'breakArea' },
   ];
 
+  ngOnInit() {
+    this.fetchInitialData();
+  }
+
+  fetchInitialData() {
+    this.loading.set(true);
+    this.userService.loadUsers().subscribe({
+      next: () => this.loading.set(false),
+      error: () => this.loading.set(false),
+    });
+  }
+
   openDialog() {
     this.selectedUser = null;
     this.userForm.reset();
+    this.displayDialog.set(true);
+  }
+
+  openEditDialog(user: User) {
+    this.selectedUser = user;
+    this.userForm.patchValue({
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      role: user.role,
+    });
     this.displayDialog.set(true);
   }
 
@@ -135,14 +127,12 @@ export class UserSettings {
       const formData = this.userForm.getRawValue();
 
       if (this.selectedUser) {
-        // MODIFICA utente
         const updatedUser = { ...this.selectedUser, ...formData };
         this.userService.updateUser(updatedUser).subscribe({
           next: () => this.closeDialog(),
           error: (err) => console.error(err),
         });
       } else {
-        // CREAZIONE utente
         this.userService.addUser(formData).subscribe({
           next: () => this.closeDialog(),
           error: (err) => console.error(err),
@@ -150,6 +140,7 @@ export class UserSettings {
       }
     }
   }
+
   closeDialog() {
     this.displayDialog.set(false);
     this.selectedUser = null;
@@ -163,9 +154,7 @@ export class UserSettings {
 
     if (confirmDelete && user.id) {
       this.userService.deleteUser(user.id).subscribe({
-        next: () => {
-          console.log('User successfully deleted');
-        },
+        next: () => console.log('User successfully deleted'),
         error: (err) => console.error('Error during deletion:', err),
       });
     }

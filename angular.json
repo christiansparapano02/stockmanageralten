@@ -8,6 +8,10 @@
   "newProjectRoot": "projects",
   "projects": {
     "stockManagerAlten": {
+      "i18n": {
+        "sourceLocale":"en-US",
+        "locales": {"it-IT": "src/locale/messages.it.xlf"}
+      },
       "projectType": "application",
       "schematics": {},
       "root": "",
