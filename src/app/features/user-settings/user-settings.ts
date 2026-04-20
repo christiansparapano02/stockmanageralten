@@ -1,17 +1,11 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, OnInit } from '@angular/core';
 import { USER_SERVICE_TOKEN } from '../../core/user/user-service.token';
 
 import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
 import { MenuItem } from 'primeng/api';
 import { User, type UserRole } from '../../core/user/user.model';
-import {
-  FormControl,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators,
-  ɵInternalFormsSharedModule,
-} from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Dialog } from 'primeng/dialog';
 import { Button } from 'primeng/button';
 import { Select } from 'primeng/select';
@@ -22,11 +16,11 @@ import { SpeedDial } from "primeng/speeddial"; // adatta il path
 
 @Component({
   selector: 'app-user-settings',
+  standalone: true,
   imports: [
     TableModule,
     TagModule,
     Dialog,
-    ɵInternalFormsSharedModule,
     Button,
     ReactiveFormsModule,
     Select,
@@ -38,7 +32,7 @@ import { SpeedDial } from "primeng/speeddial"; // adatta il path
   templateUrl: './user-settings.html',
   styleUrl: './user-settings.css',
 })
-export class UserSettings {
+export class UserSettings implements OnInit {
   private userService = inject(USER_SERVICE_TOKEN);
   users = this.userService.allUsers;
 
@@ -86,11 +80,11 @@ export class UserSettings {
   });
 
   roleOptions = [
-    { label: 'Administrator', value: 'admin' },
-    { label: 'Medical Area', value: 'medicalArea' },
-    { label: 'Office', value: 'officeArea' },
-    { label: 'Security', value: 'securityArea' },
-    { label: 'Break Area', value: 'breakArea' },
+    { label: $localize`:@@role.admin:Administrator`, value: 'admin' },
+    { label: $localize`:@@role.medical:Medical Area`, value: 'medicalArea' },
+    { label: $localize`:@@role.office:Office`, value: 'officeArea' },
+    { label: $localize`:@@role.security:Security`, value: 'securityArea' },
+    { label: $localize`:@@role.break:Break Area`, value: 'breakArea' },
   ];
 
   ngOnInit() {
@@ -130,12 +124,12 @@ export class UserSettings {
         const updatedUser = { ...this.selectedUser, ...formData };
         this.userService.updateUser(updatedUser).subscribe({
           next: () => this.closeDialog(),
-          error: (err) => console.error(err),
+          error: (err) => alert(err.message),
         });
       } else {
         this.userService.addUser(formData).subscribe({
           next: () => this.closeDialog(),
-          error: (err) => console.error(err),
+          error: (err) => alert(err.message),
         });
       }
     }
@@ -149,7 +143,7 @@ export class UserSettings {
 
   deleteUser(user: User) {
     const confirmDelete = confirm(
-      `Are you sure you want to delete the user ${user.firstName} ${user.lastName}?`,
+      $localize`:@@userSettings.confirmDelete:Are you sure you want to delete the user ${user.firstName} ${user.lastName}?`,
     );
 
     if (confirmDelete && user.id) {
