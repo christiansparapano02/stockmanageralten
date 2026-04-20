@@ -39,10 +39,11 @@ export class UserSettings implements OnInit {
   userActions: MenuItem[] = [];
   displayDialog = signal(false);
 
-  isDeleteMode = signal<Boolean>(false);
-  isEditMode = signal(false);
-  selectedUser: User | null = null;
+  isDeleteMode = signal<Boolean>(false); //  per gestire la visibilità del cestino
+  isEditMode = signal(false); // per mostrare la colonna con la matita
+  selectedUser: User | null = null; // per memorizzar l'utente da modificare
 
+  // Proprietà tradotte per l'header del dialog nel template
   editTitle = $localize`:@@userSettings.dialog.editTitle:Edit User`;
   newTitle = $localize`:@@userSettings.dialog.newTitle:New User`;
 
@@ -88,6 +89,7 @@ export class UserSettings implements OnInit {
   }
 
   openEditDialog(user: User) {
+    // Pre-compila il form con i dati dell'utente
     this.selectedUser = user;
     this.userForm.patchValue({
       firstName: user.firstName,
