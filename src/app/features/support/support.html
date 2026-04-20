@@ -16,17 +16,20 @@
           onSubmit(categoryInput.value, objectInput.value, descriptionInput.value, fileInput.value)
         "
       >
-        <div class="form-field">
-          <label for="category">Category</label>
-          <select id="category" name="category" class="support-select" #categoryInput>
-            <option value="" selected disabled>Select a category</option>
-            <option value="accesso">Login Issues</option>
-            <option value="inventario">Inventory Error</option>
-            <option value="categorie">Category Issue</option>
-            <option value="ui">Interface Issue</option>
-            <option value="altro">Other</option>
-          </select>
-        </div>
+     <div class="form-field">
+  <label for="category">Category</label>
+  <p-select
+    id="category"
+    name="category"
+    [(ngModel)]="selectedCategory"
+    [options]="categoryOptions"
+    optionLabel="label"
+    optionValue="value"
+    placeholder="Select a category"
+    styleClass="w-full"
+    #categoryInput
+  ></p-select>
+</div>
 
         <div class="form-field">
           <label for="subject">Subject</label>

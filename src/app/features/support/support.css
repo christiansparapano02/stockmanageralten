@@ -183,3 +183,17 @@ input[type="file"]::file-selector-button:hover {
   align-items: center;
   min-height: 300px;
 }
+
+/* forza il tema dark sul pannello overlay dei p-select */
+.app-dark .p-select-overlay {
+  background: var(--p-select-background);
+  color: var(--p-select-color);
+}
+
+.app-dark .p-select-option {
+  color: var(--p-select-option-color);
+}
+
+.app-dark .p-select-option:hover {
+  background: var(--p-select-option-focus-background);
+}
