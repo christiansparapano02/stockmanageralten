@@ -1,5 +1,5 @@
 @if (loading()) {
-  <p-table [value]="[1,2,3,4,5]" [tableStyle]="{ 'min-width': '50rem' }">
+  <p-table [value]="[1, 2, 3, 4, 5]" [tableStyle]="{ 'min-width': '50rem' }">
     <ng-template pTemplate="header">
       <tr>
         <th>Name</th>
@@ -90,7 +90,7 @@
 
         <td>
           @if (mode() === 'edit') {
-            <div style="display: flex; align-items: center; gap: 8px; overflow: visible;">
+            <div style="display: flex; align-items: center; gap: 8px; overflow: visible">
               <p-button
                 icon="pi pi-minus-circle"
                 severity="danger"
@@ -155,7 +155,13 @@
 
 @if (mode() === 'edit') {
   <div class="edit-actions">
-    <button pButton type="button" label="Cancel" severity="secondary" (click)="cancelEdit()"></button>
+    <button
+      pButton
+      type="button"
+      label="Cancel"
+      severity="secondary"
+      (click)="cancelEdit()"
+    ></button>
     <button pButton type="button" label="Save Changes" (click)="saveEdit()"></button>
   </div>
 }
@@ -169,44 +175,100 @@
 >
   <div class="form-field">
     <label for="name">Name</label>
-    <input id="name" pInputText [ngModel]="newItem().name" (ngModelChange)="newItem.set({ ...newItem(), name: $event })" />
+    <input
+      id="name"
+      pInputText
+      required
+      #nameRef="ngModel"
+      [ngModel]="newItem().name"
+      (ngModelChange)="newItem.set({ ...newItem(), name: $event })"
+    />
+    @if (nameRef.invalid && nameRef.touched) {
+      <small class="error-text">Il nome è obbligatorio</small>
+    }
   </div>
   <div class="form-field">
     <label for="nextCheck">Next Check</label>
-   <p-datepicker
-  id="nextCheck"
-  [showIcon]="true"
-  [ngModel]="newItem().nextCheck"
-  (ngModelChange)="newItem.set({ ...newItem(), nextCheck: $event })"
-/>
+    <p-datepicker
+      id="nextCheck"
+      [showIcon]="true"
+      [ngModel]="newItem().nextCheck"
+      (ngModelChange)="newItem.set({ ...newItem(), nextCheck: $event })"
+    />
   </div>
   <div class="form-field">
     <label for="expiring">Expiry Date</label>
     <p-datepicker
-  id="expiring"
-  [showIcon]="true"
-  [ngModel]="newItem().expiring"
-  (ngModelChange)="newItem.set({ ...newItem(), expiring: $event })"
-/>
+      id="expiring"
+      [showIcon]="true"
+      [ngModel]="newItem().expiring"
+      (ngModelChange)="newItem.set({ ...newItem(), expiring: $event })"
+    />
   </div>
   <div class="form-field">
     <label for="quantity">Available Quantity</label>
-    <p-inputnumber inputId="quantity" [ngModel]="newItem().quantity" (ngModelChange)="newItem.set({ ...newItem(), quantity: $event })" [showButtons]="true" [min]="0" buttonLayout="horizontal" spinnerMode="horizontal" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" />
+    <p-inputnumber
+      inputId="quantity"
+      [ngModel]="newItem().quantity"
+      (ngModelChange)="newItem.set({ ...newItem(), quantity: $event })"
+      [showButtons]="true"
+      [min]="0"
+      buttonLayout="horizontal"
+      spinnerMode="horizontal"
+      incrementButtonIcon="pi pi-plus"
+      decrementButtonIcon="pi pi-minus"
+    />
   </div>
   <div class="form-field">
     <label for="minQuantity">Minimum Quantity</label>
-    <p-inputnumber inputId="minQuantity" [ngModel]="newItem().minQuantity" (ngModelChange)="newItem.set({ ...newItem(), minQuantity: $event })" [showButtons]="true" [min]="1" buttonLayout="horizontal" spinnerMode="horizontal" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" />
+    <p-inputnumber
+      inputId="minQuantity"
+      [ngModel]="newItem().minQuantity"
+      (ngModelChange)="newItem.set({ ...newItem(), minQuantity: $event })"
+      [showButtons]="true"
+      [min]="1"
+      buttonLayout="horizontal"
+      spinnerMode="horizontal"
+      incrementButtonIcon="pi pi-plus"
+      decrementButtonIcon="pi pi-minus"
+    />
   </div>
   <ng-template pTemplate="footer">
-    <button pButton type="button" label="Cancel" severity="secondary" (click)="dialogVisible.set(false)"></button>
-    <button pButton type="button" label="Save" (click)="saveNewItem()"></button>
+    <button
+      pButton
+      type="button"
+      label="Cancel"
+      severity="secondary"
+      (click)="dialogVisible.set(false)"
+    ></button>
+    <button
+      pButton
+      type="button"
+      label="Save"
+      [disabled]="nameRef.invalid"
+      (click)="saveNewItem()"
+    ></button>
   </ng-template>
 </p-dialog>
 
-<p-dialog header="Add Quantity" [visible]="addQtyVisible()" [modal]="true" [style]="{ width: '20rem' }" (visibleChange)="addQtyVisible.set($event)">
+<p-dialog
+  header="Add Quantity"
+  [visible]="addQtyVisible()"
+  [modal]="true"
+  [style]="{ width: '20rem' }"
+  (visibleChange)="addQtyVisible.set($event)"
+>
   <div class="form-field">
     <label>Quantity to add</label>
-    <p-inputnumber [(ngModel)]="qtyAmount" [min]="1" [showButtons]="true" buttonLayout="horizontal" spinnerMode="horizontal" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" />
+    <p-inputnumber
+      [(ngModel)]="qtyAmount"
+      [min]="1"
+      [showButtons]="true"
+      buttonLayout="horizontal"
+      spinnerMode="horizontal"
+      incrementButtonIcon="pi pi-plus"
+      decrementButtonIcon="pi pi-minus"
+    />
   </div>
   <ng-template pTemplate="footer">
     <p-button label="Cancel" severity="secondary" (onClick)="addQtyVisible.set(false)" />
@@ -214,10 +276,24 @@
   </ng-template>
 </p-dialog>
 
-<p-dialog header="Remove Quantity" [visible]="removeQtyVisible()" [modal]="true" [style]="{ width: '20rem' }" (visibleChange)="removeQtyVisible.set($event)">
+<p-dialog
+  header="Remove Quantity"
+  [visible]="removeQtyVisible()"
+  [modal]="true"
+  [style]="{ width: '20rem' }"
+  (visibleChange)="removeQtyVisible.set($event)"
+>
   <div class="form-field">
     <label>Quantity to remove</label>
-    <p-inputnumber [(ngModel)]="qtyAmount" [min]="1" [showButtons]="true" buttonLayout="horizontal" spinnerMode="horizontal" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" />
+    <p-inputnumber
+      [(ngModel)]="qtyAmount"
+      [min]="1"
+      [showButtons]="true"
+      buttonLayout="horizontal"
+      spinnerMode="horizontal"
+      incrementButtonIcon="pi pi-plus"
+      decrementButtonIcon="pi pi-minus"
+    />
   </div>
   <ng-template pTemplate="footer">
     <p-button label="Cancel" severity="secondary" (onClick)="removeQtyVisible.set(false)" />
