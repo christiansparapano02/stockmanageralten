@@ -173,11 +173,21 @@
   </div>
   <div class="form-field">
     <label for="nextCheck">Next Check</label>
-    <input id="nextCheck" type="date" [ngModel]="newItem().nextCheck ? (newItem().nextCheck | date: 'yyyy-MM-dd') : ''" (ngModelChange)="newItem.set({ ...newItem(), nextCheck: $event ? $any($event) : undefined })" />
+   <p-datepicker
+  id="nextCheck"
+  [showIcon]="true"
+  [ngModel]="newItem().nextCheck"
+  (ngModelChange)="newItem.set({ ...newItem(), nextCheck: $event })"
+/>
   </div>
   <div class="form-field">
     <label for="expiring">Expiry Date</label>
-    <input id="expiring" type="date" [ngModel]="newItem().expiring ? (newItem().expiring | date: 'yyyy-MM-dd') : ''" (ngModelChange)="newItem.set({ ...newItem(), expiring: $event ? $any($event) : undefined })" />
+    <p-datepicker
+  id="expiring"
+  [showIcon]="true"
+  [ngModel]="newItem().expiring"
+  (ngModelChange)="newItem.set({ ...newItem(), expiring: $event })"
+/>
   </div>
   <div class="form-field">
     <label for="quantity">Available Quantity</label>

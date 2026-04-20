@@ -60,7 +60,7 @@
 .nav-section {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 1rem;
   width: 100%;
 }
 

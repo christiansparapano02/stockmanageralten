@@ -16,6 +16,7 @@ import { Item } from '../../core/item/item.interface';
 import { Options } from './options/options';
 import { StatusLabelPipe } from '../../shared/pipes/status.pipe.ts';
 import { ITEM_SERVICE_TOKEN } from '../../core/item/item-service.token';
+import { DatePickerModule } from 'primeng/datepicker';
 
 @Component({
   selector: 'app-stock',
@@ -32,6 +33,7 @@ import { ITEM_SERVICE_TOKEN } from '../../core/item/item-service.token';
     ConfirmDialogModule,
     StatusLabelPipe,
     SkeletonModule,
+    DatePickerModule,
   ],
   providers: [ConfirmationService],
   templateUrl: './stock.html',
