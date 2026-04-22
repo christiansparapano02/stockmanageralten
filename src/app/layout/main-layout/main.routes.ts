@@ -17,7 +17,7 @@ export const MAIN_ROUTES: Routes = [
         title: 'Inventory - Categories',
       },
       {
-        path: 'stock/:category', // Questo corrisponde a "/categories/stock/:category"
+        path: ':category', // Questo corrisponde a "/categories/stock/:category"
         loadComponent: () => import('../../features/stock/stock').then((m) => m.Stock),
         // canActivate:  [categoryGuard],
         title: 'Stock Details',

@@ -35,17 +35,17 @@ export class Categories {
 
   onSelectCategory(cat: Category) {
     console.log(`Navigazione verso categoria: ${cat.name}`);
-    this.router.navigate(['/categories/stock', cat.name]);
+    this.router.navigate(['/categories', cat.id]);
   }
 }
 
-//MODIFICARE DOPO AUTHsERVICE
+//MODIFICARE DOPO authService
 // onSelectCategory(cat: Category) {
 //   // cat.name sarà "Medical", "Office", ecc.
 //   if (this.authService.canAccessCategory(cat.name)) {
-//     this.router.navigate(['/categories/stock', cat.name]);
+//     this.router.navigate(['/categories/', cat.name]);
 //   } else {
-//     // Messaggio opzionale
+//     // Messaggio
 //     console.error("Non hai i permessi per l'area: " + cat.name);
 //   }
 // }

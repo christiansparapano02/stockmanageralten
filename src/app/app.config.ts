@@ -33,7 +33,7 @@ export const appConfig: ApplicationConfig = {
     },
     {
       provide: ITEM_SERVICE_TOKEN,
-      useExisting: ItemMockService,
+      useClass: ItemMockService,
     },
     {
       provide: USER_SERVICE_TOKEN,

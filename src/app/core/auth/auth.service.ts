@@ -5,7 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { User, UserRole } from '../user/user.model';
 import { LoginCredentials, LoginResponse } from './auth.model';
-import { Observable, tap } from 'rxjs';
+import { catchError, Observable, tap, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -50,6 +50,7 @@ export class AuthService {
     if (!user) return false;
     if (user.role === 'admin') return true;
 
+    //confronta ruolo mappato con nome categoria nell url
     const requiredCategory = this.roleMapping[user.role];
     return requiredCategory?.toLowerCase() === categoryName?.toLowerCase();
   }
@@ -57,22 +58,24 @@ export class AuthService {
   login(credentials: LoginCredentials): Observable<LoginResponse> {
     return this.http.post<LoginResponse>(`${this.API_URL}/login`, credentials).pipe(
       tap((response) => {
-        const token = response.token;
-        this.tokenState.set(token);
+        this.tokenState.set(response.token);
 
         // Decodifica per ricavare lo User
-        const decoded: any = jwtDecode(token);
+        const decoded: any = jwtDecode(response.token);
 
+        // Mappatura
         const user: User = {
-          email: decoded.email || decoded.unique_name,
-          firstName: decoded.given_name || '',
-          lastName: decoded.family_name || '',
-          role: (decoded.role ||
-            decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/role']) as UserRole,
+          id: decoded['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'], // GUID Utente
+          email: decoded['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress'],
+          firstName: decoded['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname'],
+          lastName: decoded['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname'],
+
+          role: decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] as UserRole,
         };
 
         this.userState.set(user);
       }),
+      catchError((err) => throwError(() => new Error(err.error || 'Login Error'))),
     );
   }
 
