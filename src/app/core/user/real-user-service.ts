@@ -50,4 +50,4 @@ export class RealUserService implements IUserService {
   }
 }
 
-//poi gestire errori, come email già esistente
+//poi gestire errori, come email già esistente (di regola gestito da be)

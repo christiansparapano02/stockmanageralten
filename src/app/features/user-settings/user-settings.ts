@@ -155,7 +155,7 @@ export class UserSettings implements OnInit {
             this.closeDialog();
           },
 
-          error: (err) => this.showError(err.message),
+          error: (err) => this.showError(err.message), //this.showError(err.error) o err.error.message per vedere messaggio specifico mandato da be
         });
       } else {
         this.userService.addUser(formData).subscribe({

@@ -1,1 +1,15 @@
-// PROTEGGE SE NON LOGGATO
+import { inject } from '@angular/core';
+import { AuthService } from '../auth/auth.service';
+import { CanActivateFn, Router } from '@angular/router';
+
+export const authGuard: CanActivateFn = () => {
+  const authService = inject(AuthService);
+  const router = inject(Router);
+
+  if (authService.isLoggedIn()) {
+    return true;
+  }
+
+  //se non loggato, rimandato a login.
+  return router.parseUrl('/login');
+};
