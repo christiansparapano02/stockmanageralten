@@ -1,5 +1,7 @@
 @import 'primeicons/primeicons.css';
 
+@import 'primeflex/primeflex.css';
+
 * {
   margin: 0;
   padding: 0;
@@ -8,11 +10,13 @@
 }
 
 body {
-    background-color: var(--p-surface-ground);
-    color: var(--p-text-color);
-    margin: 0;
-    min-height: 100vh;
-    transition: background-color 0.3s, color 0.3s;
-    height: 100vh;
-   overflow: hidden; /* Aggiunge una transizione fluida quando cambi tema! */
+  background-color: var(--p-surface-ground);
+  color: var(--p-text-color);
+  margin: 0;
+  min-height: 100vh;
+  transition:
+    background-color 0.3s,
+    color 0.3s;
+  height: 100vh;
+  overflow: hidden; /* Aggiunge una transizione fluida quando cambi tema! */
 }

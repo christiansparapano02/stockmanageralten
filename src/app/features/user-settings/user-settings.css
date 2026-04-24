@@ -22,7 +22,6 @@
 /* ============================================
    SPEED DIAL
    ============================================ */
-
 .user-speeddial-container {
   position: fixed;
   bottom: 2rem;
@@ -32,7 +31,7 @@
   display: flex;
   align-items: flex-end;
   z-index: 1000;
-  pointer-events: none; /* Rende il contenitore "trasparente" ai click */
+  pointer-events: none;
 }
 
 :host ::ng-deep .p-speeddial-list {
@@ -79,57 +78,14 @@
 }
 
 /* ============================================
-   FORM
+   SELECT — LARGHEZZA PIENA
    ============================================ */
-.user-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
-  padding: 0.5rem 0;
-}
-
-.form-field {
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-}
-
-.form-field label {
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: var(--text-color-secondary);
-}
-
-.form-field input.p-inputtext {
-  width: 100%;
-  padding: 0.6rem 0.75rem;
-  border: 1px solid var(--surface-border);
-  border-radius: 6px;
-  font-size: 0.95rem;
-  color: var(--text-color);
-  background: var(--surface-card);
-  transition:
-    border-color 0.2s,
-    box-shadow 0.2s;
-  box-sizing: border-box;
-}
-
-.form-field input.p-inputtext:focus {
-  border-color: #028bd3;
-  box-shadow: 0 0 0 0.2rem rgba(2, 139, 211, 0.2);
-  outline: none;
-}
-
-/* ============================================
-   SELECT — larghezza piena
-   ============================================ */
-.form-field p-select,
-.form-field :host ::ng-deep .p-select {
+:host ::ng-deep .p-select {
   width: 100%;
 }
 
 /* ============================================
-   DIALOG — footer
+   DIALOG — FOOTER
    ============================================ */
 :host ::ng-deep .p-dialog .p-dialog-footer {
   padding: 1rem 1.5rem;
@@ -140,7 +96,7 @@
 }
 
 /* ============================================
-   DELETE MODE — hover riga rossastro
+   MODALITA' ELIMINAZIONE — HOVER RIGA
    ============================================ */
 :host ::ng-deep .p-datatable-tbody > tr.delete-hover:hover {
   background-color: #fff1f2 !important;

@@ -110,28 +110,28 @@
     [style]="{ width: '420px' }"
     [draggable]="false"
   >
-    <form [formGroup]="userForm" class="flex flex-column gap-4 mt-2">
+    <form [formGroup]="userForm" class="flex flex-column gap-3 mt-2">
       <div class="flex flex-column gap-2">
         <label for="f_name" class="font-semibold text-sm">First Name</label>
         <input pInputText id="f_name" formControlName="firstName" />
       </div>
 
-      <div class="flex flex-column gap-2">
+      <div class="flex flex-column gap-1">
         <label for="l_name" class="font-semibold text-sm">Last Name</label>
         <input pInputText id="l_name" formControlName="lastName" />
       </div>
 
-      <div class="flex flex-column gap-2">
+      <div class="flex flex-column gap-1">
         <label for="email" class="font-semibold text-sm">Email</label>
         <input pInputText id="email" formControlName="email" type="email" />
       </div>
 
-      <div class="flex flex-column gap-2">
+      <div class="flex flex-column gap-1">
         <label for="phone" class="font-semibold text-sm">Phone</label>
         <input pInputText id="phone" formControlName="phone" />
       </div>
 
-      <div class="flex flex-column gap-2">
+      <div class="flex flex-column gap-1">
         <label for="pwd" class="font-semibold text-sm">
           {{ selectedUser ? 'Password (Locked)' : 'Password' }}
         </label>
@@ -149,7 +149,7 @@
         }
       </div>
 
-      <div class="flex flex-column gap-2">
+      <div class="flex flex-column gap-1">
         <label for="role" class="font-semibold text-sm">Role</label>
         <p-select
           id="role"
