@@ -125,7 +125,7 @@ export class Catalogue implements OnInit {
   }
 
   saveEdit() {
-    const updatedItems: Item[] = this.editableItems().map((i: Item) => ({
+    const updatedItems = this.editableItems().map((i) => ({
       ...i,
       categoryId: i.categoryId.toString(),
     }));
