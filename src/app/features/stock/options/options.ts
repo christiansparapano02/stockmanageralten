@@ -28,16 +28,4 @@ export class Options {
       command: () => this.onAdd.emit(),
     },
   ];
-
-  handleAdd() {
-    console.log('ADD');
-  }
-
-  handleEdit() {
-    console.log('EDIT');
-  }
-
-  handleDelete() {
-    console.log('DELETE');
-  }
 }

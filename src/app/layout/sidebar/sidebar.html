@@ -16,6 +16,16 @@
     </a>
 
     <a
+      (click)="goTo('catalogue')"
+      [class.active]="isActive('catalogue')"
+      class="nav-item"
+      tooltipPosition="right"
+    >
+      <i class="pi pi-book"></i>
+      <span>Catalogue</span>
+    </a>
+
+    <a
       (click)="goTo('categories')"
       [class.active]="isActive('categories')"
       class="nav-item"

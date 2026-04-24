@@ -15,6 +15,14 @@ export class ItemRealService implements IItemService {
     return this.http.get<Item[]>(`${this.apiUrl}/category/${categoryId}`);
   }
 
+  getCatalogueByCategory(categoryId: string): Observable<Item[]> {
+    return this.http.get<Item[]>(`${this.apiUrl}/catalogue/category/${categoryId}`);
+  }
+
+  getAll(): Observable<Item[]> {
+    return this.http.get<Item[]>(this.apiUrl);
+  }
+
   getCritical(): Observable<Item[]> {
     return this.http.get<Item[]>(`${this.apiUrl}/critical`);
   }
@@ -29,5 +37,9 @@ export class ItemRealService implements IItemService {
 
   delete(id: string): Observable<boolean> {
     return this.http.delete<boolean>(`${this.apiUrl}/${id}`);
+  }
+
+  deleteCatalogueItem(id: string): Observable<boolean> {
+    return this.http.delete<boolean>(`${this.apiUrl}/catalogue/${id}`);
   }
 }

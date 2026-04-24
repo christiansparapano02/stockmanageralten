@@ -37,4 +37,10 @@ export const MAIN_ROUTES: Routes = [
     title: 'Inventory - User Settings',
     // canActivate: [adminGuard]
   },
+  {
+    path: 'catalogue',
+    loadComponent: () => import('../../features/catalogue/catalogue').then((m) => m.Catalogue),
+    title: 'Inventory - Catalogue',
+    // canActivate: [adminGuard]
+  },
 ];

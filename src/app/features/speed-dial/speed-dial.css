@@ -1,0 +1,45 @@
+:host {
+  position: fixed;
+  bottom: 32px;
+  right: 32px;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+:host ::ng-deep .p-speeddial-button {
+  pointer-events: all;
+  width: 56px !important;
+  height: 56px !important;
+  min-width: 56px !important;
+  border-radius: 50% !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+}
+
+:host ::ng-deep .p-speeddial-list {
+  pointer-events: none;
+}
+
+:host ::ng-deep .p-speeddial-open .p-speeddial-list {
+  pointer-events: all;
+}
+
+:host ::ng-deep .p-speeddial-action {
+  pointer-events: all;
+  width: 44px !important;
+  height: 44px !important;
+  min-width: 44px !important;
+  border-radius: 50% !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+}
+
+:host ::ng-deep .p-speeddial-action .p-button-icon,
+:host ::ng-deep .p-speeddial-button .p-button-icon {
+  font-size: 1.1rem;
+  line-height: 1;
+}
