@@ -174,37 +174,21 @@
   (visibleChange)="dialogVisible.set($event)"
 >
   <div class="form-field">
-    <label for="name">Name</label>
-    <input
-      id="name"
-      pInputText
-      required
+    <label for="catalogueItem">Item</label>
+    <p-select
+      inputId="catalogueItem"
+      [options]="catalogueItems()"
+      optionLabel="name"
       #nameRef="ngModel"
-      [ngModel]="newItem().name"
-      (ngModelChange)="newItem.set({ ...newItem(), name: $event })"
-    />
-    @if (nameRef.invalid && nameRef.touched) {
-      <small class="error-text">Il nome è obbligatorio</small>
-    }
-  </div>
-  <div class="form-field">
-    <label for="nextCheck">Next Check</label>
-    <p-datepicker
-      id="nextCheck"
-      [showIcon]="true"
-      [ngModel]="newItem().nextCheck"
-      (ngModelChange)="newItem.set({ ...newItem(), nextCheck: $event })"
+      required
+      [ngModel]="selectedCatalogueItem()"
+      (ngModelChange)="selectedCatalogueItem.set($event)"
+      placeholder="Select an item"
+      appendTo="body"
+      styleClass="w-full"
     />
   </div>
-  <div class="form-field">
-    <label for="expiring">Expiry Date</label>
-    <p-datepicker
-      id="expiring"
-      [showIcon]="true"
-      [ngModel]="newItem().expiring"
-      (ngModelChange)="newItem.set({ ...newItem(), expiring: $event })"
-    />
-  </div>
+
   <div class="form-field">
     <label for="quantity">Available Quantity</label>
     <p-inputnumber
@@ -219,35 +203,10 @@
       decrementButtonIcon="pi pi-minus"
     />
   </div>
-  <div class="form-field">
-    <label for="minQuantity">Minimum Quantity</label>
-    <p-inputnumber
-      inputId="minQuantity"
-      [ngModel]="newItem().minQuantity"
-      (ngModelChange)="newItem.set({ ...newItem(), minQuantity: $event })"
-      [showButtons]="true"
-      [min]="1"
-      buttonLayout="horizontal"
-      spinnerMode="horizontal"
-      incrementButtonIcon="pi pi-plus"
-      decrementButtonIcon="pi pi-minus"
-    />
-  </div>
+
   <ng-template pTemplate="footer">
-    <button
-      pButton
-      type="button"
-      label="Cancel"
-      severity="secondary"
-      (click)="dialogVisible.set(false)"
-    ></button>
-    <button
-      pButton
-      type="button"
-      label="Save"
-      [disabled]="nameRef.invalid"
-      (click)="saveNewItem()"
-    ></button>
+    <p-button label="Cancel" severity="secondary" (onClick)="dialogVisible.set(false)" />
+    <p-button label="Add" [disabled]="!selectedCatalogueItem()" (onClick)="saveNewItem()" />
   </ng-template>
 </p-dialog>
 

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal, DestroyRef } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
@@ -17,6 +17,8 @@ import { Options } from './options/options';
 import { StatusLabelPipe } from '../../shared/pipes/status.pipe.ts';
 import { ITEM_SERVICE_TOKEN } from '../../core/item/item-service.token';
 import { DatePickerModule } from 'primeng/datepicker';
+import { SelectModule } from 'primeng/select';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-stock',
@@ -34,6 +36,7 @@ import { DatePickerModule } from 'primeng/datepicker';
     StatusLabelPipe,
     SkeletonModule,
     DatePickerModule,
+    SelectModule,
   ],
   providers: [ConfirmationService],
   templateUrl: './stock.html',
@@ -43,6 +46,7 @@ export class Stock implements OnInit {
   route = inject(ActivatedRoute);
   itemService = inject(ITEM_SERVICE_TOKEN);
   confirmationService = inject(ConfirmationService);
+  destroyRef = inject(DestroyRef);
 
   items = signal<Item[]>([]);
   categoryId = signal<string>('');
@@ -68,8 +72,12 @@ export class Stock implements OnInit {
 
   loading = signal(false);
 
+  catalogueItems = signal<Item[]>([]);
+
+  selectedCatalogueItem = signal<Item | null>(null);
+
   ngOnInit() {
-    this.route.params.subscribe((params) => {
+    this.route.params.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params) => {
       this.categoryId.set(params['category']);
       this.loadItems();
     });
@@ -108,14 +116,26 @@ export class Stock implements OnInit {
       quantity: 0,
       minQuantity: 1,
     });
+    this.itemService.getCatalogueByCategory(this.categoryId()).subscribe((data) => {
+      this.catalogueItems.set(data);
+    });
     this.dialogVisible.set(true);
   }
 
   saveNewItem() {
+    const selected = this.selectedCatalogueItem();
+    if (!selected) return;
+
     const itemToSave: Omit<Item, 'id'> = {
-      ...this.newItem(),
+      name: selected.name,
       categoryId: this.categoryId(),
-      status: this.computeStatus(this.newItem()),
+      minQuantity: selected.minQuantity,
+      quantity: this.newItem().quantity,
+      status: this.computeStatus({
+        quantity: this.newItem().quantity,
+        minQuantity: selected.minQuantity,
+      }),
+      inStock: true,
     };
 
     this.itemService.add(itemToSave).subscribe((created) => {

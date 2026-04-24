@@ -1,0 +1,184 @@
+@if (loading()) {
+  <p-table [value]="[1, 2, 3, 4, 5]" [tableStyle]="{ 'min-width': '50rem' }">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Name</th>
+        <th>Category</th>
+        <th>Minimum Quantity</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body">
+      <tr>
+        <td><p-skeleton /></td>
+        <td><p-skeleton width="60%" /></td>
+        <td><p-skeleton width="40%" styleClass="mx-auto" /></td>
+      </tr>
+    </ng-template>
+  </p-table>
+} @else {
+  <p-table
+    [value]="mode() === 'edit' ? editableItems() : items()"
+    [tableStyle]="{ 'min-width': '50rem' }"
+    [globalFilterFields]="['name']"
+    #dt
+  >
+    <ng-template pTemplate="caption">
+      <p-iconfield>
+        <p-inputicon styleClass="pi pi-search" />
+        <input
+          pInputText
+          type="text"
+          placeholder="Search by name..."
+          (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+        />
+      </p-iconfield>
+    </ng-template>
+
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Name</th>
+        <th>Category</th>
+        <th>Minimum Quantity</th>
+        @if (mode() === 'delete') {
+          <th>Actions</th>
+        }
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-item let-rowIndex="rowIndex">
+      <tr>
+        <td>
+          @if (mode() === 'edit') {
+            <input pInputText [(ngModel)]="editableItems()[rowIndex].name" />
+          } @else {
+            {{ item.name }}
+          }
+        </td>
+
+        <td>
+          @if (mode() === 'edit') {
+            <p-select
+              [options]="categories()"
+              optionLabel="name"
+              optionValue="id"
+              [(ngModel)]="editableItems()[rowIndex].categoryId"
+              appendTo="body"
+              styleClass="w-full"
+            />
+          } @else {
+            {{ getCategoryName(item.categoryId) }}
+          }
+        </td>
+
+        <td>
+          @if (mode() === 'edit') {
+            <p-inputnumber
+              [(ngModel)]="editableItems()[rowIndex].minQuantity"
+              [showButtons]="true"
+              [min]="1"
+              buttonLayout="horizontal"
+              spinnerMode="horizontal"
+              incrementButtonIcon="pi pi-plus"
+              decrementButtonIcon="pi pi-minus"
+            />
+          } @else {
+            {{ item.minQuantity }}
+          }
+        </td>
+
+        @if (mode() === 'delete') {
+          <td>
+            <p-button
+              icon="pi pi-trash"
+              severity="danger"
+              [rounded]="true"
+              (onClick)="confirmDelete(item)"
+            />
+          </td>
+        }
+      </tr>
+    </ng-template>
+  </p-table>
+}
+
+@if (mode() === 'edit') {
+  <div class="edit-actions">
+    <p-button label="Cancel" severity="secondary" (onClick)="cancelEdit()" />
+    <p-button label="Save Changes" (onClick)="saveEdit()" />
+  </div>
+}
+
+<app-options
+  (onAdd)="dialogVisible.set(true)"
+  (onEdit)="handleEdit()"
+  (onDelete)="mode.set(mode() === 'delete' ? 'none' : 'delete')"
+/>
+
+<p-dialog
+  header="Add Item"
+  [visible]="dialogVisible()"
+  [modal]="true"
+  [style]="{ width: '30rem' }"
+  (visibleChange)="dialogVisible.set($event)"
+>
+  <div class="form-field">
+    <label for="name">Name</label>
+    <input
+      id="name"
+      pInputText
+      #nameRef="ngModel"
+      required
+      [ngModel]="newItem().name"
+      (ngModelChange)="newItem.set({ ...newItem(), name: $event })"
+    />
+    @if (nameRef.invalid && nameRef.touched) {
+      <small class="error-text">Il nome è obbligatorio</small>
+    }
+  </div>
+
+  <div class="form-field">
+    <label for="category">Category</label>
+    <p-select
+      inputId="category"
+      [options]="categories()"
+      optionLabel="name"
+      optionValue="id"
+      #categoryRef="ngModel"
+      required
+      [ngModel]="newItem().categoryId"
+      (ngModelChange)="newItem.set({ ...newItem(), categoryId: $event })"
+      placeholder="Select a category"
+      appendTo="body"
+      styleClass="w-full"
+    />
+    @if (categoryRef.invalid && categoryRef.touched) {
+      <small class="error-text">La categoria è obbligatoria</small>
+    }
+  </div>
+
+  <div class="form-field">
+    <label for="minQuantity">Minimum Quantity</label>
+    <p-inputnumber
+      inputId="minQuantity"
+      [ngModel]="newItem().minQuantity"
+      (ngModelChange)="newItem.set({ ...newItem(), minQuantity: $event })"
+      [showButtons]="true"
+      [min]="1"
+      buttonLayout="horizontal"
+      spinnerMode="horizontal"
+      incrementButtonIcon="pi pi-plus"
+      decrementButtonIcon="pi pi-minus"
+    />
+  </div>
+
+  <ng-template pTemplate="footer">
+    <p-button label="Cancel" severity="secondary" (onClick)="dialogVisible.set(false)" />
+    <p-button
+      label="Save"
+      [disabled]="nameRef.invalid || categoryRef.invalid"
+      (onClick)="saveNewItem()"
+    />
+  </ng-template>
+</p-dialog>
+
+<p-confirmdialog />

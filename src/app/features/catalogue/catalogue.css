@@ -1,0 +1,45 @@
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.edit-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+:host ::ng-deep .catalogue-speeddial {
+  position: fixed;
+  bottom: 32px;
+  right: 32px;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+:host ::ng-deep .catalogue-speeddial .p-speeddial-button {
+  pointer-events: all;
+  width: 56px !important;
+  height: 56px !important;
+  min-width: 56px !important;
+  border-radius: 50% !important;
+}
+
+:host ::ng-deep .catalogue-speeddial .p-speeddial-list {
+  pointer-events: none;
+}
+
+:host ::ng-deep .catalogue-speeddial .p-speeddial-open .p-speeddial-list {
+  pointer-events: all;
+}
+
+:host ::ng-deep .catalogue-speeddial .p-speeddial-action {
+  pointer-events: all;
+  width: 44px !important;
+  height: 44px !important;
+  min-width: 44px !important;
+  border-radius: 50% !important;
+}

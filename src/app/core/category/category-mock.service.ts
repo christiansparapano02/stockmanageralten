@@ -17,4 +17,8 @@ export class CategoryMockService implements ICategoryService {
   getCategories(): Observable<Category[]> {
     return of(this.mockCategories).pipe(delay(800));
   }
+
+  getCategoryName(id: string): string {
+    return this.mockCategories.find((c) => c.id === Number(id))?.name ?? '—';
+  }
 }

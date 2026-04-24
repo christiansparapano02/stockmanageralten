@@ -7,4 +7,5 @@ export interface Item {
   categoryId: string;
   quantity: number;
   minQuantity: number;
+  inStock?: boolean;
 }
