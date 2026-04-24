@@ -12,6 +12,10 @@ import { provideHttpClient } from '@angular/common/http';
 
 import { USER_SERVICE_TOKEN } from './core/user/user-service.token';
 import { MockUserService } from './core/user/mock.user.service';
+import { MockOfficeService } from './core/office/mock.office.service';
+import { OFFICE_SERVICE_TOKEN } from './core/office/office-service.token';
+import { ROLE_SERVICE_TOKEN } from './core/role/role-service.token';
+import { MockRoleService } from './core/role/mock.role.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -38,6 +42,14 @@ export const appConfig: ApplicationConfig = {
     {
       provide: USER_SERVICE_TOKEN,
       useClass: MockUserService, //modificare con RealUserService dopo
+    },
+    {
+      provide: OFFICE_SERVICE_TOKEN,
+      useClass: MockOfficeService,
+    },
+    {
+      provide: ROLE_SERVICE_TOKEN,
+      useClass: MockRoleService,
     },
   ],
 };

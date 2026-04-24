@@ -1,9 +1,13 @@
-export type UserRole = 'admin' | 'medicalArea' | 'securityArea' | 'officeArea' | 'breakArea';
+//export type UserRole = 'admin' | 'medicalArea' | 'securityArea' | 'officeArea' | 'breakArea';
 
 export interface User {
-  id?: string; //può mancare durante la creazione di un nuovo user, poi restituito dal backend
+  id?: string; // Opzionale perché il backend lo genera dopo la post
   firstName: string;
   lastName: string;
   email: string;
-  role: UserRole;
+  phone: string;
+  officeId: string; //fk verso offices
+  roleId: string; //fk verso roles
+  isConfirmed: boolean;
+  password?: string; // Solo per la creazione da parte dell admin
 }

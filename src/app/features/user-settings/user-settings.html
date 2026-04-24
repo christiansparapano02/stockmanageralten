@@ -3,19 +3,19 @@
     <div class="flex align-items-center justify-content-between mb-4">
       <h2 class="m-0 font-medium text-xl">User Management</h2>
     </div>
-    <p-table [value]="[1, 2, 3, 4, 5]" [tableStyle]="{ 'min-width': '50rem' }">
+    <p-table [value]="[1, 2, 3, 4]" [tableStyle]="{ 'min-width': '60rem' }">
       <ng-template pTemplate="header">
         <tr>
-          <th style="width: 70px">ID</th>
           <th>First Name</th>
           <th>Last Name</th>
           <th>Email</th>
+          <th>Phone</th>
           <th class="text-center" style="width: 150px">Role</th>
         </tr>
       </ng-template>
       <ng-template pTemplate="body">
         <tr>
-          <td><p-skeleton width="2rem" /></td>
+          <td><p-skeleton /></td>
           <td><p-skeleton /></td>
           <td><p-skeleton /></td>
           <td><p-skeleton /></td>
@@ -27,44 +27,39 @@
 } @else {
   <div class="card shadow-1 border-round p-3">
     <div class="flex align-items-center justify-content-between mb-4">
-      <h2 i18n="@@userSettings.pageTitle" class="m-0 font-medium text-xl">User Management</h2>
+      <div>
+        <h2 i18n="@@userSettings.pageTitle" class="m-0 font-medium text-xl">User Management</h2>
+      </div>
     </div>
 
     <p-table
       [value]="users()"
       [scrollable]="true"
-      scrollHeight="350px"
-      [tableStyle]="{ 'min-width': '50rem' }"
+      scrollHeight="400px"
+      [tableStyle]="{ 'min-width': '60rem' }"
     >
       <ng-template pTemplate="header">
         <tr>
-          <th style="width: 70px">ID</th>
           <th i18n="@@userSettings.table.firstName">First Name</th>
           <th i18n="@@userSettings.table.lastName">Last Name</th>
           <th i18n="@@userSettings.table.email">Email</th>
+          <th i18n="@@userSettings.table.phone">Phone</th>
           <th i18n="@@userSettings.table.role" class="text-center" style="width: 150px">Role</th>
-          @if (isDeleteMode()) {
-            <th i18n="@@userSettings.table.actions" style="width: 80px" class="text-center">
-              Actions
-            </th>
-          }
-          @if (isEditMode()) {
-            <th i18n="@@userSettings.table.edit" style="width: 80px" class="text-center">Edit</th>
+          @if (isDeleteMode() || isEditMode()) {
+            <th style="width: 80px" class="text-center">Action</th>
           }
         </tr>
       </ng-template>
 
       <ng-template pTemplate="body" let-user>
         <tr>
-          <td class="text-500 font-medium" style="font-size: 0.85rem">
-            {{ user.id }}
-          </td>
-
           <td>{{ user.firstName }}</td>
           <td>{{ user.lastName }}</td>
           <td>{{ user.email }}</td>
+          <td>{{ user.phone || '-' }}</td>
           <td class="text-center">
-            <p-tag [value]="user.role"></p-tag>
+            <p-tag [value]="getRoleName(user.roleId)" severity="secondary"></p-tag>
+            <!--ora n/a perchè role service vuoto-->
           </td>
           @if (isDeleteMode()) {
             <td class="text-center">
@@ -93,9 +88,7 @@
 
       <ng-template pTemplate="emptymessage">
         <tr>
-          <td i18n="@@userSettings.table.emptyMessage" colspan="5" class="text-center p-5 text-500">
-            No users found.
-          </td>
+          <td colspan="6" class="text-center p-5 text-500">No users found for this location.</td>
         </tr>
       </ng-template>
     </p-table>
@@ -106,7 +99,6 @@
       [model]="userActions"
       direction="up"
       showIcon="pi pi-plus"
-      hideIcon="pi pi-times"
       buttonClassName="p-button-primary shadow-4"
     />
   </div>
@@ -117,67 +109,60 @@
     [modal]="true"
     [style]="{ width: '420px' }"
     [draggable]="false"
-    [resizable]="false"
   >
-    <form [formGroup]="userForm" class="user-form">
-      <div class="form-field">
-        <label i18n="@@userSettings.form.firstName" for="first_name">First Name</label>
-        <input
-          pInputText
-          id="first_name"
-          formControlName="firstName"
-          autocomplete="off"
-          i18n-placeholder="@@userSettings.form.placeholder.firstName"
-          placeholder="Enter first name"
-        />
+    <form [formGroup]="userForm" class="flex flex-column gap-3 mt-2">
+      <div class="flex flex-column gap-1">
+        <label for="f_name" class="font-semibold text-sm">First Name</label>
+        <input pInputText id="f_name" formControlName="firstName" />
       </div>
-      <div class="form-field">
-        <label i18n="@@userSettings.form.lastName" for="last_name">Last Name</label>
-        <input
-          pInputText
-          id="last_name"
-          formControlName="lastName"
-          autocomplete="off"
-          i18n-placeholder="@@userSettings.form.placeholder.lastName"
-          placeholder="Enter last name"
-        />
+
+      <div class="flex flex-column gap-1">
+        <label for="l_name" class="font-semibold text-sm">Last Name</label>
+        <input pInputText id="l_name" formControlName="lastName" />
       </div>
-      <div class="form-field">
-        <label i18n="@@userSettings.form.email" for="email_field">Email</label>
-        <input
-          pInputText
-          id="email_field"
-          formControlName="email"
-          autocomplete="off"
-          i18n-placeholder="@@userSettings.form.placeholder.email"
-          placeholder="Enter email"
-        />
+
+      <div class="flex flex-column gap-1">
+        <label for="email" class="font-semibold text-sm">Email</label>
+        <input pInputText id="email" formControlName="email" type="email" />
       </div>
-      <div class="form-field">
-        <label i18n="@@userSettings.form.role" for="role_field">Role</label>
-        <p-select
-          id="role_field"
-          formControlName="role"
-          [options]="roleOptions"
-          optionLabel="label"
-          optionValue="value"
+
+      <div class="flex flex-column gap-1">
+        <label for="phone" class="font-semibold text-sm">Phone</label>
+        <input pInputText id="phone" formControlName="phone" />
+      </div>
+
+      <div class="flex flex-column gap-1">
+        <label for="pwd" class="font-semibold text-sm">
+          {{ selectedUser ? 'Password (Locked)' : 'Password' }}
+        </label>
+        <p-password
+          id="pwd"
+          formControlName="password"
+          [toggleMask]="true"
+          [feedback]="false"
           appendTo="body"
-          i18n-placeholder="@@userSettings.form.placeholder.role"
+          styleClass="w-full"
+        />
+      </div>
+
+      <div class="flex flex-column gap-1">
+        <label for="role" class="font-semibold text-sm">Role</label>
+        <p-select
+          id="role"
+          formControlName="roleId"
+          [options]="roles()"
+          optionLabel="roleName"
+          optionValue="id"
           placeholder="Select a role"
+          appendTo="body"
           styleClass="w-full"
         />
       </div>
     </form>
+
     <ng-template pTemplate="footer">
+      <p-button label="Cancel" icon="pi pi-times" [text]="true" (click)="closeDialog()" />
       <p-button
-        i18n-label="@@userSettings.form.btnCancel"
-        label="Cancel"
-        icon="pi pi-times"
-        [text]="true"
-        (click)="displayDialog.set(false)"
-      />
-      <p-button
-        i18n-label="@@userSettings.form.btnSave"
         label="Save"
         icon="pi pi-check"
         [disabled]="userForm.invalid"
@@ -186,5 +171,6 @@
     </ng-template>
   </p-dialog>
 }
+
 <p-toast />
 <p-confirmDialog />
