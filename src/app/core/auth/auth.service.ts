@@ -6,7 +6,8 @@
 // import { User } from '../user/user.model';
 // import { LoginCredentials, LoginResponse } from './auth.model';
 // import { catchError, Observable, tap, throwError } from 'rxjs';
-// import { RoleService } from '../role/role-service';
+
+// import { ROLE_SERVICE_TOKEN } from '../role/role-service.token';
 
 // @Injectable({
 //   providedIn: 'root',
@@ -14,7 +15,7 @@
 // export class AuthService {
 //   private httpClient = inject(HttpClient);
 //   private router = inject(Router);
-//   private roleService = inject(RoleService);
+//   private roleService = inject(ROLE_SERVICE_TOKEN);
 
 //   private readonly API_URL = 'https://localhost:xxxx/blabla';
 
@@ -80,7 +81,7 @@
 //     );
 //   }
 
-//   //per capire se utente ha accesso a categoria (metodo utilizzato nella categoryGuard)
+//   //per capire se utente ha accesso a categoria (metodo utilizzato nella categoryGuard) //o fare mapping con id dal service per avere il nome o utilizzare id
 //   canAccessCategory(categoryName: string): boolean {
 //     const user = this.userState();
 //     if (!user) return false;
@@ -95,6 +96,6 @@
 //     this.userState.set(null);
 //     this.tokenState.set(null);
 //     this.router.navigate(['/login']);
-//   }
 
+//   }
 // }
