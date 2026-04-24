@@ -136,11 +136,13 @@ export class Stock implements OnInit {
         minQuantity: selected.minQuantity,
       }),
       inStock: true,
+      catalogueItemId: selected.id,
     };
 
     this.itemService.add(itemToSave).subscribe((created) => {
       this.items.update((current) => [...current, created]);
       this.dialogVisible.set(false);
+      this.selectedCatalogueItem.set(null);
     });
   }
 

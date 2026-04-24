@@ -45,7 +45,7 @@ export class ItemMockService implements IItemService {
       inStock: false,
     },
 
-    // STOCK (già presenti)
+    // STOCK (già presenti, collegati al catalogo tramite catalogueItemId)
     {
       id: 's1',
       name: 'Carta A4 (risma)',
@@ -53,9 +53,26 @@ export class ItemMockService implements IItemService {
       quantity: 15,
       minQuantity: 10,
       inStock: true,
+      catalogueItemId: '1',
     },
-    { id: 's2', name: 'Penne biro', categoryId: '1', quantity: 30, minQuantity: 10, inStock: true },
-    { id: 's3', name: 'Spillatrice', categoryId: '1', quantity: 1, minQuantity: 5, inStock: true },
+    {
+      id: 's2',
+      name: 'Penne biro',
+      categoryId: '1',
+      quantity: 30,
+      minQuantity: 10,
+      inStock: true,
+      catalogueItemId: '2',
+    },
+    {
+      id: 's3',
+      name: 'Spillatrice',
+      categoryId: '1',
+      quantity: 1,
+      minQuantity: 5,
+      inStock: true,
+      catalogueItemId: '3',
+    },
     {
       id: 's4',
       name: 'Kit pronto soccorso',
@@ -63,8 +80,17 @@ export class ItemMockService implements IItemService {
       quantity: 3,
       minQuantity: 2,
       inStock: true,
+      catalogueItemId: '4',
     },
-    { id: 's5', name: 'Estintore', categoryId: '3', quantity: 4, minQuantity: 2, inStock: true },
+    {
+      id: 's5',
+      name: 'Estintore',
+      categoryId: '3',
+      quantity: 4,
+      minQuantity: 2,
+      inStock: true,
+      catalogueItemId: '5',
+    },
     {
       id: 's6',
       name: 'Badge accesso',
@@ -72,6 +98,7 @@ export class ItemMockService implements IItemService {
       quantity: 0,
       minQuantity: 5,
       inStock: true,
+      catalogueItemId: '6',
     },
     {
       id: 's7',
@@ -80,70 +107,67 @@ export class ItemMockService implements IItemService {
       quantity: 2,
       minQuantity: 1,
       inStock: true,
+      catalogueItemId: '7',
     },
   ];
 
   getAll(): Observable<Item[]> {
-    return of(this.items.filter((i) => !i.inStock)).pipe(delay(800));
+    return of([...this.items.filter((i) => !i.inStock)]).pipe(delay(800));
   }
 
   getByCategory(categoryId: string): Observable<Item[]> {
-    return of(this.items.filter((i) => i.categoryId === categoryId && i.inStock)).pipe(delay(800));
+    return of([...this.items.filter((i) => i.categoryId === categoryId && i.inStock)]).pipe(
+      delay(800),
+    );
   }
 
   getCatalogueByCategory(categoryId: string): Observable<Item[]> {
-    const inStockNames = this.items
-      .filter((i) => i.categoryId === categoryId && i.inStock)
-      .map((i) => i.name);
+    const inStockCatalogueIds = this.items
+      .filter((i) => i.categoryId === categoryId && i.inStock && i.catalogueItemId)
+      .map((i) => i.catalogueItemId);
 
-    return of(
-      this.items.filter(
-        (i) => i.categoryId === categoryId && !i.inStock && !inStockNames.includes(i.name),
+    return of([
+      ...this.items.filter(
+        (i) => i.categoryId === categoryId && !i.inStock && !inStockCatalogueIds.includes(i.id),
       ),
-    ).pipe(delay(800));
+    ]).pipe(delay(800));
   }
 
   getCritical(): Observable<Item[]> {
-    return of(this.items.filter((i) => i.inStock && i.quantity === 0)).pipe(delay(800));
+    return of([...this.items.filter((i) => i.inStock && i.quantity === 0)]).pipe(delay(800));
   }
 
   add(item: Omit<Item, 'id'>): Observable<Item> {
-    const newItem: Item = {
-      ...item,
-      id: crypto.randomUUID(),
-    };
-
+    const newItem: Item = { ...item, id: crypto.randomUUID() };
     this.items.push(newItem);
-
     return of(newItem).pipe(delay(800));
   }
 
-  // ✏️ UPDATE
   update(updatedItem: Item): Observable<Item> {
     const index = this.items.findIndex((i) => i.id === updatedItem.id);
-
     if (index !== -1) {
       this.items[index] = { ...updatedItem };
     }
 
+    // se è un item del catalogo, aggiorna nome e minQuantity negli item in stock collegati
+    if (!updatedItem.inStock) {
+      this.items = this.items.map((i) => {
+        if (i.inStock && i.catalogueItemId === updatedItem.id) {
+          return { ...i, name: updatedItem.name, minQuantity: updatedItem.minQuantity };
+        }
+        return i;
+      });
+    }
+
     return of(updatedItem).pipe(delay(800));
   }
+
   delete(id: string): Observable<boolean> {
     const item = this.items.find((i) => i.id === id);
     if (!item) return of(false);
 
-    if (!item.inStock) {
-      // 🟦 Eliminazione dal CATALOGUE
-      // rimuovo il template
-      this.items = this.items.filter((i) => i.id !== id);
-
-      // rimuovo anche eventuale copia in stock
-      this.items = this.items.filter(
-        (i) => !(i.inStock === true && i.name === item.name && i.categoryId === item.categoryId),
-      );
-    } else {
-      // 🟥 Eliminazione dallo STOCK
-      // rimuovo solo la copia in stock
+    if (item.inStock) {
+      // eliminazione dallo stock — rimuove solo questo item
       this.items = this.items.filter((i) => i.id !== id);
     }
 
@@ -151,6 +175,7 @@ export class ItemMockService implements IItemService {
   }
 
   deleteCatalogueItem(id: string): Observable<boolean> {
+    // rimuove solo l'item del catalogo, non tocca lo stock
     this.items = this.items.filter((i) => i.id !== id);
     return of(true).pipe(delay(800));
   }

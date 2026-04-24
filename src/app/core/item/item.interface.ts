@@ -8,4 +8,5 @@ export interface Item {
   quantity: number;
   minQuantity: number;
   inStock?: boolean;
+  catalogueItemId?: string;
 }
