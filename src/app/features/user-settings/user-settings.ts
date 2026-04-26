@@ -19,6 +19,7 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { PasswordModule } from 'primeng/password';
 import { OFFICE_SERVICE_TOKEN } from '../../core/office/office-service.token';
 import { ROLE_SERVICE_TOKEN } from '../../core/role/role-service.token';
+import { SessionService } from '../../shared/services/session.service';
 
 @Component({
   selector: 'app-user-settings',
@@ -45,15 +46,14 @@ export class UserSettings implements OnInit {
   private userService = inject(USER_SERVICE_TOKEN);
   private officeService = inject(OFFICE_SERVICE_TOKEN);
   private roleService = inject(ROLE_SERVICE_TOKEN);
-
-  //da scommentare dopo che authService pronto
-  // private authService = inject(AuthService);
+  private session = inject(SessionService);
 
   private confirmationService = inject(ConfirmationService); // per delete user
   private messageService = inject(MessageService);
 
-  // readonly CURRENT_ADMIN_OFFICE_ID = computed(() => this.authService.userOfficeId());
-  readonly TEMP_OFFICE_ID = '95648c6f-b0aa-458f-98a2-a9b98c15290b'; //per simulazione admin, dovrebbe arrivare da authService (vedi sopra)
+  //poi scommentare dopo attivazione sessionService
+  //readonly currentOfficeId = this.session.userOfficeId;
+  readonly TEMP_OFFICE_ID = '95648c6f-b0aa-458f-98a2-a9b98c15290b'; //per simulazione admin, dovrebbe arrivare da sessionService
 
   users = this.userService.allUsers;
   roles = this.roleService.allRoles;
@@ -108,6 +108,35 @@ export class UserSettings implements OnInit {
       },
     });
   }
+
+  //fetchInitalData con session
+  // fetchInitialData() {
+  //   const officeId = this.currentOfficeId();
+
+  //   if (!officeId) {
+  //     this.showError('No Office ID found in session.');
+  //     return;
+  //   }
+
+  //   this.loading.set(true);
+
+  //   /**
+  //    * [PROMEMORIA API]: Non chiamiamo più roleService.loadRoles() qui.
+  //    * I ruoli sono già stati caricati dall'AuthService durante il login.
+  //    */
+
+  //   this.officeService.getOfficeById(officeId).subscribe({
+  //     next: (office) => {
+  //       this.officeInfo.set(office);
+  //       this.loadUsersData(officeId);
+  //     },
+  //     error: () => {
+  //       this.showError('Office details not found.');
+  //       this.loading.set(false);
+  //     },
+  //   });
+  // }
+
   private loadUsersData(id: string) {
     this.userService.loadUsers(id).subscribe({
       next: () => this.loading.set(false),
@@ -199,6 +228,7 @@ export class UserSettings implements OnInit {
     if (this.userForm.invalid) return;
 
     const formData = this.userForm.getRawValue(); //include tutti i campi, anche quelli disabilitati, per non perdere dati
+    //const officeId = this.currentOfficeId(); // Recuperiamo l'ID dinamico (SESSION)
 
     //se in edit user:
     if (this.selectedUser) {
@@ -207,7 +237,7 @@ export class UserSettings implements OnInit {
       const updatedUser: User = {
         ...userDataWithoutPassword,
         id: this.selectedUser.id,
-        officeId: this.TEMP_OFFICE_ID,
+        officeId: this.TEMP_OFFICE_ID, // sostituire con officeId
         isConfirmed: this.selectedUser.isConfirmed, // Mantiene lo stato attuale
       };
 
@@ -223,7 +253,7 @@ export class UserSettings implements OnInit {
       //modalità creazione utente
       const newUser: User = {
         ...formData,
-        officeId: this.TEMP_OFFICE_ID,
+        officeId: this.TEMP_OFFICE_ID, // sostituire con officeId
         isConfirmed: false,
       };
       this.userService.addUser(newUser).subscribe({

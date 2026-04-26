@@ -1,23 +1,46 @@
-// import { HttpInterceptorFn } from '@angular/common/http';
-// import { AuthService } from '../auth/auth.service';
-// import { inject } from '@angular/core';
+import { HttpInterceptorFn } from '@angular/common/http';
+import { inject } from '@angular/core';
+import { SessionService } from '../../shared/services/session.service';
 
+export const authInterceptor: HttpInterceptorFn = (req, next) => {
+  const session = inject(SessionService);
+  const token = session.getToken();
+
+  if (token) {
+    const clonedRequest = req.clone({
+      setHeaders: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return next(clonedRequest);
+  }
+
+  return next(req);
+};
+
+//alternativa per gestire 401
 // export const authInterceptor: HttpInterceptorFn = (req, next) => {
-//   const authService = inject(AuthService);
-//   const token = authService.getToken();
+//   const session = inject(SessionService);
+//   const authService = inject(AuthService); // Serve per il logout
+//   const token = session.getToken();
+
+//   let request = req;
 
 //   if (token) {
-//     const clonedRequest = req.clone({
+//     request = req.clone({
 //       setHeaders: {
 //         Authorization: `Bearer ${token}`,
 //       },
 //     });
-//     return next(clonedRequest);
 //   }
 
-//   return next(req);
+//   return next(request).pipe(
+//     catchError((error) => {
+//       // Se il server risponde 401, il token è scaduto o non valido
+//       if (error instanceof HttpErrorResponse && error.status === 401) {
+//         authService.logout(); // Pulisce la sessione e manda al login
+//       }
+//       return throwError(() => error);
+//     }),
+//   );
 // };
-// // registrarlo nel file app.config.ts
-// // provideHttpClient(
-// //   withInterceptors([authInterceptor]),
-// // );

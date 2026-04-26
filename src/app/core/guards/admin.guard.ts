@@ -1,16 +1,15 @@
-// import { inject } from '@angular/core';
-// import { AuthService } from '../auth/auth.service';
-// import { CanActivateFn, Router } from '@angular/router';
+import { inject } from '@angular/core';
+import { CanActivateFn, Router } from '@angular/router';
+import { SessionService } from '../../shared/services/session.service';
 
-// export const adminGuard: CanActivateFn = () => {
-//   const authService = inject(AuthService);
-//   const router = inject(Router);
+export const adminGuard: CanActivateFn = (route, state) => {
+  const session = inject(SessionService);
+  const router = inject(Router);
 
-//   if (authService.isAdmin()) {
-//     return true;
-//   }
+  if (session.isLoggedIn() && session.isAdmin()) {
+    return true;
+  }
 
-//   // Se non sei admin, non puoi stare in dashboard o usersettings
-//   // rimanda alla sezione categorie
-//   return router.parseUrl('/categories');
-// };
+  //se non admin, rimanda a initial route
+  return router.parseUrl(session.getInitialRoute());
+};

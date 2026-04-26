@@ -1,15 +1,15 @@
-// import { inject } from '@angular/core';
-// import { AuthService } from '../auth/auth.service';
-// import { CanActivateFn, Router } from '@angular/router';
+import { inject } from '@angular/core';
+import { CanActivateFn, Router } from '@angular/router';
+import { SessionService } from '../../shared/services/session.service';
 
-// export const authGuard: CanActivateFn = () => {
-//   const authService = inject(AuthService);
-//   const router = inject(Router);
+export const authGuard: CanActivateFn = () => {
+  const session = inject(SessionService);
+  const router = inject(Router);
 
-//   if (authService.isLoggedIn()) {
-//     return true;
-//   }
+  if (session.isLoggedIn()) {
+    return true;
+  }
 
-//   //se non loggato, rimandato a login.
-//   return router.parseUrl('/login');
-// };
+  //se non loggato, rimandato a login
+  return router.parseUrl('/login');
+};
