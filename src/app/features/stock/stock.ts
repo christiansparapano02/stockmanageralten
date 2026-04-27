@@ -1,9 +1,9 @@
-import { Component, inject, OnInit, signal, DestroyRef } from '@angular/core';
+import { Component, inject, OnInit, signal, DestroyRef, ViewChild } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
-import { ConfirmationService } from 'primeng/api';
+import { ConfirmationService, MenuItem } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DialogModule } from 'primeng/dialog';
@@ -11,9 +11,10 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
 import { TableModule } from 'primeng/table';
 import { SkeletonModule } from 'primeng/skeleton';
+import { MenuModule } from 'primeng/menu';
+import { Menu } from 'primeng/menu';
 
 import { Item } from '../../core/item/item.interface';
-import { Options } from './options/options';
 import { StatusLabelPipe } from '../../shared/pipes/status.pipe.ts';
 import { ITEM_SERVICE_TOKEN } from '../../core/item/item-service.token';
 import { DatePickerModule } from 'primeng/datepicker';
@@ -26,7 +27,6 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   imports: [
     TableModule,
     DatePipe,
-    Options,
     FormsModule,
     DialogModule,
     InputTextModule,
@@ -37,6 +37,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     SkeletonModule,
     DatePickerModule,
     SelectModule,
+    MenuModule,
   ],
   providers: [ConfirmationService],
   templateUrl: './stock.html',
@@ -47,6 +48,8 @@ export class Stock implements OnInit {
   itemService = inject(ITEM_SERVICE_TOKEN);
   confirmationService = inject(ConfirmationService);
   destroyRef = inject(DestroyRef);
+
+  @ViewChild('rowMenu') rowMenu!: Menu;
 
   items = signal<Item[]>([]);
   categoryId = signal<string>('');
@@ -59,6 +62,7 @@ export class Stock implements OnInit {
   removeQtyVisible = signal(false);
   qtyAmount = 1;
   selectedRowIndex = signal<number>(-1);
+  selectedItem = signal<Item | null>(null);
 
   newItem = signal<Omit<Item, 'id'>>({
     name: '',
@@ -71,10 +75,24 @@ export class Stock implements OnInit {
   });
 
   loading = signal(false);
-
   catalogueItems = signal<Item[]>([]);
-
   selectedCatalogueItem = signal<Item | null>(null);
+
+  rowMenuItems: MenuItem[] = [
+    {
+      label: 'Edit',
+      icon: 'pi pi-pencil',
+      command: () => this.startEditRow(),
+    },
+    {
+      label: 'Delete',
+      icon: 'pi pi-trash',
+      command: () => {
+        const item = this.selectedItem();
+        if (item) this.confirmDelete(item);
+      },
+    },
+  ];
 
   ngOnInit() {
     this.route.params.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params) => {
@@ -85,7 +103,6 @@ export class Stock implements OnInit {
 
   loadItems() {
     this.loading.set(true);
-
     this.itemService.getByCategory(this.categoryId()).subscribe({
       next: (data) => {
         const normalized = data.map((item) => ({
@@ -95,14 +112,34 @@ export class Stock implements OnInit {
         this.items.set(normalized);
         this.loading.set(false);
       },
-      error: () => {
-        this.loading.set(false);
-      },
+      error: () => this.loading.set(false),
     });
   }
 
   computeStatus(item: Pick<Item, 'quantity' | 'minQuantity'>): number {
     return item.quantity < item.minQuantity ? 0 : 1;
+  }
+
+  openRowMenu(event: MouseEvent, item: Item) {
+    this.selectedItem.set(item);
+    this.rowMenu.toggle(event);
+  }
+
+  startEditRow() {
+    const item = this.selectedItem();
+    if (!item) return;
+    const idx = this.items().findIndex((i) => i.id === item.id);
+    this.mode.set('edit');
+    this.editableItems.set(this.items().map((i) => ({ ...i })));
+    this.selectedRowIndex.set(idx);
+  }
+
+  onRowDoubleClick(item: Item) {
+    const idx = this.items().findIndex((i) => i.id === item.id);
+    this.selectedItem.set(item);
+    this.mode.set('edit');
+    this.editableItems.set(this.items().map((i) => ({ ...i })));
+    this.selectedRowIndex.set(idx);
   }
 
   handleAdd() {
@@ -146,16 +183,6 @@ export class Stock implements OnInit {
     });
   }
 
-  handleEdit() {
-    if (this.mode() === 'edit') {
-      this.saveEdit();
-      return;
-    }
-
-    this.mode.set('edit');
-    this.editableItems.set(this.items().map((item) => ({ ...item })));
-  }
-
   saveEdit() {
     const updatedItems = this.editableItems().map((item) => ({
       ...item,
@@ -169,15 +196,13 @@ export class Stock implements OnInit {
     this.items.set(updatedItems);
     this.editableItems.set([]);
     this.mode.set('none');
+    this.selectedRowIndex.set(-1);
   }
 
   cancelEdit() {
     this.editableItems.set([]);
     this.mode.set('none');
-  }
-
-  handleDelete() {
-    this.mode.set(this.mode() === 'delete' ? 'none' : 'delete');
+    this.selectedRowIndex.set(-1);
   }
 
   confirmDelete(item: Item) {
