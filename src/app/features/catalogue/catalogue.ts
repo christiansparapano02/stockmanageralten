@@ -16,6 +16,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService, MenuItem } from 'primeng/api';
 import { Category } from '../../core/category/category.interface';
 import { ITEM_SERVICE_TOKEN } from '../../core/item/item-service.token';
+import { Menu } from 'primeng/menu';
 
 @Component({
   selector: 'app-catalogue',
@@ -33,6 +34,7 @@ import { ITEM_SERVICE_TOKEN } from '../../core/item/item-service.token';
     SelectModule,
     ButtonModule,
     ConfirmDialogModule,
+    Menu,
   ],
   providers: [ConfirmationService],
   templateUrl: './catalogue.html',
@@ -42,6 +44,9 @@ export class Catalogue implements OnInit {
   itemService = inject(ITEM_SERVICE_TOKEN);
   categoryService = inject(CategoryMockService);
   confirmationService = inject(ConfirmationService);
+
+  selectedItem = signal<Item | null>(null);
+  visible = false;
 
   items = signal<Item[]>([]);
   editableItems = signal<any[]>([]);
@@ -56,34 +61,38 @@ export class Catalogue implements OnInit {
     minQuantity: 1,
   });
 
-  speedDialItems: MenuItem[] = [
+  popUpItems: MenuItem[] = [
     {
-      icon: 'pi pi-trash',
-      command: () => this.mode.set(this.mode() === 'delete' ? 'none' : 'delete'),
-    },
-    {
-      icon: 'pi pi-pencil',
-      command: () => {
-        if (this.mode() === 'edit') {
-          this.saveEdit();
-        } else {
-          this.mode.set('edit');
-          this.editableItems.set(
-            this.items().map((i) => ({
-              ...i,
-              categoryId: i.categoryId,
-            })),
-          );
-        }
-      },
-    },
-    {
-      icon: 'pi pi-plus',
-      command: () => {
-        this.mode.set('none');
-        this.newItem.set({ name: '', categoryId: '', minQuantity: 1 });
-        this.dialogVisible.set(true);
-      },
+      label: 'Options',
+      items: [
+        {
+          label: 'Details',
+          icon: 'pi pi-info-circle',
+          command: () => this.showDialog(this.selectedItem()!),
+        },
+        {
+          label: 'Edit',
+          icon: 'pi pi-pencil',
+          command: () => {
+            if (this.mode() === 'edit') {
+              this.saveEdit();
+            } else {
+              this.mode.set('edit');
+              this.editableItems.set(
+                this.items().map((i) => ({
+                  ...i,
+                  categoryId: i.categoryId,
+                })),
+              );
+            }
+          },
+        },
+        {
+          label: 'Delete',
+          icon: 'pi pi-trash',
+          command: () => this.confirmDelete(this.selectedItem()!),
+        },
+      ],
     },
   ];
 
@@ -105,6 +114,18 @@ export class Catalogue implements OnInit {
 
   getCategoryName(categoryId: string): string {
     return this.categoryService.getCategoryName(categoryId);
+  }
+
+  showDialog(item: Item) {
+    this.itemService.getByCategory(item.categoryId).subscribe((stockItems) => {
+      const stockItem = stockItems.find((s) => s.name === item.name);
+      this.selectedItem.set({
+        ...item,
+        quantity: stockItem?.quantity ?? 0,
+        status: (stockItem?.quantity ?? 0) < (item.minQuantity ?? 0) ? 0 : 1,
+      });
+      this.visible = true;
+    });
   }
 
   saveNewItem() {
@@ -169,5 +190,15 @@ export class Catalogue implements OnInit {
         categoryId: Number(i.categoryId),
       })),
     );
+  }
+
+  getStatusClass(item: Item): string {
+    if (item.quantity === 0) return 'badge-critical';
+    if (item.quantity < item.minQuantity) return 'badge-low';
+    return 'badge-ok';
+  }
+
+  openMenu(event: Event, item: Item) {
+    this.selectedItem.set(item);
   }
 }
