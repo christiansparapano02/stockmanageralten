@@ -1,48 +1,8 @@
-.edit-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 12px;
-  margin-top: 16px;
-}
-
 .form-field {
   display: flex;
   flex-direction: column;
   gap: 6px;
   margin-bottom: 14px;
-}
-
-:host ::ng-deep .delete-btn {
-  position: relative;
-  z-index: 10;
-}
-
-.spinner-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 300px;
-}
-
-td {
-  overflow: visible;
-}
-
-:host ::ng-deep .p-inputnumber {
-  overflow: visible;
-  width: 100%;
-}
-
-:host ::ng-deep .p-inputnumber-input {
-  width: 100%;
-}
-
-:host ::ng-deep .p-dialog-content {
-  overflow: visible;
-}
-
-:host ::ng-deep .p-inputnumber-button {
-  display: flex !important;
 }
 
 :host ::ng-deep .fab-btn {

@@ -11,23 +11,21 @@
         <th style="width: 48px"></th>
       </tr>
     </ng-template>
+
     <ng-template pTemplate="body">
       <tr>
         <td><p-skeleton /></td>
         <td><p-skeleton width="60%" /></td>
         <td><p-skeleton width="70%" /></td>
         <td><p-skeleton width="70%" /></td>
-        <td><p-skeleton width="40%" styleClass="mx-auto" /></td>
-        <td><p-skeleton width="40%" styleClass="mx-auto" /></td>
+        <td><p-skeleton width="40%" /></td>
+        <td><p-skeleton width="40%" /></td>
         <td><p-skeleton width="24px" /></td>
       </tr>
     </ng-template>
   </p-table>
 } @else {
-  <p-table
-    [value]="mode() === 'edit' ? editableItems() : items()"
-    [tableStyle]="{ 'min-width': '50rem' }"
-  >
+  <p-table [value]="items()" [tableStyle]="{ 'min-width': '50rem' }">
     <ng-template pTemplate="header">
       <tr>
         <th>Name</th>
@@ -40,101 +38,23 @@
       </tr>
     </ng-template>
 
-    <ng-template pTemplate="body" let-item let-rowIndex="rowIndex">
-      <tr (dblclick)="onRowDoubleClick(item)" style="cursor: pointer">
-        <td>
-          @if (mode() === 'edit' && editableItems()[rowIndex]?.id === item.id) {
-            <input pInputText [(ngModel)]="editableItems()[rowIndex].name" />
-          } @else {
-            {{ item.name }}
-          }
-        </td>
+    <ng-template pTemplate="body" let-item>
+      <tr (dblclick)="openEditDialog(item)" style="cursor: pointer">
+        <td>{{ item.name }}</td>
 
         <td>{{ item | statusLabel }}</td>
 
         <td>
-          @if (mode() === 'edit' && editableItems()[rowIndex]?.id === item.id) {
-            <input
-              type="date"
-              [ngModel]="
-                editableItems()[rowIndex].nextCheck
-                  ? (editableItems()[rowIndex].nextCheck | date: 'yyyy-MM-dd')
-                  : ''
-              "
-              (ngModelChange)="
-                editableItems()[rowIndex].nextCheck = $event ? $any($event) : undefined
-              "
-            />
-          } @else {
-            {{ item.nextCheck ? (item.nextCheck | date: 'dd/MM/yyyy') : '—' }}
-          }
+          {{ item.nextCheck ? (item.nextCheck | date: 'dd/MM/yyyy') : '—' }}
         </td>
 
         <td>
-          @if (mode() === 'edit' && editableItems()[rowIndex]?.id === item.id) {
-            <input
-              type="date"
-              [ngModel]="
-                editableItems()[rowIndex].expiring
-                  ? (editableItems()[rowIndex].expiring | date: 'yyyy-MM-dd')
-                  : ''
-              "
-              (ngModelChange)="
-                editableItems()[rowIndex].expiring = $event ? $any($event) : undefined
-              "
-            />
-          } @else {
-            {{ item.expiring ? (item.expiring | date: 'dd/MM/yyyy') : '—' }}
-          }
+          {{ item.expiring ? (item.expiring | date: 'dd/MM/yyyy') : '—' }}
         </td>
 
-        <td>
-          @if (mode() === 'edit' && editableItems()[rowIndex]?.id === item.id) {
-            <div style="display: flex; align-items: center; gap: 8px; overflow: visible">
-              <p-button
-                icon="pi pi-minus-circle"
-                severity="danger"
-                [rounded]="true"
-                size="small"
-                (onClick)="openRemoveDialog(rowIndex)"
-              />
-              <p-inputnumber
-                [(ngModel)]="editableItems()[rowIndex].quantity"
-                [showButtons]="true"
-                [min]="0"
-                buttonLayout="horizontal"
-                spinnerMode="horizontal"
-                incrementButtonIcon="pi pi-plus"
-                decrementButtonIcon="pi pi-minus"
-              />
-              <p-button
-                icon="pi pi-plus-circle"
-                severity="success"
-                [rounded]="true"
-                size="small"
-                (onClick)="openAddDialog(rowIndex)"
-              />
-            </div>
-          } @else {
-            {{ item.quantity }}
-          }
-        </td>
+        <td>{{ item.quantity }}</td>
 
-        <td>
-          @if (mode() === 'edit' && editableItems()[rowIndex]?.id === item.id) {
-            <p-inputnumber
-              [(ngModel)]="editableItems()[rowIndex].minQuantity"
-              [showButtons]="true"
-              [min]="1"
-              buttonLayout="horizontal"
-              spinnerMode="horizontal"
-              incrementButtonIcon="pi pi-plus"
-              decrementButtonIcon="pi pi-minus"
-            />
-          } @else {
-            {{ item.minQuantity }}
-          }
-        </td>
+        <td>{{ item.minQuantity }}</td>
 
         <td>
           <p-button
@@ -152,21 +72,10 @@
 
 <p-menu #rowMenu [model]="rowMenuItems" [popup]="true" />
 
-@if (mode() === 'edit') {
-  <div class="edit-actions">
-    <button
-      pButton
-      type="button"
-      label="Cancel"
-      severity="secondary"
-      (click)="cancelEdit()"
-    ></button>
-    <button pButton type="button" label="Save Changes" (click)="saveEdit()"></button>
-  </div>
-}
-
 <!-- FAB -->
 <p-button icon="pi pi-plus" [rounded]="true" styleClass="fab-btn" (onClick)="handleAdd()" />
+
+<!-- ADD ITEM -->
 
 <p-dialog
   header="Add Item"
@@ -176,13 +85,11 @@
   (visibleChange)="dialogVisible.set($event)"
 >
   <div class="form-field">
-    <label for="catalogueItem">Item</label>
+    <label>Item</label>
+
     <p-select
-      inputId="catalogueItem"
       [options]="catalogueItems()"
       optionLabel="name"
-      #nameRef="ngModel"
-      required
       [ngModel]="selectedCatalogueItem()"
       (ngModelChange)="selectedCatalogueItem.set($event)"
       placeholder="Select an item"
@@ -192,73 +99,80 @@
   </div>
 
   <div class="form-field">
-    <label for="quantity">Available Quantity</label>
+    <label>Available Quantity</label>
+
     <p-inputnumber
-      inputId="quantity"
       [ngModel]="newItem().quantity"
       (ngModelChange)="newItem.set({ ...newItem(), quantity: $event })"
       [showButtons]="true"
       [min]="0"
-      buttonLayout="horizontal"
-      spinnerMode="horizontal"
-      incrementButtonIcon="pi pi-plus"
-      decrementButtonIcon="pi pi-minus"
     />
   </div>
 
   <ng-template pTemplate="footer">
     <p-button label="Cancel" severity="secondary" (onClick)="dialogVisible.set(false)" />
+
     <p-button label="Add" [disabled]="!selectedCatalogueItem()" (onClick)="saveNewItem()" />
   </ng-template>
 </p-dialog>
 
-<p-dialog
-  header="Add Quantity"
-  [visible]="addQtyVisible()"
-  [modal]="true"
-  [style]="{ width: '20rem' }"
-  (visibleChange)="addQtyVisible.set($event)"
->
-  <div class="form-field">
-    <label>Quantity to add</label>
-    <p-inputnumber
-      [(ngModel)]="qtyAmount"
-      [min]="1"
-      [showButtons]="true"
-      buttonLayout="horizontal"
-      spinnerMode="horizontal"
-      incrementButtonIcon="pi pi-plus"
-      decrementButtonIcon="pi pi-minus"
-    />
-  </div>
-  <ng-template pTemplate="footer">
-    <p-button label="Cancel" severity="secondary" (onClick)="addQtyVisible.set(false)" />
-    <p-button label="Add" severity="success" (onClick)="confirmAddQty()" />
-  </ng-template>
-</p-dialog>
+<!-- EDIT ITEM -->
 
 <p-dialog
-  header="Remove Quantity"
-  [visible]="removeQtyVisible()"
+  header="Edit Item"
+  [visible]="editDialogVisible()"
   [modal]="true"
-  [style]="{ width: '20rem' }"
-  (visibleChange)="removeQtyVisible.set($event)"
+  [style]="{ width: '30rem' }"
+  (visibleChange)="editDialogVisible.set($event)"
 >
-  <div class="form-field">
-    <label>Quantity to remove</label>
-    <p-inputnumber
-      [(ngModel)]="qtyAmount"
-      [min]="1"
-      [showButtons]="true"
-      buttonLayout="horizontal"
-      spinnerMode="horizontal"
-      incrementButtonIcon="pi pi-plus"
-      decrementButtonIcon="pi pi-minus"
-    />
-  </div>
+  @if (editingItem(); as item) {
+    <div class="form-field">
+      <label>Name</label>
+
+      <input pInputText [(ngModel)]="item.name" />
+    </div>
+
+    <div class="form-field">
+      <label>Next Check</label>
+
+      <p-datepicker
+        [(ngModel)]="item.nextCheck"
+        [showIcon]="true"
+        dateFormat="dd/mm/yy"
+        appendTo="body"
+        styleClass="w-full"
+      />
+    </div>
+
+    <div class="form-field">
+      <label>Expiry Date</label>
+
+      <p-datepicker
+        [(ngModel)]="item.expiring"
+        [showIcon]="true"
+        dateFormat="dd/mm/yy"
+        appendTo="body"
+        styleClass="w-full"
+      />
+    </div>
+
+    <div class="form-field">
+      <label>Available Quantity</label>
+
+      <p-inputnumber [(ngModel)]="item.quantity" [showButtons]="true" [min]="0" />
+    </div>
+
+    <div class="form-field">
+      <label>Minimum Quantity</label>
+
+      <p-inputnumber [(ngModel)]="item.minQuantity" [showButtons]="true" [min]="1" />
+    </div>
+  }
+
   <ng-template pTemplate="footer">
-    <p-button label="Cancel" severity="secondary" (onClick)="removeQtyVisible.set(false)" />
-    <p-button label="Remove" severity="danger" (onClick)="confirmRemoveQty()" />
+    <p-button label="Cancel" severity="secondary" (onClick)="editDialogVisible.set(false)" />
+
+    <p-button label="Save" (onClick)="saveEditedItem()" />
   </ng-template>
 </p-dialog>
 
