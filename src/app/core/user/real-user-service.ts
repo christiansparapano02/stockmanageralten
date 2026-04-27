@@ -1,6 +1,6 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { IUserService } from './user-service.interface';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { User } from './user.model';
 import { Observable, tap } from 'rxjs';
 
@@ -8,7 +8,6 @@ import { Observable, tap } from 'rxjs';
 export class RealUserService implements IUserService {
   private httpClient = inject(HttpClient);
   private users = signal<User[]>([]);
-
   readonly allUsers = this.users.asReadonly();
 
   //url base per get utenti
@@ -17,8 +16,11 @@ export class RealUserService implements IUserService {
   constructor() {}
 
   //caricamento iniziale
-  loadUsers(): Observable<User[]> {
-    return this.httpClient.get<User[]>(this.apiUrl).pipe(tap((data) => this.users.set(data)));
+  loadUsers(officeId: string): Observable<User[]> {
+    const params = new HttpParams().set('officeId', officeId); //inivio idUfficio come parametro di ricerca ?officeId=...
+    return this.httpClient
+      .get<User[]>(this.apiUrl, { params })
+      .pipe(tap((data) => this.users.set(data)));
   }
 
   addUser(user: User): Observable<User> {

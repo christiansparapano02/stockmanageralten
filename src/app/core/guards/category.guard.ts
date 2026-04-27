@@ -1,25 +1,25 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
-import { AuthService } from '../auth/auth.service';
+import { SessionService } from '../../shared/services/session.service';
 
 export const categoryGuard: CanActivateFn = (route, state) => {
-  const authService = inject(AuthService);
+  const session = inject(SessionService);
   const router = inject(Router);
 
-  // Estrae il nome della categoria dall'URL (es. "Medical")
-  const categoryName = route.params['category'];
+  // Estrae id della categoria dall'URL
+  const categoryId = route.paramMap.get('id');
 
   //  Se non è loggato, al login
-  if (!authService.isLoggedIn()) {
+  if (!session.isLoggedIn()) {
     return router.parseUrl('/login');
   }
 
   //  Se ha i permessi (Admin o Ruolo corrispondente)
-  if (authService.canAccessCategory(categoryName)) {
+  if (categoryId && session.canAccessCategory(categoryId)) {
     return true;
   }
 
   //  Se l'accesso è negato, reindirizza alla rotta base corretta per l'utente
   //admin in dashboard, utente in lista categories
-  return router.parseUrl(authService.getInitialRoute());
+  return router.parseUrl(session.getInitialRoute());
 };

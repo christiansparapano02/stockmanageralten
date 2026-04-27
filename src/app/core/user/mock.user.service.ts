@@ -7,43 +7,54 @@ import { delay, Observable, of, tap } from 'rxjs';
 export class MockUserService implements IUserService {
   private mockUsers = signal<User[]>([
     {
-      id: '1',
+      id: 'u1',
       firstName: 'Marco',
       lastName: 'Bianchi',
-      email: 'm.bianchi@azienda.it',
-      role: 'admin',
+      email: 'm.bianchi@test.it',
+      phone: '333111',
+      officeId: 'milano01',
+      roleId: 'role-admin-id',
+      isConfirmed: true,
     },
     {
-      id: '2',
+      id: 'u2',
       firstName: 'Giulia',
       lastName: 'Verdi',
-      email: 'g.verdi@azienda.it',
-      role: 'medicalArea',
+      email: 'g.verdi@test.it',
+      phone: '333222',
+      officeId: 'milano01',
+      roleId: 'role-medical-id',
+      isConfirmed: true,
     },
     {
-      id: '3',
+      id: 'u3',
       firstName: 'Luca',
       lastName: 'Neri',
-      email: 'l.neri@azienda.it',
-      role: 'officeArea',
+      email: 'l.neri@test.it',
+      phone: '333333',
+      officeId: 'roma01',
+      roleId: 'role-office-id',
+      isConfirmed: true,
     },
     {
-      id: '4',
+      id: 'u4',
       firstName: 'Anna',
       lastName: 'Rossi',
-      email: 'a.rossi@azienda.it',
-      role: 'breakArea',
+      email: 'a.rossi@test.it',
+      phone: '333444',
+      officeId: 'milano01',
+      roleId: 'role-break-id',
+      isConfirmed: false,
     },
   ]);
 
   //esporre lista user in sola lettura
   readonly allUsers = this.mockUsers.asReadonly();
 
-  loadUsers(): Observable<User[]> {
-    return of(this.mockUsers()).pipe(
-      delay(900),
-      tap((data) => this.mockUsers.set(data)),
-    );
+  loadUsers(officeId: string): Observable<User[]> {
+    // simulazione filtro per sede
+    const filtered = this.mockUsers().filter((u) => u.officeId === officeId);
+    return of(filtered).pipe(delay(800));
   }
 
   addUser(user: User): Observable<User> {
