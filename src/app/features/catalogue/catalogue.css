@@ -43,3 +43,51 @@
   min-width: 44px !important;
   border-radius: 50% !important;
 }
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--p-surface-200);
+}
+
+.detail-row:last-child {
+  border-bottom: none;
+}
+
+.detail-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--p-text-muted-color);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.detail-value {
+  font-size: 0.95rem;
+  color: var(--p-text-color);
+  font-weight: 500;
+}
+
+.detail-badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.badge-ok {
+  background-color: var(--p-green-100);
+  color: var(--p-green-700);
+}
+
+.badge-low {
+  background-color: var(--p-yellow-100);
+  color: var(--p-yellow-700);
+}
+
+.badge-critical {
+  background-color: var(--p-red-100);
+  color: var(--p-red-700);
+}
