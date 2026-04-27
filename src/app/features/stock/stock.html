@@ -8,6 +8,7 @@
         <th>Expiry Date</th>
         <th>Available Quantity</th>
         <th>Minimum Quantity</th>
+        <th style="width: 48px"></th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body">
@@ -18,6 +19,7 @@
         <td><p-skeleton width="70%" /></td>
         <td><p-skeleton width="40%" styleClass="mx-auto" /></td>
         <td><p-skeleton width="40%" styleClass="mx-auto" /></td>
+        <td><p-skeleton width="24px" /></td>
       </tr>
     </ng-template>
   </p-table>
@@ -34,16 +36,14 @@
         <th>Expiry Date</th>
         <th>Available Quantity</th>
         <th>Minimum Quantity</th>
-        @if (mode() === 'delete') {
-          <th>Actions</th>
-        }
+        <th style="width: 48px"></th>
       </tr>
     </ng-template>
 
     <ng-template pTemplate="body" let-item let-rowIndex="rowIndex">
-      <tr>
+      <tr (dblclick)="onRowDoubleClick(item)" style="cursor: pointer">
         <td>
-          @if (mode() === 'edit') {
+          @if (mode() === 'edit' && editableItems()[rowIndex]?.id === item.id) {
             <input pInputText [(ngModel)]="editableItems()[rowIndex].name" />
           } @else {
             {{ item.name }}
@@ -53,7 +53,7 @@
         <td>{{ item | statusLabel }}</td>
 
         <td>
-          @if (mode() === 'edit') {
+          @if (mode() === 'edit' && editableItems()[rowIndex]?.id === item.id) {
             <input
               type="date"
               [ngModel]="
@@ -71,7 +71,7 @@
         </td>
 
         <td>
-          @if (mode() === 'edit') {
+          @if (mode() === 'edit' && editableItems()[rowIndex]?.id === item.id) {
             <input
               type="date"
               [ngModel]="
@@ -89,7 +89,7 @@
         </td>
 
         <td>
-          @if (mode() === 'edit') {
+          @if (mode() === 'edit' && editableItems()[rowIndex]?.id === item.id) {
             <div style="display: flex; align-items: center; gap: 8px; overflow: visible">
               <p-button
                 icon="pi pi-minus-circle"
@@ -121,7 +121,7 @@
         </td>
 
         <td>
-          @if (mode() === 'edit') {
+          @if (mode() === 'edit' && editableItems()[rowIndex]?.id === item.id) {
             <p-inputnumber
               [(ngModel)]="editableItems()[rowIndex].minQuantity"
               [showButtons]="true"
@@ -136,22 +136,21 @@
           }
         </td>
 
-        @if (mode() === 'delete') {
-          <td>
-            <p-button
-              icon="pi pi-trash"
-              severity="danger"
-              [rounded]="true"
-              (onClick)="confirmDelete(item)"
-            />
-          </td>
-        }
+        <td>
+          <p-button
+            icon="pi pi-ellipsis-v"
+            [text]="true"
+            [rounded]="true"
+            size="small"
+            (onClick)="openRowMenu($event, item)"
+          />
+        </td>
       </tr>
     </ng-template>
   </p-table>
 }
 
-<app-options (onAdd)="handleAdd()" (onEdit)="handleEdit()" (onDelete)="handleDelete()" />
+<p-menu #rowMenu [model]="rowMenuItems" [popup]="true" />
 
 @if (mode() === 'edit') {
   <div class="edit-actions">
@@ -165,6 +164,9 @@
     <button pButton type="button" label="Save Changes" (click)="saveEdit()"></button>
   </div>
 }
+
+<!-- FAB -->
+<p-button icon="pi pi-plus" [rounded]="true" styleClass="fab-btn" (onClick)="handleAdd()" />
 
 <p-dialog
   header="Add Item"

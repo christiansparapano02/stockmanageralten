@@ -44,3 +44,12 @@ td {
 :host ::ng-deep .p-inputnumber-button {
   display: flex !important;
 }
+
+:host ::ng-deep .fab-btn {
+  position: fixed;
+  bottom: 32px;
+  right: 32px;
+  z-index: 9999;
+  width: 56px !important;
+  height: 56px !important;
+}

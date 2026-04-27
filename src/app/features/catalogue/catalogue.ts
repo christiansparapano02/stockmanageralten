@@ -16,7 +16,6 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService, MenuItem } from 'primeng/api';
 import { Category } from '../../core/category/category.interface';
 import { ITEM_SERVICE_TOKEN } from '../../core/item/item-service.token';
-import { Options } from '../stock/options/options';
 
 @Component({
   selector: 'app-catalogue',
@@ -34,7 +33,6 @@ import { Options } from '../stock/options/options';
     SelectModule,
     ButtonModule,
     ConfirmDialogModule,
-    Options,
   ],
   providers: [ConfirmationService],
   templateUrl: './catalogue.html',
