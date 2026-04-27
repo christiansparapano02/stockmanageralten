@@ -10,7 +10,8 @@
           <th>Last Name</th>
           <th>Email</th>
           <th>Phone</th>
-          <th class="text-center" style="width: 150px">Role</th>
+          <th>Role</th>
+          <th style="width: 50px"></th>
         </tr>
       </ng-template>
       <ng-template pTemplate="body">
@@ -19,7 +20,8 @@
           <td><p-skeleton /></td>
           <td><p-skeleton /></td>
           <td><p-skeleton /></td>
-          <td><p-skeleton width="60%" styleClass="mx-auto" /></td>
+          <td><p-skeleton /></td>
+          <td><p-skeleton width="2rem" /></td>
         </tr>
       </ng-template>
     </p-table>
@@ -37,6 +39,7 @@
       [scrollable]="true"
       scrollHeight="400px"
       [tableStyle]="{ 'min-width': '60rem' }"
+      selectionMode="single"
     >
       <ng-template pTemplate="header">
         <tr>
@@ -45,44 +48,29 @@
           <th i18n="@@userSettings.table.email">Email</th>
           <th i18n="@@userSettings.table.phone">Phone</th>
           <th i18n="@@userSettings.table.role" class="text-center" style="width: 150px">Role</th>
-          @if (isDeleteMode() || isEditMode()) {
-            <th style="width: 80px" class="text-center">Action</th>
-          }
+          <th style="width: 50px"></th>
         </tr>
       </ng-template>
 
       <ng-template pTemplate="body" let-user>
-        <tr>
+        <tr (dblclick)="openEditDialog(user)" class="cursor-pointer row-hover">
           <td>{{ user.firstName }}</td>
           <td>{{ user.lastName }}</td>
           <td>{{ user.email }}</td>
           <td>{{ user.phone || '-' }}</td>
           <td class="text-center">
             <p-tag [value]="getRoleName(user.roleId)" severity="secondary"></p-tag>
-            <!--ora n/a perchè role service vuoto-->
           </td>
-          @if (isDeleteMode()) {
-            <td class="text-center">
-              <p-button
-                icon="pi pi-trash"
-                severity="danger"
-                [rounded]="true"
-                [text]="true"
-                (click)="deleteUser(user)"
-              />
-            </td>
-          }
-          @if (isEditMode()) {
-            <td class="text-center">
-              <p-button
-                icon="pi pi-pencil"
-                severity="info"
-                [rounded]="true"
-                [text]="true"
-                (onClick)="openEditDialog(user)"
-              />
-            </td>
-          }
+          <td class="text-center">
+            <p-menu #menu [model]="MenuItems(user)" [popup]="true" appendTo="body" />
+            <p-button
+              icon="pi pi-ellipsis-v"
+              [text]="true"
+              [rounded]="true"
+              severity="secondary"
+              (click)="menu.toggle($event)"
+            />
+          </td>
         </tr>
       </ng-template>
 
@@ -94,12 +82,14 @@
     </p-table>
   </div>
 
-  <div class="user-speeddial-container">
-    <p-speed-dial
-      [model]="userActions"
-      direction="up"
-      showIcon="pi pi-plus"
-      buttonClassName="p-button-primary shadow-4"
+  <div class="add-user-button-container">
+    <p-button
+      icon="pi pi-plus"
+      [rounded]="true"
+      [raised]="true"
+      (click)="openDialog()"
+      severity="primary"
+      size="large"
     />
   </div>
 

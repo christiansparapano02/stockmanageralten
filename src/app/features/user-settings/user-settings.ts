@@ -3,8 +3,7 @@ import { USER_SERVICE_TOKEN } from '../../core/user/user-service.token';
 
 import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
-import { SpeedDialModule } from 'primeng/speeddial';
-import { MenuItem } from 'primeng/api';
+import { MenuModule } from 'primeng/menu'; // Assicurati sia presente
 import { User } from '../../core/user/user.model';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Dialog } from 'primeng/dialog';
@@ -14,7 +13,7 @@ import { InputText } from 'primeng/inputtext';
 import { SkeletonModule } from 'primeng/skeleton';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
-import { ConfirmationService, MessageService } from 'primeng/api';
+import { MenuItem, ConfirmationService, MessageService } from 'primeng/api';
 
 import { PasswordModule } from 'primeng/password';
 import { OFFICE_SERVICE_TOKEN } from '../../core/office/office-service.token';
@@ -27,7 +26,6 @@ import { SessionService } from '../../shared/services/session.service';
   imports: [
     TableModule,
     TagModule,
-    SpeedDialModule,
     Dialog,
     Button,
     ReactiveFormsModule,
@@ -37,6 +35,7 @@ import { SessionService } from '../../shared/services/session.service';
     ConfirmDialogModule,
     ToastModule,
     PasswordModule,
+    MenuModule,
   ],
   providers: [ConfirmationService, MessageService],
   templateUrl: './user-settings.html',
@@ -61,11 +60,7 @@ export class UserSettings implements OnInit {
 
   loading = signal(false);
 
-  userActions: MenuItem[] = [];
   displayDialog = signal(false);
-
-  isDeleteMode = signal<Boolean>(false); //  per gestire la visibilità del cestino
-  isEditMode = signal(false); // per mostrare la colonna con la matita
   selectedUser: User | null = null; // per memorizzar l'utente da modificare
 
   // Proprietà tradotte per l'header del dialog nel template
@@ -87,7 +82,6 @@ export class UserSettings implements OnInit {
   }
 
   ngOnInit() {
-    this.updateMenu();
     this.fetchInitialData();
   }
 
@@ -109,34 +103,6 @@ export class UserSettings implements OnInit {
     });
   }
 
-  //fetchInitalData con session
-  // fetchInitialData() {
-  //   const officeId = this.currentOfficeId();
-
-  //   if (!officeId) {
-  //     this.showError('No Office ID found in session.');
-  //     return;
-  //   }
-
-  //   this.loading.set(true);
-
-  //   /**
-  //    * [PROMEMORIA API]: Non chiamiamo più roleService.loadRoles() qui.
-  //    * I ruoli sono già stati caricati dall'AuthService durante il login.
-  //    */
-
-  //   this.officeService.getOfficeById(officeId).subscribe({
-  //     next: (office) => {
-  //       this.officeInfo.set(office);
-  //       this.loadUsersData(officeId);
-  //     },
-  //     error: () => {
-  //       this.showError('Office details not found.');
-  //       this.loading.set(false);
-  //     },
-  //   });
-  // }
-
   private loadUsersData(id: string) {
     this.userService.loadUsers(id).subscribe({
       next: () => this.loading.set(false),
@@ -147,31 +113,17 @@ export class UserSettings implements OnInit {
     });
   }
 
-  //configurazione menù SpeedDial
-  updateMenu() {
-    this.userActions = [
+  MenuItems(user: User): MenuItem[] {
+    return [
       {
-        icon: 'pi pi-user-plus',
-        tooltipOptions: { tooltipLabel: $localize`:@@userSettings.actions.addUser:Add User` },
-        command: () => this.openDialog(),
-      },
-      {
+        label: $localize`:@@userSettings.actions.editUsers:Edit User`,
         icon: 'pi pi-pencil',
-        tooltipOptions: { tooltipLabel: $localize`:@@userSettings.actions.editUsers:Edit Users` },
-        command: () => {
-          this.isEditMode.set(!this.isEditMode());
-          this.isDeleteMode.set(false);
-        },
+        command: () => this.openEditDialog(user),
       },
       {
+        label: $localize`:@@userSettings.actions.deleteUsers:Delete User`,
         icon: 'pi pi-trash',
-        tooltipOptions: {
-          tooltipLabel: $localize`:@@userSettings.actions.deleteUsers:Delete Users`,
-        },
-        command: () => {
-          this.isDeleteMode.set(!this.isDeleteMode());
-          this.isEditMode.set(false);
-        },
+        command: () => this.deleteUser(user),
       },
     ];
   }
@@ -228,7 +180,6 @@ export class UserSettings implements OnInit {
     if (this.userForm.invalid) return;
 
     const formData = this.userForm.getRawValue(); //include tutti i campi, anche quelli disabilitati, per non perdere dati
-    //const officeId = this.currentOfficeId(); // Recuperiamo l'ID dinamico (SESSION)
 
     //se in edit user:
     if (this.selectedUser) {
@@ -246,8 +197,7 @@ export class UserSettings implements OnInit {
           this.showSuccess($localize`:@@userSettings.msg.updated:User updated successfully`);
           this.closeDialog();
         },
-
-        error: (err) => this.showError(err.message), //this.showError(err.error) o err.error.message per vedere messaggio specifico mandato da be
+        error: (err) => this.showError(err.message),
       });
     } else {
       //modalità creazione utente
@@ -261,7 +211,6 @@ export class UserSettings implements OnInit {
           this.showSuccess($localize`:@@userSettings.msg.added:User added successfully`);
           this.closeDialog();
         },
-
         error: (err) => this.showError(err.message),
       });
     }

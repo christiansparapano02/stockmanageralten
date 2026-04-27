@@ -6,6 +6,14 @@
   margin: 1rem;
 }
 
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.row-hover:hover {
+  background-color: var(--surface-hover) !important;
+}
+
 /* ============================================
    TABELLA
    ============================================ */
@@ -19,62 +27,26 @@
   background-color: var(--surface-hover);
 }
 
+/* =ng-deep per allineare ellipsis e icone */
+:host ::ng-deep .p-button.p-button-text.p-button-secondary {
+  color: var(--text-color-secondary);
+}
+
 /* ============================================
-   SPEED DIAL
+   AZIONI E PULSANTI
    ============================================ */
-.user-speeddial-container {
+.add-user-button-container {
   position: fixed;
   bottom: 2rem;
   right: 2rem;
-  height: 250px;
-  width: 60px;
-  display: flex;
-  align-items: flex-end;
   z-index: 1000;
-  pointer-events: none;
 }
 
-:host ::ng-deep .p-speeddial-list {
-  pointer-events: none;
-}
-
-:host ::ng-deep .p-speeddial-open .p-speeddial-list {
-  pointer-events: all;
-}
-
-:host ::ng-deep .p-speeddial-button {
-  pointer-events: all;
-  background-color: #028bd3;
-  width: 56px !important;
-  height: 56px !important;
-  min-width: 56px !important;
+/* Override dimensione pulsante Add User */
+:host ::ng-deep .add-user-button-container .p-button {
+  width: 60px !important;
+  height: 60px !important;
   border-radius: 50% !important;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: visible;
-  border: none;
-}
-
-:host ::ng-deep .p-speeddial-action .p-button-icon,
-:host ::ng-deep .p-speeddial-button .p-button-icon {
-  font-size: 1.1rem;
-  line-height: 1;
-}
-
-:host ::ng-deep .p-speeddial-action {
-  width: 44px !important;
-  height: 44px !important;
-  min-width: 44px !important;
-  border-radius: 50% !important;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: visible;
-}
-
-:host ::ng-deep .p-speeddial-button.p-button:hover {
-  background-color: #0470aa !important;
 }
 
 /* ============================================
@@ -96,18 +68,7 @@
 }
 
 /* ============================================
-   MODALITA' ELIMINAZIONE — HOVER RIGA
-   ============================================ */
-:host ::ng-deep .p-datatable-tbody > tr.delete-hover:hover {
-  background-color: #fff1f2 !important;
-}
-
-:host ::ng-deep .p-button.p-button-danger.p-button-text:hover {
-  background: rgba(239, 68, 68, 0.1);
-}
-
-/* ============================================
-   SPINNER
+   SPINNER E SKELETON
    ============================================ */
 .spinner-container {
   display: flex;
