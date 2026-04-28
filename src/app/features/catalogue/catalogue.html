@@ -5,12 +5,14 @@
         <th>Name</th>
         <th>Category</th>
         <th>Minimum Quantity</th>
+        <th></th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body">
       <tr>
         <td><p-skeleton /></td>
         <td><p-skeleton width="60%" /></td>
+        <td><p-skeleton width="40%" styleClass="mx-auto" /></td>
         <td><p-skeleton width="40%" styleClass="mx-auto" /></td>
       </tr>
     </ng-template>
@@ -39,6 +41,7 @@
         <th>Name</th>
         <th>Category</th>
         <th>Minimum Quantity</th>
+        <th></th>
       </tr>
     </ng-template>
 
@@ -48,57 +51,20 @@
         <td>{{ getCategoryName(item.categoryId) }}</td>
         <td>{{ item.minQuantity }}</td>
         <td>
-          <p-menu #menu [model]="popUpItems" [popup]="true" appendTo="body" />
-          <p-button (click)="openMenu($event, item); menu.toggle($event)" icon="pi pi-ellipsis-v" />
+          <p-button
+            (click)="openMenu($event, item); menu.toggle($event)"
+            icon="pi pi-ellipsis-v"
+            [text]="true"
+            [rounded]="true"
+            size="small"
+          />
         </td>
       </tr>
     </ng-template>
   </p-table>
 }
 
-<p-dialog
-  header="Item Details"
-  [modal]="true"
-  [(visible)]="visible"
-  [style]="{ width: '28rem' }"
->
-  <div class="detail-card">
-    <div class="detail-block">
-      <span class="detail-label">Name</span>
-      <span class="detail-value detail-name">{{ selectedItem()?.name }}</span>
-    </div>
-
-    <div class="detail-divider"></div>
-
-    <div class="detail-row">
-      <div class="detail-block">
-        <span class="detail-label">Status</span>
-        @if (selectedItem()) {
-          <span class="detail-badge" [class]="getStatusClass(selectedItem()!)">
-            {{ selectedItem()! | statusLabel }}
-          </span>
-        }
-      </div>
-      <div class="detail-block">
-        <span class="detail-label">Category</span>
-        <span class="detail-value">{{ getCategoryName(selectedItem()?.categoryId ?? '') }}</span>
-      </div>
-    </div>
-
-    <div class="detail-divider"></div>
-
-    <div class="detail-row">
-      <div class="detail-block">
-        <span class="detail-label">Quantity</span>
-        <span class="detail-value detail-qty">{{ selectedItem()?.quantity }}</span>
-      </div>
-      <div class="detail-block">
-        <span class="detail-label">Min Quantity</span>
-        <span class="detail-value detail-qty">{{ selectedItem()?.minQuantity }}</span>
-      </div>
-    </div>
-  </div>
-</p-dialog>
+<p-menu #menu [model]="popUpItems" [popup]="true" appendTo="body" />
 
 <p-dialog
   header="Edit Item"
