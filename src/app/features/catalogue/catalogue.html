@@ -17,7 +17,7 @@
   </p-table>
 } @else {
   <p-table
-    [value]="mode() === 'edit' ? editableItems() : items()"
+    [value]="items()"
     [tableStyle]="{ 'min-width': '50rem' }"
     [globalFilterFields]="['name']"
     #dt
@@ -39,81 +39,116 @@
         <th>Name</th>
         <th>Category</th>
         <th>Minimum Quantity</th>
-        @if (mode() === 'delete') {
-          <th>Actions</th>
-        }
       </tr>
     </ng-template>
 
     <ng-template pTemplate="body" let-item let-rowIndex="rowIndex">
-      <tr>
+      <tr class="tr-pointer" (dblclick)="startEdit(item)">
+        <td>{{ item.name }}</td>
+        <td>{{ getCategoryName(item.categoryId) }}</td>
+        <td>{{ item.minQuantity }}</td>
         <td>
-          @if (mode() === 'edit') {
-            <input pInputText [(ngModel)]="editableItems()[rowIndex].name" />
-          } @else {
-            {{ item.name }}
-          }
+          <p-menu #menu [model]="popUpItems" [popup]="true" appendTo="body" />
+          <p-button (click)="openMenu($event, item); menu.toggle($event)" icon="pi pi-ellipsis-v" />
         </td>
-
-        <td>
-          @if (mode() === 'edit') {
-            <p-select
-              [options]="categories()"
-              optionLabel="name"
-              optionValue="id"
-              [(ngModel)]="editableItems()[rowIndex].categoryId"
-              appendTo="body"
-              styleClass="w-full"
-            />
-          } @else {
-            {{ getCategoryName(item.categoryId) }}
-          }
-        </td>
-
-        <td>
-          @if (mode() === 'edit') {
-            <p-inputnumber
-              [(ngModel)]="editableItems()[rowIndex].minQuantity"
-              [showButtons]="true"
-              [min]="1"
-              buttonLayout="horizontal"
-              spinnerMode="horizontal"
-              incrementButtonIcon="pi pi-plus"
-              decrementButtonIcon="pi pi-minus"
-            />
-          } @else {
-            {{ item.minQuantity }}
-          }
-        </td>
-
-        <td>
-            <p-menu #menu [model]="popUpItems" [popup]="true" appendTo="body"/>
-            <p-button (click)="openMenu($event, item); menu.toggle($event)" icon="pi pi-ellipsis-v" />
-          <p-dialog
-            header="Item Details"
-            [modal]="true"
-            [(visible)]="visible"
-            [style]="{ width: '25rem' }"
-          >
-            <div class="detail-row">
-              <span class="detail-label">Name</span>
-              <span class="detail-value">{{ selectedItem()?.name }}</span>
-            </div>
-          </p-dialog>
-        </td>
-
-       
       </tr>
     </ng-template>
   </p-table>
 }
 
-@if (mode() === 'edit') {
-  <div class="edit-actions">
-    <p-button label="Cancel" severity="secondary" (onClick)="cancelEdit()" />
-    <p-button label="Save Changes" (onClick)="saveEdit()" />
+<p-dialog
+  header="Item Details"
+  [modal]="true"
+  [(visible)]="visible"
+  [style]="{ width: '28rem' }"
+>
+  <div class="detail-card">
+    <div class="detail-block">
+      <span class="detail-label">Name</span>
+      <span class="detail-value detail-name">{{ selectedItem()?.name }}</span>
+    </div>
+
+    <div class="detail-divider"></div>
+
+    <div class="detail-row">
+      <div class="detail-block">
+        <span class="detail-label">Status</span>
+        @if (selectedItem()) {
+          <span class="detail-badge" [class]="getStatusClass(selectedItem()!)">
+            {{ selectedItem()! | statusLabel }}
+          </span>
+        }
+      </div>
+      <div class="detail-block">
+        <span class="detail-label">Category</span>
+        <span class="detail-value">{{ getCategoryName(selectedItem()?.categoryId ?? '') }}</span>
+      </div>
+    </div>
+
+    <div class="detail-divider"></div>
+
+    <div class="detail-row">
+      <div class="detail-block">
+        <span class="detail-label">Quantity</span>
+        <span class="detail-value detail-qty">{{ selectedItem()?.quantity }}</span>
+      </div>
+      <div class="detail-block">
+        <span class="detail-label">Min Quantity</span>
+        <span class="detail-value detail-qty">{{ selectedItem()?.minQuantity }}</span>
+      </div>
+    </div>
   </div>
-}
+</p-dialog>
+
+<p-dialog
+  header="Edit Item"
+  [modal]="true"
+  [(visible)]="editDialogVisible"
+  [style]="{ width: '30rem' }"
+>
+  <div class="form-field">
+    <label>Name</label>
+    <input
+      pInputText
+      [ngModel]="editableItem()?.name"
+      (ngModelChange)="editableItem.set({ ...editableItem(), name: $event })"
+    />
+  </div>
+
+  <div class="form-field">
+    <label>Category</label>
+    <p-select
+      [options]="categories()"
+      optionLabel="name"
+      optionValue="id"
+      [ngModel]="editableItem()?.categoryId"
+      (ngModelChange)="editableItem.set({ ...editableItem(), categoryId: $event })"
+      appendTo="body"
+      styleClass="w-full"
+    />
+  </div>
+
+  <div class="form-field">
+    <label>Minimum Quantity</label>
+    <p-inputnumber
+      [ngModel]="editableItem()?.minQuantity"
+      (ngModelChange)="editableItem.set({ ...editableItem(), minQuantity: $event })"
+      [showButtons]="true"
+      [min]="1"
+      buttonLayout="horizontal"
+      spinnerMode="horizontal"
+      incrementButtonIcon="pi pi-plus"
+      decrementButtonIcon="pi pi-minus"
+    />
+  </div>
+
+  <ng-template pTemplate="footer">
+    <p-button label="Cancel" severity="secondary" (onClick)="editDialogVisible.set(false)" />
+    <p-button label="Save" (onClick)="saveEdit()" />
+  </ng-template>
+</p-dialog>
+
+<p-button icon="pi pi-plus" [rounded]="true" styleClass="fab-btn" (onClick)="handleAdd()" />
 
 <p-dialog
   header="Add Item"

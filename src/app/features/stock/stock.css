@@ -1,3 +1,4 @@
+/* ===== FORM FIELD ===== */
 .form-field {
   display: flex;
   flex-direction: column;
@@ -5,6 +6,7 @@
   margin-bottom: 14px;
 }
 
+/* ===== FAB BUTTON ===== */
 :host ::ng-deep .fab-btn {
   position: fixed;
   bottom: 32px;
@@ -12,4 +14,89 @@
   z-index: 9999;
   width: 56px !important;
   height: 56px !important;
+}
+
+/* ===== DETAIL DIALOG ===== */
+.detail-card {
+  display: flex;
+  flex-direction: column;
+  padding: 0.25rem 0;
+}
+
+/* Singolo blocco: label sopra, valore sotto */
+.detail-block {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 0.85rem 1rem;
+}
+
+/* Riga con due blocchi affiancati */
+.detail-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.detail-row .detail-block:first-child {
+  border-right: 1px solid var(--p-surface-200);
+}
+
+/* Separatore orizzontale */
+.detail-divider {
+  height: 1px;
+  background: var(--p-surface-200);
+  margin: 0 1rem;
+}
+
+/* ===== LABEL & VALUE ===== */
+.detail-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--p-text-muted-color);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.detail-value {
+  font-size: 0.95rem;
+  color: var(--p-text-color);
+  font-weight: 500;
+}
+
+.detail-name {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--p-primary-color);
+}
+
+.detail-qty {
+  font-size: 1.25rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ===== BADGES ===== */
+.detail-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  width: fit-content;
+}
+
+.badge-ok {
+  background-color: var(--p-green-100);
+  color: var(--p-green-700);
+}
+
+.badge-low {
+  background-color: var(--p-yellow-100);
+  color: var(--p-yellow-700);
+}
+
+.badge-critical {
+  background-color: var(--p-red-100);
+  color: var(--p-red-700);
 }
