@@ -1,25 +1,25 @@
-import { Component, DestroyRef, inject, OnInit, signal, ViewChild } from '@angular/core';
+import { Component, inject, OnInit, signal, DestroyRef } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { NgClass } from '@angular/common';
 
-import { ConfirmationService, MenuItem } from 'primeng/api';
+import { ConfirmationService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DialogModule } from 'primeng/dialog';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
-import { Menu, MenuModule } from 'primeng/menu';
-import { SelectModule } from 'primeng/select';
-import { SkeletonModule } from 'primeng/skeleton';
 import { TableModule } from 'primeng/table';
-
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { SkeletonModule } from 'primeng/skeleton';
+import { MenuModule } from 'primeng/menu';
 
 import { Item } from '../../core/item/item.interface';
-import { ITEM_SERVICE_TOKEN } from '../../core/item/item-service.token';
 import { StatusLabelPipe } from '../../shared/pipes/status.pipe.ts';
+import { ITEM_SERVICE_TOKEN } from '../../core/item/item-service.token';
 import { DatePickerModule } from 'primeng/datepicker';
+import { SelectModule } from 'primeng/select';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-stock',
@@ -27,6 +27,7 @@ import { DatePickerModule } from 'primeng/datepicker';
   imports: [
     TableModule,
     DatePipe,
+    NgClass,
     FormsModule,
     DialogModule,
     InputTextModule,
@@ -35,9 +36,9 @@ import { DatePickerModule } from 'primeng/datepicker';
     ConfirmDialogModule,
     StatusLabelPipe,
     SkeletonModule,
+    DatePickerModule,
     SelectModule,
     MenuModule,
-    DatePickerModule,
   ],
   providers: [ConfirmationService],
   templateUrl: './stock.html',
@@ -49,23 +50,22 @@ export class Stock implements OnInit {
   confirmationService = inject(ConfirmationService);
   destroyRef = inject(DestroyRef);
 
-  @ViewChild('rowMenu') rowMenu!: Menu;
-
   items = signal<Item[]>([]);
   categoryId = signal<string>('');
-
-  loading = signal(false);
-
   dialogVisible = signal(false);
-
   editDialogVisible = signal(false);
-
-  selectedItem = signal<Item | null>(null);
-
-  editingItem = signal<Item | null>(null);
+  addQtyVisible = signal(false);
+  removeQtyVisible = signal(false);
+  loading = signal(false);
 
   catalogueItems = signal<Item[]>([]);
   selectedCatalogueItem = signal<Item | null>(null);
+  selectedItem = signal<Item | null>(null);
+  editingItem = signal<Item | null>(null);
+
+  visible = false;
+  qtyAmount = 1;
+  selectedRowIndex = signal<number>(-1);
 
   newItem = signal<Omit<Item, 'id'>>({
     name: '',
@@ -77,28 +77,26 @@ export class Stock implements OnInit {
     minQuantity: 1,
   });
 
-  rowMenuItems: MenuItem[] = [
+  rowMenuItems = [
     {
-      label: 'Edit',
-      icon: 'pi pi-pencil',
-      command: () => {
-        const item = this.selectedItem();
-
-        if (item) {
-          this.openEditDialog(item);
-        }
-      },
-    },
-    {
-      label: 'Delete',
-      icon: 'pi pi-trash',
-      command: () => {
-        const item = this.selectedItem();
-
-        if (item) {
-          this.confirmDelete(item);
-        }
-      },
+      label: 'Options',
+      items: [
+        {
+          label: 'Details',
+          icon: 'pi pi-info-circle',
+          command: () => this.showDetails(this.selectedItem()!),
+        },
+        {
+          label: 'Edit',
+          icon: 'pi pi-pencil',
+          command: () => this.openEditDialog(this.selectedItem()!),
+        },
+        {
+          label: 'Delete',
+          icon: 'pi pi-trash',
+          command: () => this.confirmDelete(this.selectedItem()!),
+        },
+      ],
     },
   ];
 
@@ -111,20 +109,16 @@ export class Stock implements OnInit {
 
   loadItems() {
     this.loading.set(true);
-
     this.itemService.getByCategory(this.categoryId()).subscribe({
       next: (data) => {
         const normalized = data.map((item) => ({
           ...item,
           status: this.computeStatus(item),
         }));
-
         this.items.set(normalized);
         this.loading.set(false);
       },
-      error: () => {
-        this.loading.set(false);
-      },
+      error: () => this.loading.set(false),
     });
   }
 
@@ -132,9 +126,20 @@ export class Stock implements OnInit {
     return item.quantity < item.minQuantity ? 0 : 1;
   }
 
-  openRowMenu(event: MouseEvent, item: Item) {
+  getStatusClass(item: Item): string {
+    if (item.quantity === 0) return 'badge-critical';
+    if (item.quantity < item.minQuantity) return 'badge-low';
+    return 'badge-ok';
+  }
+
+  openRowMenu(event: Event, item: Item, menu: any) {
     this.selectedItem.set(item);
-    this.rowMenu.toggle(event);
+    menu.toggle(event);
+  }
+
+  showDetails(item: Item) {
+    this.selectedItem.set(item);
+    this.visible = true;
   }
 
   openEditDialog(item: Item) {
@@ -143,20 +148,12 @@ export class Stock implements OnInit {
   }
 
   saveEditedItem() {
-    const item = this.editingItem();
-
-    if (!item) return;
-
-    const updated = {
-      ...item,
-      status: this.computeStatus(item),
-    };
-
-    this.itemService.update(updated).subscribe((saved) => {
-      this.items.update((items) => items.map((i) => (i.id === saved.id ? saved : i)));
-
+    const updated = this.editingItem();
+    if (!updated) return;
+    const withStatus = { ...updated, status: this.computeStatus(updated) };
+    this.itemService.update(withStatus).subscribe(() => {
+      this.items.update((current) => current.map((i) => (i.id === withStatus.id ? withStatus : i)));
       this.editDialogVisible.set(false);
-      this.editingItem.set(null);
     });
   }
 
@@ -170,17 +167,14 @@ export class Stock implements OnInit {
       quantity: 0,
       minQuantity: 1,
     });
-
     this.itemService.getCatalogueByCategory(this.categoryId()).subscribe((data) => {
       this.catalogueItems.set(data);
     });
-
     this.dialogVisible.set(true);
   }
 
   saveNewItem() {
     const selected = this.selectedCatalogueItem();
-
     if (!selected) return;
 
     const itemToSave: Omit<Item, 'id'> = {
@@ -193,35 +187,57 @@ export class Stock implements OnInit {
         minQuantity: selected.minQuantity,
       }),
       inStock: true,
-      catalogueItemId: selected.id,
     };
 
     this.itemService.add(itemToSave).subscribe((created) => {
       this.items.update((current) => [...current, created]);
-
       this.dialogVisible.set(false);
-
-      this.selectedCatalogueItem.set(null);
     });
   }
 
   confirmDelete(item: Item) {
     this.confirmationService.confirm({
       header: 'Confirm Deletion',
-
       message: `Are you sure you want to delete "${item.name}"?`,
-
       icon: 'pi pi-exclamation-triangle',
-
       acceptLabel: 'Delete',
-
       rejectLabel: 'Cancel',
-
       accept: () => {
         this.itemService.delete(item.id).subscribe(() => {
           this.items.update((current) => current.filter((i) => i.id !== item.id));
         });
       },
     });
+  }
+
+  openAddDialog(rowIndex: number) {
+    this.selectedRowIndex.set(rowIndex);
+    this.qtyAmount = 1;
+    this.addQtyVisible.set(true);
+  }
+
+  openRemoveDialog(rowIndex: number) {
+    this.selectedRowIndex.set(rowIndex);
+    this.qtyAmount = 1;
+    this.removeQtyVisible.set(true);
+  }
+
+  confirmAddQty() {
+    const idx = this.selectedRowIndex();
+    if (idx === -1) return;
+    const items = [...this.items()];
+    items[idx] = { ...items[idx], quantity: items[idx].quantity + this.qtyAmount };
+    this.items.set(items);
+    this.addQtyVisible.set(false);
+  }
+
+  confirmRemoveQty() {
+    const idx = this.selectedRowIndex();
+    if (idx === -1) return;
+    const items = [...this.items()];
+    const newQty = Math.max(0, items[idx].quantity - this.qtyAmount);
+    items[idx] = { ...items[idx], quantity: newQty };
+    this.items.set(items);
+    this.removeQtyVisible.set(false);
   }
 }

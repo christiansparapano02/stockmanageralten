@@ -13,10 +13,10 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { SelectModule } from 'primeng/select';
 import { ButtonModule } from 'primeng/button';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { ConfirmationService, MenuItem } from 'primeng/api';
+import { ConfirmationService } from 'primeng/api';
+import { MenuModule } from 'primeng/menu';
 import { Category } from '../../core/category/category.interface';
 import { ITEM_SERVICE_TOKEN } from '../../core/item/item-service.token';
-import { Menu } from 'primeng/menu';
 
 @Component({
   selector: 'app-catalogue',
@@ -34,7 +34,7 @@ import { Menu } from 'primeng/menu';
     SelectModule,
     ButtonModule,
     ConfirmDialogModule,
-    Menu,
+    MenuModule,
   ],
   providers: [ConfirmationService],
   templateUrl: './catalogue.html',
@@ -45,15 +45,15 @@ export class Catalogue implements OnInit {
   categoryService = inject(CategoryMockService);
   confirmationService = inject(ConfirmationService);
 
-  selectedItem = signal<Item | null>(null);
-  visible = false;
-
   items = signal<Item[]>([]);
-  editableItems = signal<any[]>([]);
   categories = signal<Category[]>([]);
   loading = signal(false);
   dialogVisible = signal(false);
-  mode = signal<'none' | 'edit' | 'delete'>('none');
+  editDialogVisible = signal(false);
+
+  selectedItem = signal<Item | null>(null);
+  editableItem = signal<any>(null);
+  visible = false;
 
   newItem = signal<Omit<Item, 'id' | 'status' | 'nextCheck' | 'expiring' | 'quantity'>>({
     name: '',
@@ -61,7 +61,7 @@ export class Catalogue implements OnInit {
     minQuantity: 1,
   });
 
-  popUpItems: MenuItem[] = [
+  popUpItems = [
     {
       label: 'Options',
       items: [
@@ -74,16 +74,10 @@ export class Catalogue implements OnInit {
           label: 'Edit',
           icon: 'pi pi-pencil',
           command: () => {
-            if (this.mode() === 'edit') {
-              this.saveEdit();
-            } else {
-              this.mode.set('edit');
-              this.editableItems.set(
-                this.items().map((i) => ({
-                  ...i,
-                  categoryId: i.categoryId,
-                })),
-              );
+            const item = this.selectedItem();
+
+            if (item) {
+              this.startEdit(item);
             }
           },
         },
@@ -116,6 +110,10 @@ export class Catalogue implements OnInit {
     return this.categoryService.getCategoryName(categoryId);
   }
 
+  openMenu(event: Event, item: Item) {
+    this.selectedItem.set(item);
+  }
+
   showDialog(item: Item) {
     this.itemService.getByCategory(item.categoryId).subscribe((stockItems) => {
       const stockItem = stockItems.find((s) => s.name === item.name);
@@ -126,6 +124,33 @@ export class Catalogue implements OnInit {
       });
       this.visible = true;
     });
+  }
+
+  startEdit(item: Item) {
+    this.editableItem.set({ ...item, categoryId: Number(item.categoryId) });
+    this.editDialogVisible.set(true);
+  }
+
+  saveEdit() {
+    const updated: Item = {
+      ...this.editableItem(),
+      categoryId: String(this.editableItem().categoryId),
+    };
+    this.itemService.update(updated).subscribe(() => {
+      this.items.update((current) =>
+        current.map((i) => (i.id === updated.id ? updated : i)),
+      );
+      this.editDialogVisible.set(false);
+    });
+  }
+
+  handleAdd() {
+    this.newItem.set({
+      name: '',
+      categoryId: '',
+      minQuantity: 1,
+    });
+    this.dialogVisible.set(true);
   }
 
   saveNewItem() {
@@ -143,26 +168,6 @@ export class Catalogue implements OnInit {
     });
   }
 
-  saveEdit() {
-    const updatedItems = this.editableItems().map((i) => ({
-      ...i,
-      categoryId: i.categoryId.toString(),
-    }));
-
-    updatedItems.forEach((item) => {
-      this.itemService.update(item).subscribe();
-    });
-
-    this.items.set(updatedItems);
-    this.editableItems.set([]);
-    this.mode.set('none');
-  }
-
-  cancelEdit() {
-    this.editableItems.set([]);
-    this.mode.set('none');
-  }
-
   confirmDelete(item: Item) {
     this.confirmationService.confirm({
       header: 'Confirm Deletion',
@@ -178,27 +183,9 @@ export class Catalogue implements OnInit {
     });
   }
 
-  handleEdit() {
-    if (this.mode() === 'edit') {
-      this.saveEdit();
-      return;
-    }
-    this.mode.set('edit');
-    this.editableItems.set(
-      this.items().map((i) => ({
-        ...i,
-        categoryId: Number(i.categoryId),
-      })),
-    );
-  }
-
   getStatusClass(item: Item): string {
     if (item.quantity === 0) return 'badge-critical';
     if (item.quantity < item.minQuantity) return 'badge-low';
     return 'badge-ok';
-  }
-
-  openMenu(event: Event, item: Item) {
-    this.selectedItem.set(item);
   }
 }

@@ -91,3 +91,16 @@
   background-color: var(--p-red-100);
   color: var(--p-red-700);
 }
+
+.tr-pointer {
+  cursor: pointer;
+}
+
+:host ::ng-deep .fab-btn {
+  position: fixed;
+  bottom: 32px;
+  right: 32px;
+  z-index: 9999;
+  width: 56px !important;
+  height: 56px !important;
+}

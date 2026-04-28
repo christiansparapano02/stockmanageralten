@@ -4,14 +4,9 @@
       <tr>
         <th>Name</th>
         <th>Status</th>
-        <th>Next Check</th>
-        <th>Expiry Date</th>
-        <th>Available Quantity</th>
-        <th>Minimum Quantity</th>
         <th style="width: 48px"></th>
       </tr>
     </ng-template>
-
     <ng-template pTemplate="body">
       <tr>
         <td><p-skeleton /></td>
@@ -30,10 +25,6 @@
       <tr>
         <th>Name</th>
         <th>Status</th>
-        <th>Next Check</th>
-        <th>Expiry Date</th>
-        <th>Available Quantity</th>
-        <th>Minimum Quantity</th>
         <th style="width: 48px"></th>
       </tr>
     </ng-template>
@@ -41,28 +32,18 @@
     <ng-template pTemplate="body" let-item>
       <tr (dblclick)="openEditDialog(item)" style="cursor: pointer">
         <td>{{ item.name }}</td>
-
-        <td>{{ item | statusLabel }}</td>
-
         <td>
-          {{ item.nextCheck ? (item.nextCheck | date: 'dd/MM/yyyy') : '—' }}
+          <span class="detail-badge" [ngClass]="getStatusClass(item)">
+            {{ item | statusLabel }}
+          </span>
         </td>
-
-        <td>
-          {{ item.expiring ? (item.expiring | date: 'dd/MM/yyyy') : '—' }}
-        </td>
-
-        <td>{{ item.quantity }}</td>
-
-        <td>{{ item.minQuantity }}</td>
-
         <td>
           <p-button
             icon="pi pi-ellipsis-v"
             [text]="true"
             [rounded]="true"
             size="small"
-            (onClick)="openRowMenu($event, item)"
+            (onClick)="openRowMenu($event, item, rowMenu)"
           />
         </td>
       </tr>
@@ -70,12 +51,10 @@
   </p-table>
 }
 
-<p-menu #rowMenu [model]="rowMenuItems" [popup]="true" />
+<p-menu #rowMenu [model]="rowMenuItems" [popup]="true" appendTo="body" />
 
-<!-- FAB -->
+
 <p-button icon="pi pi-plus" [rounded]="true" styleClass="fab-btn" (onClick)="handleAdd()" />
-
-<!-- ADD ITEM -->
 
 <p-dialog
   header="Add Item"
@@ -86,7 +65,6 @@
 >
   <div class="form-field">
     <label>Item</label>
-
     <p-select
       [options]="catalogueItems()"
       optionLabel="name"
@@ -100,7 +78,6 @@
 
   <div class="form-field">
     <label>Available Quantity</label>
-
     <p-inputnumber
       [ngModel]="newItem().quantity"
       (ngModelChange)="newItem.set({ ...newItem(), quantity: $event })"
@@ -111,12 +88,9 @@
 
   <ng-template pTemplate="footer">
     <p-button label="Cancel" severity="secondary" (onClick)="dialogVisible.set(false)" />
-
     <p-button label="Add" [disabled]="!selectedCatalogueItem()" (onClick)="saveNewItem()" />
   </ng-template>
 </p-dialog>
-
-<!-- EDIT ITEM -->
 
 <p-dialog
   header="Edit Item"
@@ -128,13 +102,11 @@
   @if (editingItem(); as item) {
     <div class="form-field">
       <label>Name</label>
-
       <input pInputText [(ngModel)]="item.name" />
     </div>
 
     <div class="form-field">
       <label>Next Check</label>
-
       <p-datepicker
         [(ngModel)]="item.nextCheck"
         [showIcon]="true"
@@ -146,7 +118,6 @@
 
     <div class="form-field">
       <label>Expiry Date</label>
-
       <p-datepicker
         [(ngModel)]="item.expiring"
         [showIcon]="true"
@@ -158,21 +129,93 @@
 
     <div class="form-field">
       <label>Available Quantity</label>
-
       <p-inputnumber [(ngModel)]="item.quantity" [showButtons]="true" [min]="0" />
     </div>
 
     <div class="form-field">
       <label>Minimum Quantity</label>
-
       <p-inputnumber [(ngModel)]="item.minQuantity" [showButtons]="true" [min]="1" />
     </div>
   }
 
   <ng-template pTemplate="footer">
     <p-button label="Cancel" severity="secondary" (onClick)="editDialogVisible.set(false)" />
-
     <p-button label="Save" (onClick)="saveEditedItem()" />
+  </ng-template>
+</p-dialog>
+
+<p-dialog header="Item Details" [modal]="true" [(visible)]="visible" [style]="{ width: '28rem' }">
+  <div class="detail-card">
+    <div class="detail-block">
+      <span class="detail-label">Name</span>
+      <span class="detail-value detail-name">{{ selectedItem()?.name }}</span>
+    </div>
+
+    <div class="detail-divider"></div>
+
+    <div class="detail-row">
+      <div class="detail-block">
+        <span class="detail-label">Status</span>
+        @if (selectedItem()) {
+          <span class="detail-badge" [class]="getStatusClass(selectedItem()!)">
+            {{ selectedItem()! | statusLabel }}
+          </span>
+        }
+      </div>
+      <div class="detail-block">
+        <span class="detail-label">Next Check</span>
+        <span class="detail-value">
+          {{ selectedItem()?.nextCheck ? (selectedItem()!.nextCheck | date: 'dd/MM/yyyy') : '—' }}
+        </span>
+      </div>
+    </div>
+
+    <div class="detail-divider"></div>
+
+    <div class="detail-row">
+      <div class="detail-block">
+        <span class="detail-label">Quantity</span>
+        <span class="detail-value detail-qty">{{ selectedItem()?.quantity }}</span>
+      </div>
+      <div class="detail-block">
+        <span class="detail-label">Min Quantity</span>
+        <span class="detail-value detail-qty">{{ selectedItem()?.minQuantity }}</span>
+      </div>
+    </div>
+  </div>
+</p-dialog>
+
+<p-dialog
+  header="Add Quantity"
+  [visible]="addQtyVisible()"
+  [modal]="true"
+  [style]="{ width: '20rem' }"
+  (visibleChange)="addQtyVisible.set($event)"
+>
+  <div class="form-field">
+    <label>Quantity to add</label>
+    <p-inputnumber [(ngModel)]="qtyAmount" [min]="1" [showButtons]="true" />
+  </div>
+  <ng-template pTemplate="footer">
+    <p-button label="Cancel" severity="secondary" (onClick)="addQtyVisible.set(false)" />
+    <p-button label="Add" severity="success" (onClick)="confirmAddQty()" />
+  </ng-template>
+</p-dialog>
+
+<p-dialog
+  header="Remove Quantity"
+  [visible]="removeQtyVisible()"
+  [modal]="true"
+  [style]="{ width: '20rem' }"
+  (visibleChange)="removeQtyVisible.set($event)"
+>
+  <div class="form-field">
+    <label>Quantity to remove</label>
+    <p-inputnumber [(ngModel)]="qtyAmount" [min]="1" [showButtons]="true" />
+  </div>
+  <ng-template pTemplate="footer">
+    <p-button label="Cancel" severity="secondary" (onClick)="removeQtyVisible.set(false)" />
+    <p-button label="Remove" severity="danger" (onClick)="confirmRemoveQty()" />
   </ng-template>
 </p-dialog>
 
