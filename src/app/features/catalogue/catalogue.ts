@@ -66,11 +66,6 @@ export class Catalogue implements OnInit {
       label: 'Options',
       items: [
         {
-          label: 'Details',
-          icon: 'pi pi-info-circle',
-          command: () => this.showDialog(this.selectedItem()!),
-        },
-        {
           label: 'Edit',
           icon: 'pi pi-pencil',
           command: () => {
