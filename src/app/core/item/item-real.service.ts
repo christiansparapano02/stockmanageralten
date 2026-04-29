@@ -42,4 +42,8 @@ export class ItemRealService implements IItemService {
   deleteCatalogueItem(id: string): Observable<boolean> {
     return this.http.delete<boolean>(`${this.apiUrl}/catalogue/${id}`);
   }
+
+  getStock(): Observable<Item[]> {
+    return this.http.get<Item[]>(`${this.apiUrl}/stock`);
+  }
 }

@@ -10,4 +10,5 @@ export interface IItemService {
   update(updatedItem: Item): Observable<Item>;
   delete(id: string): Observable<boolean>;
   deleteCatalogueItem(id: string): Observable<boolean>;
+  getStock(): Observable<Item[]>;
 }

@@ -179,4 +179,8 @@ export class ItemMockService implements IItemService {
     this.items = this.items.filter((i) => i.id !== id);
     return of(true).pipe(delay(800));
   }
+
+  getStock(): Observable<Item[]> {
+    return of([...this.items.filter((item) => item.inStock)]).pipe(delay(800));
+  }
 }
