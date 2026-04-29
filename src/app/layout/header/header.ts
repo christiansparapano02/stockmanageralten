@@ -1,7 +1,5 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { InputText } from 'primeng/inputtext';
-import { IconField } from 'primeng/iconfield';
-import { InputIcon } from 'primeng/inputicon';
+
 import { DarkModeService } from '../../core/dark_mode.service';
 import { Router, RouterLink } from '@angular/router';
 import { Menu } from 'primeng/menu';
@@ -18,6 +16,7 @@ import { Avatar } from 'primeng/avatar';
 export class Header implements OnInit {
   darkModeService = inject(DarkModeService);
   menuItems: MenuItem[] = [];
+  location = signal<string>('');
 
   constructor(private router: Router) {}
 

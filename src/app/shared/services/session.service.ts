@@ -1,4 +1,4 @@
-import { computed, Injectable, signal } from '@angular/core';
+import { computed, inject, Injectable, signal } from '@angular/core';
 import { AuthSession } from '../models/auth.model';
 import { CATEGORY_IDS, ROLE_IDS } from '../auth.constants';
 import { jwtDecode } from 'jwt-decode';
@@ -8,6 +8,7 @@ export class SessionService {
   //dati dell'utente o null se non loggato
   private _session = signal<AuthSession | null>(null);
   private _token: string | null = null;
+  private _refreshToken: string | null = null;
 
   readonly user = this._session.asReadonly();
   readonly isLoggedIn = computed(() => !!this._session());
@@ -35,8 +36,9 @@ export class SessionService {
   };
 
   //capire se be cambia nome claims
-  initSession(token: string, expirationDate: string): void {
+  initSession(token: string, expirationDate: string, refreshToken: string): void {
     this._token = token; // memorizziamo il token
+    this._refreshToken = refreshToken;
     const decoded: any = jwtDecode(token);
     const expiresAt = new Date(expirationDate).getTime(); //converte data in numero intero
 
@@ -56,6 +58,11 @@ export class SessionService {
     return this._token;
   }
 
+  //per esporre refreshToken
+  getRefreshToken(): string | null {
+    return this._refreshToken;
+  }
+
   canAccessCategory(categoryId: string): boolean {
     if (this.isAdmin()) return true;
     return this.roleToCategoryMap[this._session()?.roleId!] === categoryId;
@@ -64,5 +71,6 @@ export class SessionService {
   clearSession() {
     this._session.set(null);
     this._token = null;
+    this._refreshToken = null;
   }
 }
