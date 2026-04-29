@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
 import { ChartModule } from "primeng/chart";
 import { ProgressBarModule } from 'primeng/progressbar';
 import { TagModule } from 'primeng/tag';
+import { Skeleton } from "primeng/skeleton";
 
 type StockStatus = 'ok' | 'low' | 'critical';
 
@@ -27,7 +28,7 @@ interface CategoryStockRow {
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, CardModule, ChartModule, ProgressBarModule, TagModule],
+  imports: [CommonModule, CardModule, ChartModule, ProgressBarModule, TagModule, Skeleton],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css',
 })
