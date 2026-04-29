@@ -25,7 +25,7 @@ export class AuthService {
   login(credentials: LoginCredentials): Observable<any> {
     return this.httpClient.post<LoginResponse>(`${this.API_URL}/login`, credentials).pipe(
       tap((response: LoginResponse) => {
-        this.session.initSession(response.token, response.expirationDate);
+        this.session.initSession(response.token, response.expirationDate, response.refreshToken);
       }),
       switchMap(() => this.roleService.loadRoles()), //switchMap per saltare a un'altra chiamata per caricare ruoli
       tap(() => {

@@ -2,6 +2,7 @@
 export interface LoginResponse {
   token: string;
   expirationDate: string; // Il backend restituisce un DateTime
+  refreshToken: string;
 }
 
 export interface LoginCredentials {
