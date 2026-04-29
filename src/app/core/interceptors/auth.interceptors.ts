@@ -18,28 +18,42 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   return next(req);
 };
 
-//alternativa per gestire 401
+//con REFRESH
 // export const authInterceptor: HttpInterceptorFn = (req, next) => {
 //   const session = inject(SessionService);
-//   const authService = inject(AuthService); // Serve per il logout
+//   const authService = inject(AuthService);
+
 //   const token = session.getToken();
+//   let authReq = req;
 
-//   let request = req;
-
+//   // 1. GESTIONE IN USCITA: Se abbiamo un token, lo aggiungiamo alla richiesta
 //   if (token) {
-//     request = req.clone({
-//       setHeaders: {
-//         Authorization: `Bearer ${token}`,
-//       },
+//     authReq = req.clone({
+//       setHeaders: { Authorization: `Bearer ${token}` },
 //     });
 //   }
 
-//   return next(request).pipe(
-//     catchError((error) => {
-//       // Se il server risponde 401, il token è scaduto o non valido
-//       if (error instanceof HttpErrorResponse && error.status === 401) {
-//         authService.logout(); // Pulisce la sessione e manda al login
+// 2. GESTIONE RISPOSTA: Procediamo e controlliamo eventuali errori
+//   return next(authReq).pipe(
+//     catchError((error: HttpErrorResponse) => {
+//       // Se l'errore è 401 e non è un tentativo di login o refresh già in corso
+//       if (error.status === 401 && !req.url.includes('/login') && !req.url.includes('/refresh')) {
+//         return authService.refresh().pipe(
+//           switchMap((response) => {
+//             // Refresh riuscito! Riprova la chiamata originale con il nuovo token
+//             const retryReq = req.clone({
+//               setHeaders: { Authorization: `Bearer ${response.token}` },
+//             });
+//             return next(retryReq);
+//           }),
+//           catchError((refreshError) => {
+//             // Se anche il refresh fallisce (es. refresh token scaduto), slogghiamo
+//             authService.logout();
+//             return throwError(() => refreshError);
+//           }),
+//         );
 //       }
+
 //       return throwError(() => error);
 //     }),
 //   );
