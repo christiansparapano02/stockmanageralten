@@ -7,7 +7,7 @@ export interface LoginResponse {
 
 export interface LoginCredentials {
   email: string;
-  password?: string;
+  password: string;
 }
 
 //dati utente estratti dal token (usati nella UI)

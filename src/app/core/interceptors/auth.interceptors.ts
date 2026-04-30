@@ -33,7 +33,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 //     });
 //   }
 
-// 2. GESTIONE RISPOSTA: Procediamo e controlliamo eventuali errori
+// 2. GESTIONE RISPOSTA:
 //   return next(authReq).pipe(
 //     catchError((error: HttpErrorResponse) => {
 //       // Se l'errore è 401 e non è un tentativo di login o refresh già in corso
