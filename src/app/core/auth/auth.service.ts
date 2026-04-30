@@ -32,6 +32,10 @@ export class AuthService {
         const destination = this.session.getInitialRoute();
         this.router.navigate([destination]);
       }),
+      catchError((error) => {
+        this.session.clearSession();
+        return throwError(() => error);
+      }),
     );
   }
 

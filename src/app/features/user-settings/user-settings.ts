@@ -7,8 +7,8 @@ import { MenuModule } from 'primeng/menu';
 import { User } from '../../core/user/user.model';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Dialog } from 'primeng/dialog';
-import { Button } from 'primeng/button';
-import { Select } from 'primeng/select';
+import { Button, ButtonModule } from 'primeng/button';
+import { Select, SelectModule } from 'primeng/select';
 import { InputText } from 'primeng/inputtext';
 import { SkeletonModule } from 'primeng/skeleton';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
@@ -36,6 +36,8 @@ import { SessionService } from '../../shared/services/session.service';
     ToastModule,
     PasswordModule,
     MenuModule,
+    ButtonModule,
+    SelectModule,
   ],
   providers: [ConfirmationService, MessageService],
   templateUrl: './user-settings.html',
@@ -61,7 +63,7 @@ export class UserSettings implements OnInit {
   loading = signal(false);
 
   displayDialog = signal(false);
-  selectedUser: User | null = null; // per memorizzar l'utente da modificare
+  selectedUser = signal<User | null>(null); // per memorizzar l'utente da modificare
 
   // Proprietà tradotte per l'header del dialog nel template
   editTitle = $localize`:@@userSettings.dialog.editTitle:Edit User`;
@@ -113,20 +115,22 @@ export class UserSettings implements OnInit {
     });
   }
 
-  MenuItems(user: User): MenuItem[] {
-    return [
-      {
-        label: $localize`:@@userSettings.actions.editUsers:Edit User`,
-        icon: 'pi pi-pencil',
-        command: () => this.openEditDialog(user),
-      },
-      {
-        label: $localize`:@@userSettings.actions.deleteUsers:Delete User`,
-        icon: 'pi pi-trash',
-        command: () => this.deleteUser(user),
-      },
-    ];
+  MenuItems(event: Event, user: User) {
+    this.selectedUser.set(user);
   }
+
+  MenuItem = [
+    {
+      label: $localize`:@@userSettings.actions.editUsers:Edit User`,
+      icon: 'pi pi-pencil',
+      command: () => this.openEditDialog(this.selectedUser()!),
+    },
+    {
+      label: $localize`:@@userSettings.actions.deleteUsers:Delete User`,
+      icon: 'pi pi-trash',
+      command: () => this.deleteUser(this.selectedUser()!),
+    },
+  ];
 
   userForm = new FormGroup({
     firstName: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
@@ -145,7 +149,7 @@ export class UserSettings implements OnInit {
 
   //dialog per nuovo utente
   openDialog() {
-    this.selectedUser = null;
+    this.selectedUser.set(null);
     this.userForm.reset();
     this.userForm.get('password')?.enable(); //per abilitare campo password che potrebbe essere stao disabilitato nella versione edit
     this.userForm.get('password')?.setValidators([
@@ -159,7 +163,7 @@ export class UserSettings implements OnInit {
   //dialog per modifica utente
   openEditDialog(user: User) {
     // Pre-compila il form con i dati dell'utente
-    this.selectedUser = user;
+    this.selectedUser.set(user);
 
     //in modifica campo password non richiesto, quindi disabilitato
     this.userForm.get('password')?.clearValidators();
@@ -180,16 +184,16 @@ export class UserSettings implements OnInit {
     if (this.userForm.invalid) return;
 
     const formData = this.userForm.getRawValue(); //include tutti i campi, anche quelli disabilitati, per non perdere dati
-
+    const currentUser = this.selectedUser();
     //se in edit user:
-    if (this.selectedUser) {
+    if (currentUser) {
       const { password, ...userDataWithoutPassword } = formData; //destructuring per separarare la password (non serve in update)
 
       const updatedUser: User = {
         ...userDataWithoutPassword,
-        id: this.selectedUser.id,
+        id: currentUser.id,
         officeId: this.TEMP_OFFICE_ID, // sostituire con officeId
-        isConfirmed: this.selectedUser.isConfirmed, // Mantiene lo stato attuale
+        isConfirmed: currentUser.isConfirmed, // Mantiene lo stato attuale
       };
 
       this.userService.updateUser(updatedUser).subscribe({
@@ -218,7 +222,7 @@ export class UserSettings implements OnInit {
 
   closeDialog() {
     this.displayDialog.set(false);
-    this.selectedUser = null;
+    this.selectedUser.set(null);
     this.userForm.reset();
   }
 

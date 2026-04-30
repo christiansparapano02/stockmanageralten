@@ -15,9 +15,9 @@ export class RealUserService implements IUserService {
 
   constructor() {}
 
-  //caricamento iniziale
+  //caricamento iniziale (in realtà dovrebbe arrivare da sessionService)
   loadUsers(officeId: string): Observable<User[]> {
-    const params = new HttpParams().set('officeId', officeId); //inivio idUfficio come parametro di ricerca ?officeId=...
+    const params = new HttpParams().set('officeId', officeId); //invio idUfficio come parametro di ricerca ?officeId=...
     return this.httpClient
       .get<User[]>(this.apiUrl, { params })
       .pipe(tap((data) => this.users.set(data)));
@@ -42,6 +42,7 @@ export class RealUserService implements IUserService {
       }),
     );
   }
+
   deleteUser(id: string) {
     return this.httpClient.delete<void>(`${this.apiUrl}/${id}`).pipe(
       tap(() => {
