@@ -60,13 +60,12 @@
             <p-tag [value]="getRoleName(user.roleId)" severity="secondary"></p-tag>
           </td>
           <td class="text-center">
-            <p-menu #menu [model]="MenuItems(user)" [popup]="true" appendTo="body" />
             <p-button
+              (click)="selectedUser.set(user); menu.toggle($event)"
               icon="pi pi-ellipsis-v"
               [text]="true"
               [rounded]="true"
-              severity="secondary"
-              (click)="menu.toggle($event)"
+              size="small"
             />
           </td>
         </tr>
@@ -80,6 +79,8 @@
     </p-table>
   </div>
 
+  <p-menu #menu [model]="MenuItem" [popup]="true" appendTo="body" />
+
   <div class="add-user-button-container">
     <p-button
       icon="pi pi-plus"
@@ -92,7 +93,7 @@
   </div>
 
   <p-dialog
-    [header]="selectedUser ? editTitle : newTitle"
+    [header]="selectedUser() ? editTitle : newTitle"
     [(visible)]="displayDialog"
     [modal]="true"
     [style]="{ width: '26.25rem' }"
@@ -121,7 +122,7 @@
 
       <div class="form-field">
         <label for="pwd">
-          {{ selectedUser ? 'Password (Locked)' : 'Password' }}
+          {{ selectedUser() ? 'Password (Locked)' : 'Password' }}
         </label>
         <p-password
           id="pwd"
