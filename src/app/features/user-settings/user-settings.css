@@ -62,6 +62,10 @@
   border: none;
 }
 
+:host ::ng-deep .add-user-button-container .p-button:hover {
+  background-color: #026ca3 !important;
+}
+
 /* FORM E INPUT */
 .user-form {
   display: flex;

@@ -106,3 +106,7 @@
   background-color: #028bd3;
   border: none;
 }
+
+:host ::ng-deep .fab-btn:hover {
+  background-color: #026ca3 !important;
+}
