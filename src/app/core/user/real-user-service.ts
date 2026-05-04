@@ -11,11 +11,11 @@ export class RealUserService implements IUserService {
   readonly allUsers = this.users.asReadonly();
 
   //url base per get utenti
-  private apiUrl = 'https://api...blablabla'; //MODIFICARE
+  private apiUrl = 'http://72.146.152.45:8080/users'; //MODIFICARE
 
   constructor() {}
 
-  //caricamento iniziale (in realtà dovrebbe arrivare da sessionService)
+  //caricamento iniziale (in realtà id ufficio dovrebbe arrivare da sessionService)
   loadUsers(officeId: string): Observable<User[]> {
     const params = new HttpParams().set('officeId', officeId); //invio idUfficio come parametro di ricerca ?officeId=...
     return this.httpClient

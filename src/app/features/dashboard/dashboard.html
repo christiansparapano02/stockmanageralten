@@ -6,7 +6,8 @@
 
   @if (itemsNeedingAttention() > 0) {
     <button type="button" class="attention-banner" severity="danger" (click)="goToAlerts()">
-      {{ itemsNeedingAttention() }} <span>items need attention</span> <span class="arrow-move">→</span>
+      {{ itemsNeedingAttention() }} <span>items need attention</span>
+      <span class="arrow-move">→</span>
     </button>
   }
 </header>

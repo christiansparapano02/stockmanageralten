@@ -27,13 +27,6 @@
   text-align: center;
 }
 
-/* TABELLA */
-:host ::ng-deep .p-datatable-gridlines .p-datatable-thead > tr > th {
-  background-color: var(--surface-ground);
-  color: var(--text-color-secondary);
-  font-weight: 600;
-}
-
 .role-column {
   width: 9.375rem;
 }
@@ -50,11 +43,6 @@
 
 .row-hover:hover {
   background-color: var(--surface-hover) !important;
-}
-
-/* =ng-deep per allineare ellipsis e icone */
-:host ::ng-deep .p-button.p-button-text.p-button-secondary {
-  color: var(--text-color-secondary);
 }
 
 /* AZIONI E PULSANTI */
