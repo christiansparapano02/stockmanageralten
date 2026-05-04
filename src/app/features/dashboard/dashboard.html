@@ -13,10 +13,9 @@
 </header>
 
 @if (loading()) {
-
   <section class="dashboard">
     <div class="kpi-grid">
-      @for (i of [1,2,3,4]; track i) {
+      @for (i of [1, 2, 3, 4]; track i) {
         <p-card class="kpi-card">
           <p-skeleton width="60%" height="1rem" styleClass="mb-2" />
           <p-skeleton width="40%" height="2rem" />
@@ -24,7 +23,7 @@
       }
     </div>
   </section>
-
+  <!-- 
   <section class="main-grid">
     <p-card class="panel-card">
       <ng-template pTemplate="header">
@@ -44,7 +43,7 @@
         </div>
       </ng-template>
       <div class="category-list">
-        @for (i of [1,2,3,4]; track i) {
+        @for (i of [1, 2, 3, 4]; track i) {
           <div class="category-row">
             <div class="category-top">
               <p-skeleton width="40%" height="1rem" />
@@ -56,10 +55,8 @@
         }
       </div>
     </p-card>
-  </section>
-
+  </section> -->
 } @else {
-
   <section class="dashboard">
     <div class="kpi-grid">
       <p-card class="kpi-card">
@@ -81,7 +78,7 @@
     </div>
   </section>
 
-  <section class="main-grid">
+  <!-- <section class="main-grid">
     <p-card class="panel-card">
       <ng-template pTemplate="header">
         <div class="panel-header">
@@ -97,7 +94,7 @@
         />
       </div>
     </p-card>
-
+ 
     <p-card class="panel-card">
       <ng-template pTemplate="header">
         <div class="panel-header">
@@ -124,6 +121,5 @@
         }
       </div>
     </p-card>
-  </section>
-
+  </section> -->
 }
