@@ -4,3 +4,28 @@
   align-items: center;
   min-height: 300px;
 }
+
+.badge-ok {
+  background-color: var(--p-green-100);
+  color: var(--p-green-700);
+}
+
+.badge-low {
+  background-color: var(--p-yellow-100);
+  color: var(--p-yellow-700);
+}
+
+.badge-critical {
+  background-color: var(--p-red-100);
+  color: var(--p-red-700);
+}
+
+.detail-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  width: fit-content;
+}
