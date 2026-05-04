@@ -1,7 +1,7 @@
 <header class="dashboard-header">
   <div>
     <p class="eyebrow">Dashboard</p>
-    <h1>Stock overview</h1>
+    <h1 class="title">Stock overview</h1>
   </div>
 
   @if (itemsNeedingAttention() > 0) {
@@ -12,81 +12,114 @@
   }
 </header>
 
-<section class="dashboard">
-  @if (loading()) {
-    <p>Loading dashboard...</p>
-  } @else {
+@if (loading()) {
+  <section class="dashboard">
+    <div class="kpi-grid">
+      @for (i of [1, 2, 3, 4]; track i) {
+        <p-card class="kpi-card">
+          <p-skeleton width="60%" height="1rem" styleClass="mb-2" />
+          <p-skeleton width="40%" height="2rem" />
+        </p-card>
+      }
+    </div>
+  </section>
+
+  <section class="main-grid">
+    <p-card class="panel-card">
+      <ng-template pTemplate="header">
+        <div class="panel-header">
+          <p-skeleton width="40%" height="1.2rem" />
+        </div>
+      </ng-template>
+      <div class="chart-container">
+        <p-skeleton shape="circle" size="220px" />
+      </div>
+    </p-card>
+
+    <p-card class="panel-card">
+      <ng-template pTemplate="header">
+        <div class="panel-header">
+          <p-skeleton width="40%" height="1.2rem" />
+        </div>
+      </ng-template>
+      <div class="category-list">
+        @for (i of [1, 2, 3, 4]; track i) {
+          <div class="category-row">
+            <div class="category-top">
+              <p-skeleton width="40%" height="1rem" />
+              <p-skeleton width="30%" height="1rem" />
+            </div>
+            <p-skeleton width="100%" height="0.5rem" styleClass="mt-2" />
+            <p-skeleton width="50%" height="0.75rem" styleClass="mt-1" />
+          </div>
+        }
+      </div>
+    </p-card>
+  </section>
+} @else {
+  <section class="dashboard">
     <div class="kpi-grid">
       <p-card class="kpi-card">
         <span class="kpi-label">Total items</span>
         <strong>{{ totalItems() }}</strong>
       </p-card>
-
       <p-card class="kpi-card">
         <span class="kpi-label">Total quantity</span>
         <strong>{{ totalQuantity() }}</strong>
       </p-card>
-
       <p-card class="kpi-card">
         <span class="kpi-label">Low stock</span>
         <strong>{{ low() }}</strong>
       </p-card>
-
       <p-card class="kpi-card">
         <span class="kpi-label">Critical</span>
         <strong>{{ critical() }}</strong>
       </p-card>
     </div>
-  }
-</section>
-<!-- 
-<section class = "main-grid">
-  <p-card class = "panel-card">
-    <ng-template pTemplate = "header">
-      <div class = "panel-header">
-        <h2>Stock status</h2>
-        <span>{{ totalItems() }} total</span>
-      </div>
-    </ng-template>
-<div class = "chart-container">
-    <p-chart
-    type="doughnut"
-    [data] = "donutChartData()"
-    [options] = "donutChartOptions"
-    />
-    </div>
-  </p-card>
-  <p-card class = "panel-card">
-    <ng-template pTemplate = "header">
-      <div class = "panel-header">
-        <h2>Categories</h2>
-        <span>Minimum threshold</span>
-      </div>
-    </ng-template>
+  </section>
 
-    <div class = "category-list">
-      @for (row of categoryRows(); track row.id) {
-        <div class = "category-row">
-          <div class = "category-top">
-            <strong>{{ row.name }}</strong>
-
-            <div class = "category-meta">
-              <span>{{ row.totalQuantity }}/{{ row.minQuantity}}</span>
-              <p-tag
-              [value] = "getStatusLabel(row.status)"
-              [severity] = "getStatusSeverity(row.status)"
-              />
-            </div>
-          </div>
-
-          <p-progressbar
-          [value] = "row.percentage"
-          [showValue] = "false"
-          />
-
-          <small>{{row.percentage}}% of minimum threshold</small>
+  <!-- <section class="main-grid">
+    <p-card class="panel-card">
+      <ng-template pTemplate="header">
+        <div class="panel-header">
+          <h2>Stock status</h2>
+          <span>{{ totalItems() }} total</span>
         </div>
-      }
-    </div>
-  </p-card>
-</section> -->
+      </ng-template>
+      <div class="chart-container">
+        <p-chart
+          type="doughnut"
+          [data]="donutChartData()"
+          [options]="donutChartOptions"
+        />
+      </div>
+    </p-card>
+ 
+    <p-card class="panel-card">
+      <ng-template pTemplate="header">
+        <div class="panel-header">
+          <h2>Categories</h2>
+          <span>Minimum threshold</span>
+        </div>
+      </ng-template>
+      <div class="category-list">
+        @for (row of categoryRows(); track row.id) {
+          <div class="category-row">
+            <div class="category-top">
+              <strong>{{ row.name }}</strong>
+              <div class="category-meta">
+                <span>{{ row.totalQuantity }}/{{ row.minQuantity }}</span>
+                <p-tag
+                  [value]="getStatusLabel(row.status)"
+                  [severity]="getStatusSeverity(row.status)"
+                />
+              </div>
+            </div>
+            <p-progressbar [value]="row.percentage" [showValue]="false" />
+            <small>{{ row.percentage }}% of minimum threshold</small>
+          </div>
+        }
+      </div>
+    </p-card>
+  </section> -->
+}
