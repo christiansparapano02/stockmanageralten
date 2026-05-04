@@ -17,6 +17,7 @@ import { OFFICE_SERVICE_TOKEN } from './core/office/office-service.token';
 import { ROLE_SERVICE_TOKEN } from './core/role/role-service.token';
 import { MockRoleService } from './core/role/mock.role.service';
 import { authInterceptor } from './core/interceptors/auth.interceptors';
+import { RealUserService } from './core/user/real-user-service';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -43,7 +44,7 @@ export const appConfig: ApplicationConfig = {
     },
     {
       provide: USER_SERVICE_TOKEN,
-      useClass: MockUserService, //modificare con RealUserService dopo
+      useClass: RealUserService, //modificare con RealUserService dopo
     },
     {
       provide: OFFICE_SERVICE_TOKEN,

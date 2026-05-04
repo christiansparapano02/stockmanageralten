@@ -14,6 +14,8 @@
   z-index: 9999;
   width: 56px !important;
   height: 56px !important;
+  background-color: #028bd3;
+  border: none;
 }
 
 /* ===== DETAIL DIALOG ===== */

@@ -20,7 +20,7 @@ export class AuthService {
   private session = inject(SessionService);
   private roleService = inject(ROLE_SERVICE_TOKEN);
 
-  private readonly API_URL = 'https://localhost:xxxx/blabla'; //sostituire
+  private readonly API_URL = 'http://72.146.152.45:8080'; //sostituire
 
   login(credentials: LoginCredentials): Observable<any> {
     return this.httpClient.post<LoginResponse>(`${this.API_URL}/login`, credentials).pipe(
@@ -38,6 +38,11 @@ export class AuthService {
       }),
     );
   }
+
+  //metodo refresh
+  // refresh(){
+
+  // }
 
   logout(): void {
     this.session.clearSession();
