@@ -18,6 +18,10 @@
   border: none;
 }
 
+:host ::ng-deep .fab-btn:hover {
+  background-color: #026ca3 !important;
+}
+
 /* ===== DETAIL DIALOG ===== */
 .detail-card {
   display: flex;
