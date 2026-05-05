@@ -4,15 +4,20 @@ import { InputTextModule } from 'primeng/inputtext';
 import { Button } from 'primeng/button';
 import { ProgressSpinner } from 'primeng/progressspinner';
 import { Router } from '@angular/router';
+import { MessageService } from 'primeng/api';
+import { Toast } from 'primeng/toast';
 
 @Component({
   selector: 'app-forgotpassword',
-  imports: [ReactiveFormsModule, InputTextModule, Button, ProgressSpinner],
+  imports: [ReactiveFormsModule, InputTextModule, Button, ProgressSpinner, Toast],
+  providers: [MessageService],
   templateUrl: './forgotpassword.html',
   styleUrl: './forgotpassword.css',
 })
 export class ForgotPassword implements OnInit {
   private fb = inject(FormBuilder);
+
+  private messageService = inject(MessageService);
 
   constructor(private router: Router) {}
 
@@ -39,6 +44,16 @@ export class ForgotPassword implements OnInit {
 
   onSubmit() {
     console.log(this.loginForm);
-    this.router.navigate(['/login']);
+
+    this.messageService.add({
+      severity: 'info',
+      summary: "L'email è stata inviata con successo!",
+      detail: 'Verrai rinviato alla pagina di login...',
+    });
+
+    setTimeout(() => {
+      this.router.navigate(['/login']);
+    }, 1500);
+    
   }
 }

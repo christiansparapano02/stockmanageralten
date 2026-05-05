@@ -107,3 +107,8 @@
   justify-content: flex-end;
   gap: 0.9rem;
 }
+
+::ng-deep .add-user-button-container p-button{
+  --p-button-primary-hover-background: #0970a8;
+  --p-button-primary-background: #028bd3;
+}
