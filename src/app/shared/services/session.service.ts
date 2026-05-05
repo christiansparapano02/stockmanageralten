@@ -75,6 +75,7 @@ export class SessionService {
     this._session.set(data);
   }
 
+  //utilizzato nella guard
   canAccessCategory(categoryId: string): boolean {
     if (this.isAdmin()) return true;
     return this.roleToCategoryMap[this._session()?.roleId!] === categoryId;
