@@ -214,6 +214,7 @@ export class UserSettings implements OnInit {
         next: () => {
           this.showSuccess($localize`:@@userSettings.msg.added:User added successfully`);
           this.closeDialog();
+          console.log(newUser);
         },
         error: (err) => this.showError(err.message),
       });

@@ -63,6 +63,18 @@ export class SessionService {
     return this._refreshToken;
   }
 
+  setToken(token: string) {
+    this._token = token;
+  }
+
+  setRefreshToken(rt: string) {
+    this._refreshToken = rt;
+  }
+
+  updateSession(data: AuthSession) {
+    this._session.set(data);
+  }
+
   canAccessCategory(categoryId: string): boolean {
     if (this.isAdmin()) return true;
     return this.roleToCategoryMap[this._session()?.roleId!] === categoryId;

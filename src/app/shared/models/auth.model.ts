@@ -16,7 +16,7 @@ export interface AuthSession {
   email: string;
   firstName: string;
   lastName: string;
-  roleId: string;
+  roleId: string; //di regola da eliminare
   officeId: string;
   expiresAt: number; // Timestamp calcolato dalla expirationDate
 }

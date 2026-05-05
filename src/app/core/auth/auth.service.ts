@@ -1,9 +1,7 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
-import { jwtDecode } from 'jwt-decode';
 
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { User } from '../user/user.model';
 
 import { catchError, Observable, switchMap, tap, throwError } from 'rxjs';
 
@@ -27,7 +25,7 @@ export class AuthService {
       tap((response: LoginResponse) => {
         this.session.initSession(response.token, response.expirationDate, response.refreshToken);
       }),
-      switchMap(() => this.roleService.loadRoles()), //switchMap per saltare a un'altra chiamata per caricare ruoli
+      switchMap(() => this.roleService.loadRoles()), //switchMap per saltare a un'altra chiamata per caricare ruoli (forse meglio caricare userRoles)
       tap(() => {
         const destination = this.session.getInitialRoute();
         this.router.navigate([destination]);
@@ -40,7 +38,27 @@ export class AuthService {
   }
 
   //metodo refresh
-  // refresh(){
+  refresh(): Observable<LoginResponse> {
+    const refreshToken = this.session.getRefreshToken();
+    return this.httpClient.post<LoginResponse>(`${this.API_URL}/refresh`, { refreshToken }).pipe(
+      tap((response: LoginResponse) => {
+        this.session.setToken(response.token);
+        this.session.setRefreshToken(response.refreshToken);
+        const currentSession = this.session.user();
+        if (currentSession) {
+          this.session.updateSession({
+            ...currentSession,
+            expiresAt: new Date(response.expirationDate).getTime(),
+          });
+        }
+      }),
+      catchError((error) => {
+        this.logout();
+        this.session.clearSession();
+        return throwError(() => error);
+      }),
+    );
+  }
 
   // }
 
