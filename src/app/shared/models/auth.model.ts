@@ -10,7 +10,7 @@ export interface LoginCredentials {
   password: string;
 }
 
-//dati utente estratti dal token (usati nella UI)
+//dati utente estratti dal token
 export interface AuthSession {
   id: string;
   email: string;
